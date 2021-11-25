@@ -1,28 +1,29 @@
 import os
 from twilio.rest import Client
+from django.conf import settings
 
 
 # Find your Account SID and Auth Token at twilio.com/console
 # and set the environment variables. See http://twil.io/secure
 def otpverify(mobile):
-    account_sid = 'AC3ef75ff7814967643ea18e41eaacf2d3'
-    auth_token = '43a05ac89a751fdec685b1fc183a55d3'
+    account_sid = settings.TWILIO_ACCOUNT_SID
+    auth_token = settings.TWILIO_AUTH_TOKEN
     client = Client(account_sid, auth_token)
 
     verification = client.verify \
-                     .services('VAeb43b67f74da9bff1024c316c0d3f728') \
+                     .services(settings.TWILIO_VERIFICATION_SID) \
                      .verifications \
                      .create(to='+91'+mobile, channel='sms')
 
     print(verification.status)
     
 def verify(mobile,otp):
-    account_sid = 'AC3ef75ff7814967643ea18e41eaacf2d3'
-    auth_token = '43a05ac89a751fdec685b1fc183a55d3'
+    account_sid = settings.TWILIO_ACCOUNT_SID
+    auth_token = settings.TWILIO_AUTH_TOKEN
     client = Client(account_sid, auth_token)
 
     verification_check = client.verify \
-                           .services('VAeb43b67f74da9bff1024c316c0d3f728') \
+                           .services(settings.TWILIO_VERIFICATION_SID) \
                            .verification_checks \
                            .create(to='+91'+mobile, code=otp)
 
