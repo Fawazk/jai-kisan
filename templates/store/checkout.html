@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+<section class="section-content padding-y bg">
+    <div class="container">
+
+        <!-- ============================ COMPONENT 1 ================================= -->
+
+
+
+
+        <div class="row">
+            <aside class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">Billling address</h3>
+                        <form action="{% url 'place_order' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="from-group">
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="">Name</label>
+                                        <input type="text" name="name" class="form-control">
+                                    </div>
+                                    <div class="col form-group">
+                                        <label for="">Phone</label>
+                                        <input type="text" name="phone" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="">Address</label>
+                                        <input type="Address" name="address" class="form-control">
+                                    </div>
+
+                                </div>
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="">Locality </label>
+                                        <input type="text" name="locality" class="form-control">
+                                    </div>
+                                    <div class="col form-group">
+                                        <label for="">Landmark</label>
+                                        <input type="text" name="landmark" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="">City</label>
+                                        <input type="text" name="city" class="form-control">
+                                    </div>
+                                    <div class="col form-group">
+                                        <label for="">state</label>
+                                        <input type="text" name="state" class="form-control">
+                                    </div>
+                                    
+                                   
+                                </div>
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="">Pincode </label>
+                                        <input type="text" name="pincode" class="form-control">
+                                    </div>
+                                    <div class="col form-group">
+                                        <label for="">Alternate Phone</label>
+                                        <input type="text" name="alternate_phone" class="form-control">
+                                    </div>
+                                </div>
+
+                            </div>
+                <!-- <form action="{% url 'place_order' %}" method="post" enctype="multipart/form-data" class="col-xl-10">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <input type="submit" id="btn-submit" value="submit">
+
+                    </div>
+                </div> <!-- card.// -->
+            </aside> <!-- col.// -->
+            <aside class="col-lg-6">
+
+                <div class="card">
+
+                    <table class="table table-borderless table-shopping-cart">
+                        <thead class="text-muted">
+                            <tr class="small text-uppercase">
+                                <th scope="col" width="320">Product</th>
+                                <th scope="col" width="120">Quantity</th>
+                                <th scope="col" width="120">Price</th>
+                                <th scope="col" class="text-right" width="200"> </th>
+
+                        </thead>
+                        <tbody>
+                            {% for cart_item in cart_items %}
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside"><img src="{{ cart_item.product.images_one.url }}" class="img-sm">
+                                        </div>
+                                        <figcaption class="info">
+                                            
+                                            <a href="{{ cart_item.product.get_url }}" class="text-dark">{{ cart_item.product.product_name }}</a>
+                                            {% for item in cart_item.variations.all %}<br>
+                                            <small class="text-muted">{{ item.variation_value }}</small>
+                                            {% endfor %}
+                                        </figcaption>
+                                    </figure>
+                                </td>
+
+                                <td>
+                                   {{ cart_item.quantity }} 
+                                </td>
+                                <td>
+                                    <var class="price">Rs.{{ cart_item.sub_total }}/-</var>
+                                    <small class="text-muted">Rs.{{ cart_item.product.price }}/-</small>
+                                 </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="card-body">
+                        <button type='submit' name="submit" class="btn btn-primary btn-block">Checkout</button>
+                        <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+                </form>
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+
+            </aside>
+
+
+
+
+        </div> <!-- row.// -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
+
+    </div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+</body>
+
+</html>
+{% endblock %}

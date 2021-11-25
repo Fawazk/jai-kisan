@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<h4 style="color: #5cb85c; font-weight: 700; font-size: 30px;" class="card-title mb-4 m-5 text-center">Edit Category
+</h4>
+
+<body style="background-color: #E5E5E5;">
+    <div style="width:50%; margin-top:50px; background-color:#fff" class="col-12 p-5 container">
+
+        <form id="myform" action="{{ editcategory }}" method="post">
+            {% csrf_token %}
+            {% if list_cats %}
+            <div class="form-group">
+                <h4 style="color: #5cb85c;" class="card-title mb-4 mt-3">Category Name</h4>
+                <input type="text" class="form-control" placeholder="Category Name" value="{{ list_cats.category_name }}"
+                    name="category_Name">
+            </div>
+            <div class="form-group">
+                <h4 style="color: #5cb85c;" class="card-title mb-4 mt-3">Slug</h4>
+                <input type="text" class="form-control" placeholder="Slug"
+                    value="{{ list_cats.slug }}" name="category_slug">
+            </div>
+            <div class="form-group">
+                <h4 style="color: #5cb85c;" class="card-title mb-4 mt-3">Category Description</h4>
+                <input style="height: 150px;" type="text" class="form-control" placeholder="Category Description"
+                    value="{{ list_cats.description }}" name="category_Description">
+            </div>
+            {% endif %}
+        </form>
+        <div class="pt-5">
+            <button type="submit" id="btn-submit" class="btn btn-primary">Update</button>
+            <!-- <input class="btn btn-danger" type="submit" value="Update"> -->
+            <a class="btn btn-primary" href="">cancel</a>
+        </div>
+
+        </form>
+    </div>
+    <script>
+        $(document).on('click', '#btn-submit', function (e) {
+            e.preventDefault();
+            swal({
+                title: "Do you want to update ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then(function (result) {
+                if (result) {
+                    $('#myform').submit();
+                }
+
+            });
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+<!-- <form action="" method="post" id="myform">
+    {% csrf_token %}
+ <div>
+     
+     {% for x in messages %}
+     <h3 style="color:red">{{x}}</h3>
+     {% endfor %}
+ </div> -->

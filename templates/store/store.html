@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+<!-- ========================= SECTION PAGETOP ========================= -->
+<section class="section-pagetop bg">
+	<div class="container">
+		{% if 'search' in request.path %}
+		<h2 class="title-page">Search Result </h2>
+		{% else %}
+		<h2 class="title-page">Our Store</h2>
+		{% endif %}
+	</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION INTRO END// ========================= -->
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+	<div class="container">
+
+		<div class="row">
+			<aside class="col-md-3">
+				<div class="card">
+					<article class="filter-group">
+						<header class="card-header">
+							<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+								<i class="icon-control fa fa-chevron-down"></i>
+								<h6 class="title">Categories</h6>
+							</a>
+						</header>
+						<div class="filter-content collapse show" id="collapse_1">
+							<div class="card-body">
+
+								<ul class="list-menu">
+									<li><a style="color: #5cb85c;" href="{% url 'store' %}">All products</a></li>
+									{% for x in links %}
+									<li><a style="color: #5cb85c;" href="{{ x.get_url }}">{{ x.category_name }}</a></li>
+									{% endfor %}
+								</ul>
+
+							</div> <!-- card-body.// -->
+						</div>
+					</article> <!-- filter-group  .// -->
+
+
+					<article class="filter-group">
+						<header class="card-header">
+							<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+								<i class="icon-control fa fa-chevron-down"></i>
+								<h6 class="title">Price range </h6>
+							</a>
+						</header>
+						<div class="filter-content collapse show" id="collapse_3">
+							<div class="card-body">
+
+								<div class="form-row">
+									<div class="form-group col-md-6">
+										<label>Min</label>
+										<!-- <input class="form-control" placeholder="$0" type="number"> -->
+										<select class="mr-2 form-control">
+											<option value="0">$0</option>
+											<option value="50">$50</option>
+											<option value="100">$100</option>
+											<option value="150">$150</option>
+											<option value="200">$200</option>
+											<option value="500">$500</option>
+											<option value="1000">$1000</option>
+										</select>
+									</div>
+									<div class="form-group text-right col-md-6">
+										<label>Max</label>
+										<select class="mr-2 form-control">
+											<option value="50">$50</option>
+											<option value="100">$100</option>
+											<option value="150">$150</option>
+											<option value="200">$200</option>
+											<option value="500">$500</option>
+											<option value="1000">$1000</option>
+											<option value="2000">$2000+</option>
+										</select>
+									</div>
+								</div> <!-- form-row.// -->
+								<button class="btn btn-block btn-primary">Apply</button>
+							</div><!-- card-body.// -->
+						</div>
+					</article> <!-- filter-group .// -->
+
+				</div> <!-- card.// -->
+
+			</aside> <!-- col.// -->
+			<main class="col-md-9">
+
+				<header class="border-bottom mb-4 pb-3">
+					<div class="form-inline">
+						<span class="mr-md-auto">{{ products.count }} items Found</span>
+
+					</div>
+				</header><!-- sect-heading -->
+				
+				<div class="row">
+					{% if products %}
+					{% for x in products %}
+
+
+					<div class="col-md-4">
+						<figure class="card card-product-grid">
+							<div class="img-wrap">
+
+								<a href="{{ x.get_url }}"><img src="{{ x.images_one.url}}"></a>
+
+							</div> <!-- img-wrap.// -->
+							<figcaption class="info-wrap">
+								<div class="fix-height">
+									<a href="{{ x.get_url }}" class="title">{{ x.product_name }}</a>
+									<div class="price-wrap mt-2">										
+										<span class="price">Rs.{{ x.price }}/-</span><br>
+										
+
+									</div> <!-- price-wrap.// -->
+								</div>
+								<div>
+									<!-- <a href="{% url 'add_cart' x.id %}" style="background-color: #5cb85c; color:#fff;" class="btn mr-3" >Add to cart </a>
+                    <a href="#" style="background-color: #5cb85c; color:#fff;" class="btn" >BUY NOW</a> -->
+									{% if x.stock <= 0 %} <span class="text btn btn-danger">Out of Stock</span>
+										{% else %}
+										{% if in_cart %}
+										<a href="#" class="btn btn-outline-success"> <span class="text">Added to
+												cart</span></a>
+										{% else %}
+										<a href="{% url 'add_cart' x.id %}" class="btn btn-success"> <span
+												class="text">Add to
+												cart</span></a>
+										{% endif %}
+										{% endif %}
+								</div>
+
+							</figcaption>
+						</figure>
+					</div>
+					{% endfor %}
+					{% else %}
+					<div>
+						<h3 >No Result Found. Please try again </h3>
+					</div>
+					{% endif %}
+					<!-- col.// -->
+
+
+
+
+
+
+				</div> <!-- row end.// -->
+
+
+				<nav class="mt-4" aria-label="Page navigation sample">
+					{% if products.has_other_pages %}
+					<ul class="pagination">
+						{% if products.has_previous %}
+						<li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">Previous</a></li>
+						{% else %}
+						<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+						{% endif %}
+
+						{% for i in products.paginator.page_range %}
+							{% if products.number == i %}
+								<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+							{% else %}
+								<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+								{% endif %}
+						{% endfor %}
+						{% if products.has_next %}
+						<li class="page-item"><a class="page-link" href="?pagge={{products.next_page_number}}">Next</a></li>
+						{% else %}
+						<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+						{% endif %}
+					</ul>
+					{% endif %}
+				</nav>
+
+			</main> <!-- col.// -->
+
+		</div>
+
+	</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+</body>
+
+</html>
+
+
+
+
+{% endblock %}

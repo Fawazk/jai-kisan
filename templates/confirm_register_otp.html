@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center container text-center ">
+    <div class="card py-5 px-3">
+        <form action="{% url 'confirm_register_otp' %}" method="POST">
+        {% csrf_token %}
+        <h5 class="m-0">Mobile phone verification</h5><span class="mobile-text">Enter the code we just send on your mobile phone <b class="text-danger">{{ mobile_number }}</b></span>
+        <div class="d-flex flex-row mt-5">
+            <input type="text" class="form-control" name="otp1">
+            <input type="text" class="form-control" name="otp2">
+            <input type="text" class="form-control" name="otp3">
+            <input type="text" class="form-control" name="otp4">
+            <input type="text" class="form-control" name="otp5">
+            <input type="text" class="form-control" name="otp6">
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+    <div class="text-center mt-5"><span class="d-block mobile-text">Don't receive the code?</span><span class="font-weight-bold text-danger cursor">Resend</span></div>
+
+        {% include 'includes/alert.html' %} 
+
+    </div>
+</div>
+
+
+
+</body>
+</html>
+{% endblock %}

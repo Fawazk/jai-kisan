@@ -1,0 +1,22 @@
+$(document).ready(()=>{
+    $("#registration").validate({
+        rules:{
+            name:{
+                required:true,
+                minlength:4,
+            },
+            email:{
+                required:true,
+                email:true,
+            },
+            password:{
+                required:true,
+                minlength:8,
+            },   
+            password2:{
+                required:true,
+                minlength:8,
+            },
+        }
+        })
+    })

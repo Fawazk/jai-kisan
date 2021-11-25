@@ -1,0 +1,36 @@
+{% load static %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'assets/login/login.css' %}">
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+
+    {% include 'includes/alert.html' %}
+    <div class="mx-auto" style="max-width: 380px;">
+      <h4 style="color: #5cb85c;" class="card-title m-3 font-weight-bold">Sign in</h4>
+      <div class="card-body">
+    <form action="{% url 'adminpanel' %}" method="POST" id="login">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="email" class="form-control" id="login"  name="email" value="" placeholder="Enter email">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" id="password" name="password" value="" placeholder="password">
+      </div>
+      <input type="submit" class="fadeIn fourth" value="Log In">
+    </form>
+  
+  
+
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+	<script src="{% static 'js/adminlogin.js' %}"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+	crossorigin="anonymous"></script>

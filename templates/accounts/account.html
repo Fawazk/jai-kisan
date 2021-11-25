@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+<section class="section-conten padding-y bg">
+
+    <div class="container">
+        <div class="row">
+        <aside class="col-md-3">
+            <!--   SIDEBAR   -->
+            <ul class="list-group">
+				<a class="list-group-item active" href="#"> Profile </a>
+                <a class="list-group-item" href="{% url 'my_orders' %}"> My order</a>
+                <a class="list-group-item" href="#">Settings </a>
+                <a class="list-group-item" href="#"> Change Password </a>
+    
+            </ul>
+            <br>
+            <a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+            <!--   SIDEBAR .//END   -->
+        </aside>
+	<main class="col-md-9">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Logged in as :</strong>
+			<span>{{ user.username }}</span>
+		</header>
+		<div class="card-body">
+			<div class="row"> 
+				
+			
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+		
+		</article> <!-- order-group.// --> 
+	</main>
+</div> <!-- row.// -->
+</div>
+
+
+</section>
+
+
+
+
+
+
+</body>
+</html>
+
+
+{% endblock %}
