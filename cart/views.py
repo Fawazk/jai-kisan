@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from cart.models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from orders.forms import AddressForm, OrderForm
+from orders.models import Address
 from store.models import Product, Variation
 from django.contrib import auth, messages
 
@@ -188,6 +190,9 @@ def cart(request, total=0, quantity=0, cart_items=None):
 
 @login_required(login_url='signin')
 def checkout(request, total=0, quantity=0, cart_items=None):
+    user=request.user
+    form = AddressForm()
+    address = Address.objects.filter(user=user)
     try:
         tax = 0
         grand_total = 0
@@ -208,6 +213,38 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         'quantity': quantity,
         'cart_items': cart_items,
         'tax': tax,
-        'grand_total': grand_total
+        'grand_total': grand_total,
+        'form':form,
+        'address':address,
     }
     return render(request, 'store/checkout.html',context)
+
+
+# def checkout(request):
+#     addresses = Address.objects.filter(user=request.user)
+#     try:
+#         default_address = addresses.get(default=True)
+#         form = OrderForm(
+#             initial={
+#                 'full_name': default_address.full_name,
+#                 'phone': default_address.phone,
+#                 'email': default_address.email,
+#                 'house_no': default_address.house_no,
+#                 'area': default_address.area,
+#                 'landmark': default_address.landmark,
+#                 'town': default_address.town,
+#                 'state': default_address.state,
+#                 'pin': default_address.pin
+#             }
+#         )
+#     except ObjectDoesNotExist:
+#         form = OrderForm()
+
+#     context = {
+#         'from': form,
+#         'addresses': addresses,
+#         'tax': intcomma(request.session['tax']),
+#         'total': intcomma(request.session['total_price']),
+#         'grand_total': intcomma(request.session['grand_total']),
+#     }
+#     return render(request, 'cart/checkout.html', context)

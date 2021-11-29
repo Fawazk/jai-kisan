@@ -16,7 +16,7 @@
 				<aside class="col-md-6">
 					<article class="gallery-wrap">
 						<div class="img-big-wrap">
-							<a href="#"><img src="{{ single_product.images_one.url }}"></a>
+							<a ><img class="big_img" src="{{ single_product.images_one.url }}"></a>
 						</div> <!-- img-big-wrap.// -->
 
 					</article> <!-- gallery-wrap .end// -->
@@ -182,7 +182,20 @@
 </html>
 
 </body>
-
+<script type="text/javascript">
+	$(document).ready(function () {
+	  $(".small_img").hover(function () {
+		$(".big_img").attr('src', $(this).attr('src'));
+	  })
+	})
+  </script>
+<script>
+	$(document).ready(function () {
+	  $(".big_img").imagezoomsl({
+		zoomrange: [1, 1]
+	  })
+	})
+  </script>
 </html>
 
 {% endblock %}

@@ -1,11 +1,12 @@
-from orders.models import Order
+from orders.forms import AddressForm
+from orders.models import Address, Order, OrderProduct
 from django import forms
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from accounts.models import Account
 from cart.models import Cart, CartItem
 from store.models import Product, Variation
-from .form import RegisterationForm
+from .form import RegisterationForm, edit_profileForm
 from django.contrib import auth, messages
 from .otp_verify import otpverify, verify
 from django.contrib.auth import logout
@@ -170,18 +171,109 @@ def new_password(request):
         return render(request, 'new_password.html')
 
 @login_required(login_url='signin')
-def account(request):
-    orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id,is_ordered=True)
+def profile(request):
+    account = Account.objects.get(id=request.user.id)
+    print(account)
     context ={
-        'orders':orders,
+        'account':account,
     }
     return render(request,'accounts/account.html',context)
 
 
-def my_orders(request):
-    return render(request,'accounts/my_orders.html')
+def edit_profile(request,id):
+    form = edit_profileForm(request.POST)
+    list_user = Account.objects.get(id=id)
+    form = edit_profileForm(instance=list_user)
+    if request.method=='POST':
+        form=edit_profileForm(request.POST,request.FILES,instance=list_user)
+        if form.is_valid():
+            try:
+                form.save()                
+            except:
+                context = {'form':form}
+                return render(request,'accounts/edit_profile.html',context)
+            return redirect('profile')
+    context = {'form':form}
+    return render(request,'accounts/edit_profile.html',context)
+def change_password(request):
+    curr_user=request.user
+    user_email =curr_user.email
+    print(user_email)
+
+    if request.method == 'POST':
+        current_password= request.POST['current_password']
+        print(current_password)
+        password = request.POST['password']
+        password2 = request.POST['password2']
+        user = auth.authenticate(email=user_email,password=current_password)
+        print(user)
+        if user is not None:
+            if password == password2:
+                print(password)
+                user.set_password(password)
+                user.save()
+                auth.login(request, user)
+                return redirect('profile')
+            else:
+                print('++++++++++')
+                messages.error(request, 'Password is not matching!!!')
+                return render(request, 'accounts/change_password.html')
+        else:
+            print('___________-')
+            messages.error(request, 'Current password is not matching!!!')
+            return render(request, 'accounts/change_password.html')
+    return render(request, 'accounts/change_password.html')
 
 
+def address_management(request):
+    user=request.user
+    form = AddressForm()
+    orders = Address.objects.filter(user=user)
+    context ={
+        'orders':orders,
+        'form':form,
+    }
+    return render(request,'accounts/address_management.html',context)
+def edit_address(request,id):
+    address = Address.objects.get(id=id)    
+    print(address)
+    form = AddressForm(instance=address)
+    if request.method=='POST':
+        form = AddressForm(request.POST, request.FILES, instance=address)
+        print(form)
+        if form.is_valid():
+            try:
+                form.save()                
+            except:
+                context = {
+                    'form':form
+                    }
+                return render(request,'accounts/edit_address.html',context)
+            return redirect('address_management')
+    context = {
+        'form':form,
+        }
+    return render(request,'accounts/edit_address.html',context)
+
+
+def cancel_address(request,id):
+    address = Address.objects.get(id=id,user=request.user)
+    address.delete()
+    return redirect('address_management')
+
+def add_address(request):
+    form = AddressForm()
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address=form.save(commit=False)
+            address.user=request.user
+            address.save()
+            return redirect('address_management')
+    context ={
+        'form':form,
+    }
+    return render(request,'accounts/address_management.html',context)
 
 def logout(request):
     auth.logout(request)

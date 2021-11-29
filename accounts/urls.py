@@ -13,6 +13,11 @@ urlpatterns = [
     path('confirm_register_otp',views.confirm_register_otp,name='confirm_register_otp'),
     path('logout',views.logout,name="logout"),
     # ----------------------------------------
-    path('account',views.account,name='account'),
-    path('my_orders',views.my_orders,name="my_orders"),
+    path('profile',views.profile,name='profile'),
+    path('edit_profile/<int:id>/',views.edit_profile,name='edit_profile'),
+    path('change_password',views.change_password,name="change_password"),
+    path('address_management',views.address_management,name='address_management'),
+    path('edit_address/<int:id>/',views.edit_address,name='edit_address'),
+    path('cancel_address/<int:id>/',views.cancel_address,name='cancel_address'),
+    path('add_address',views.add_address,name='add_address'),
 ]

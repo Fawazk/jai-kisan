@@ -1,0 +1,66 @@
+<div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form9Example1">Name</label><br>
+                                        <input class="form-control" type="text" id="name_id">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form9Example2">phone
+                                            Number</label><br>
+                                        <input class="form-control" type="number" id="phone_number_id">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form9Example3">Address</label><br>
+                                        <input class="form-control" type="text" id="address_id">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form9Example6">State</label><br>
+                                        <input class="form-control" type="text" id="state_id">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="typeEmail">Locality</label><br>
+                                        <input class="form-control" type="text" id="locality_id">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form9Example6">Landmark</label><br>
+                                        <input class="form-control" type="text" id="landmark_id">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="typeEmail">Pincode</label><br>
+                                        <input class="form-control" type="text" id="pincode_id">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form9Example6">Alternate Phone</label><br>
+                                        <input class="form-control" type="text" id="alternate_phone_id">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form9Example4">City</label><br>
+                                        <input class="form-control" type="text" id="city_id">
+                                    </div>
+                                </div>
+                            </div>

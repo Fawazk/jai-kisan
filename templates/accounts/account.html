@@ -6,39 +6,77 @@
 
 
 
-
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <section class="section-conten padding-y bg">
 
     <div class="container">
         <div class="row">
-        <aside class="col-md-3">
+        <div class="col-md-3">
             <!--   SIDEBAR   -->
             <ul class="list-group">
 				<a class="list-group-item active" href="#"> Profile </a>
                 <a class="list-group-item" href="{% url 'my_orders' %}"> My order</a>
-                <a class="list-group-item" href="#">Settings </a>
-                <a class="list-group-item" href="#"> Change Password </a>
+                <a class="list-group-item" href="{% url 'change_password' %}"> Change Password </a>
+                <a class="list-group-item" href="{% url 'address_management' %}"> Address Management </a>
     
             </ul>
             <br>
             <a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
             <!--   SIDEBAR .//END   -->
-        </aside>
-	<main class="col-md-9">
-		<article class="card">
-		<header class="card-header">
-			<strong class="d-inline-block mr-3">Logged in as :</strong>
-			<span>{{ user.username }}</span>
-		</header>
-		<div class="card-body">
-			<div class="row"> 
-				
-			
-			</div> <!-- row.// -->
-		</div> <!-- card-body .// -->
-		
-		</article> <!-- order-group.// --> 
-	</main>
+        </div>
+                    <div class="col-xl-9 col-md-12">
+                        <div class="card user-card-full">
+                            <div class="row m-l-0 m-r-0">
+                                <div class="col-sm-4 bg-c-lite-green user-profile">
+                                    <div class="card-block text-center text-white">
+                                        <div class="m-b-25"> <img src="{{ account.profile_img.url }}" width="25%" class="img-radius" alt="User-Profile-Image"> </div>
+                                        <h4 class="f-w-600">{{ account.username }}</h4>
+                                        <p>{{ account.phone_number }}</p> <a href="{% url 'edit_profile' account.id %}">Edit<i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="card-block">
+                                        <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p class="m-b-10 f-w-600">First Name</p>
+                                                <h6 class="text-muted f-w-400">{{ account.first_name }}</h6>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p class="m-b-10 f-w-600">Last Name</p>
+                                                    <h6 class="text-muted f-w-400">{{ account.last_name }}</h6>
+                                            </div>
+                                        </div>
+                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></h6>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p class="m-b-10 f-w-600">Email</p>
+                                                <h6 class="text-muted f-w-400">{{ account.email }}</h6>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p class="m-b-10 f-w-600">Phone</p>
+                                                <h6 class="text-muted f-w-400">{{ account.phone_number }}</h6>
+                                            </div>
+                                        </div>
+                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></h6>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p class="m-b-10 f-w-600">State</p>
+                                                <h6 class="text-muted f-w-400">{{ account.state }}</h6>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p class="m-b-10 f-w-600">City</p>
+                                                <h6 class="text-muted f-w-400">{{ account.city }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              
+        </div>
 </div> <!-- row.// -->
 </div>
 

@@ -1,0 +1,145 @@
+{% load static %}
+{% include 'adminpanel/nav.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="{% static 'admincss/admin_home.css' %}"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>Product_list</title>
+</head>
+
+<body>
+    <div class="header ">
+        <div class="align-items-">
+            <div class="px-2 col-lg-12 col-7">
+                <div class="mb-2 d-flex justify-content-between align-items-center">
+                    <!-- <div class="position-relative"> <span class="position-absolute search"><i class="fa fa-search"></i></span> <input class="form-control w-100" placeholder="Search by order#, name..."> </div> -->
+                    <!-- <div class="px-2"> <span>Filters <i class="fa fa-angle-down"></i></span> <i class="fa fa-ellipsis-h ms-3"></i> </div> -->
+                </div>
+                <div class="table-responsive">
+                    <div>
+                        <h1 style="color:#5cb85c" class="m-5">Active Orders</h1>
+                    </div>
+                    <table id="table" class="display">
+                        <thead>
+
+                            <tr>
+                                <th scope="col">User</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Order Number</th>
+                                <th scope="col">Product price</th>
+                                <th scope="col">Total payment</th>
+                                <th scope="col">Tax</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">is_ordered</th>
+                                <th scope="col">created_at</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for x in order_history%}
+                            {% if x.status == 4 or x.status == 0 %}
+                            
+                            <tr>
+                                <th scope="row">
+                                    {{ x.user }}
+                                </th>
+                                <td>
+                                    {{ x.product }}
+                                </td>
+                                <td>
+                                    {{ x.order.name }}
+                                </td>
+                                <td>
+                                    {{ x.order.order_number }}
+                                </td>
+                                <td>
+                                    {{ x.product_price }}
+                                </td>
+                                <td>
+                                    {{ x.order.order_total }}
+                                </td>
+                                <td>
+                                    {{ x.order.tax }}
+                                </td>
+                                <td>
+                                    {{ x.quantity }}
+                                </td>
+                              
+                                    {% if x.status == 0 %}
+                                    <td>Cancelled</td>
+                                    {% elif x.status == 4 %}
+                                    <td>Deliveded</td>
+                                    {% endif %}
+                               
+                                <td>
+                                    {{ x.order.is_ordered }}
+                                </td>
+                                <td>
+                                    {{ x.updated_at }}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+ 
+
+    <!-- Modal -->
+     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <p id="model-body-content" class="text-danger"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="" type="button" class="btn btn-primary"  id="delete"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>
+
+</body>
+
+</html>

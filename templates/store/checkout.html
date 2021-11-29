@@ -4,88 +4,270 @@
 {% load static %}
 
 {% block content %}
-
-
-
-
-
 <section class="section-content padding-y bg">
     <div class="container">
-
-        <!-- ============================ COMPONENT 1 ================================= -->
-
-
-
-
         <div class="row">
-            <aside class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title mb-4">Billling address</h3>
-                        <form action="{% url 'place_order' %}" method="POST">
-                            {% csrf_token %}
-                            <div class="from-group">
-                                <div class="form-row">
-                                    <div class="col form-group">
-                                        <label for="">Name</label>
-                                        <input type="text" name="name" class="form-control">
-                                    </div>
-                                    <div class="col form-group">
-                                        <label for="">Phone</label>
-                                        <input type="text" name="phone" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col form-group">
-                                        <label for="">Address</label>
-                                        <input type="Address" name="address" class="form-control">
-                                    </div>
-
-                                </div>
-                                <div class="form-row">
-                                    <div class="col form-group">
-                                        <label for="">Locality </label>
-                                        <input type="text" name="locality" class="form-control">
-                                    </div>
-                                    <div class="col form-group">
-                                        <label for="">Landmark</label>
-                                        <input type="text" name="landmark" class="form-control">
-                                    </div>
+            <aside class="col-lg-7">
+                <div class="row">
+                    <div class="col-md-12 pb-3">
+                        <div id="accordion">
+                            <div class="card p-4"
+                                style="box-shadow: 0 6px 6px 0 rgb(0 0 0 / 12%), 0 1px 3px 0 rgb(0 0 0 / 18%);">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <button class="" data-toggle="collapse" data-target="#collapsetwo"
+                                            aria-expanded="true" aria-controls="collapsetwo">
+                                            Address
+                                        </button>
+                                    </h5>
                                 </div>
 
-                                <div class="form-row">
-                                    <div class="col form-group">
-                                        <label for="">City</label>
-                                        <input type="text" name="city" class="form-control">
-                                    </div>
-                                    <div class="col form-group">
-                                        <label for="">state</label>
-                                        <input type="text" name="state" class="form-control">
-                                    </div>
-                                    
-                                   
-                                </div>
-                                <div class="form-row">
-                                    <div class="col form-group">
-                                        <label for="">Pincode </label>
-                                        <input type="text" name="pincode" class="form-control">
-                                    </div>
-                                    <div class="col form-group">
-                                        <label for="">Alternate Phone</label>
-                                        <input type="text" name="alternate_phone" class="form-control">
-                                    </div>
-                                </div>
+                                <div id="collapsetwo" class="collapse show" aria-labelledby="headingOne"
+                                    data-parent="#accordion">
+                                    {% for addres in address %}
+                                    <div class="col-md-12" style="cursor: pointer" onclick="billingAddress('{{ addres.id }}')">
+                                        <div class="card container mt-2"
+                                            style="box-shadow: 0 6px 6px 0 rgb(0 0 0 / 12%), 0 1px 3px 0 rgb(0 0 0 / 18%);">
+                                            <div class="card-body container">
+                                                <div class="dpjmKp d-flex justify-content-end">
+                                                    <img
+                                                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
+                                                    <div class="_3E8aIl _1UHYca">
+                                                        <div class="_16FXBY">
+                                                            <a href="{% url 'edit_address' addres.id %}">Edit</a>
+                                                        </div>
+                                                        <div class="_16FXBY">
+                                                            <a href="{% url 'cancel_address' addres.id %}">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button style="border: none;">{{ addres.type }}</button><br>
+                                                <b id="name-{{ addres.id }}">{{ addres.name }}</b>&emsp;&emsp;<b
+                                                    id="phone-{{ addres.id }}">{{ addres.phone }}</b>
+                                                <div class="row container-fluid mt-2 mb-2">
+                                                    <p id="address-{{ addres.id }}">{{ addres.address }}</p>
+                                                    <p id="locality-{{ addres.id }}">{{ addres.locality }},</p>
+                                                    <p id="landmark-{{ addres.id }}">{{ addres.landmark }},</p>
+                                                    <p id="city-{{ addres.id }}">{{ addres.city }},</p>
+                                                    <p id="state-{{ addres.id }}">{{ addres.state }}-</p>
+                                                    <p id="pincode-{{ addres.id }}">{{ addres.pincode }}</p>
+                                                    <b id="alternate_phone-{{ addres.id }}">-{{ addres.alternate_phone }}</b>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% endfor %}
+                                </div>
                             </div>
-                <!-- <form action="{% url 'place_order' %}" method="post" enctype="multipart/form-data" class="col-xl-10">
-                    {% csrf_token %}
-                    {{ form | crispy }}
-                    <input type="submit" id="btn-submit" value="submit">
-
+                        </div>
                     </div>
-                </div> <!-- card.// -->
-            </aside> <!-- col.// -->
-            <aside class="col-lg-6">
+                </div>
+                <div class="col-md-12 p-0 mb-4 ">
+                    <div id="accordion card shadow">
+                        <div class="card"
+                            style="box-shadow: 0 6px 6px 0 rgb(0 0 0 / 12%), 0 1px 3px 0 rgb(0 0 0 / 18%); width: 100%;">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="" data-toggle="collapse" data-target="#collapseOne"
+                                        aria-expanded="true" aria-controls="collapseOne">
+                                        Add Address
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordion">
+                                <div class="card-body card shadow">
+
+                                    <form id="myform" action="{% url 'add_address' %}" method="post">
+
+                                        {% csrf_token %}
+                                        <div>
+                                            <div class="card card-custom pb-4">
+                                                <div class="card-body mt-0 mx-5">
+                                                    <div class="text-center mb-3 pb-2 mt-3">
+                                                        <h4 style="color: #495057 ;">Delivery Address</h4>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label"
+                                                                    for="form9Example1">Name</label>
+                                                                {{form.name}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label" for="form9Example2">phone
+                                                                    Number</label>
+                                                                {{ form.phone }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label"
+                                                                    for="form9Example3">Address</label>
+                                                                {{ form.address }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label"
+                                                                    for="form9Example4">City</label>
+                                                                {{ form.city }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label"
+                                                                    for="form9Example6">State</label>{{ form.state }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label"
+                                                                    for="typeEmail">Locality</label>
+                                                                {{ form.locality }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label"
+                                                                    for="form9Example6">Landmark</label>
+                                                                {{ form.landmark }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label"
+                                                                    for="typeEmail">Pincode</label>
+                                                                {{ form.pincode }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label"
+                                                                    for="form9Example6">alternate_phone</label>
+                                                                {{ form.alternate_phone }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="form-outline">
+                                                                <label class="form-label" for="typeEmail">Address
+                                                                    type</label><br>
+                                                                {{ form.type }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="float-end ">
+
+                                                        <button type="submit" class="btn btn-primary btn-rounded"
+                                                            style="background-color: #0062CC ;">Place addres</button>
+                                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                </div>
+                <hr>
+                <div class="col-md-12 p-0 card  shadow">
+                    <div class="card-body"style="box-shadow: 0 6px 6px 0 rgb(0 0 0 / 12%), 0 1px 3px 0 rgb(0 0 0 / 18%); width: 100%;">
+                        <h4 class="card-title">Address info</h4>
+                        <form action="{% url 'place_order' %}" method="post">
+                            {% csrf_token %}
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label"
+                                            for="form9Example1">Name</label>
+                                        {{form.name}}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form9Example2">phone
+                                            Number</label>
+                                        {{ form.phone }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label"
+                                            for="form9Example3">Address</label>
+                                        {{ form.address }}
+                                    </div>
+                                </div>
+                              
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label"
+                                            for="form9Example6">State</label>{{ form.state }}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label"
+                                            for="typeEmail">Locality</label>
+                                        {{ form.locality }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label"
+                                            for="form9Example6">Landmark</label>
+                                        {{ form.landmark }}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label"
+                                            for="typeEmail">Pincode</label>
+                                        {{ form.pincode }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label"
+                                            for="form9Example6">alternate_phone</label>
+                                        {{ form.alternate_phone }}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label"
+                                            for="form9Example4">City</label>
+                                        {{ form.city }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="float-end ">
+                                
+                            </div>
+                    </div>
+                </div>
+            </aside>
+            <aside class="col-lg-5">
 
                 <div class="card">
 
@@ -103,11 +285,12 @@
                             <tr>
                                 <td>
                                     <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="{{ cart_item.product.images_one.url }}" class="img-sm">
+                                        <div class="aside"><img src="{{ cart_item.product.images_one.url }}"
+                                                class="img-sm">
                                         </div>
                                         <figcaption class="info">
-                                            
-                                            <a href="{{ cart_item.product.get_url }}" class="text-dark">{{ cart_item.product.product_name }}</a>
+                                            <a href="{{ cart_item.product.get_url }}"
+                                                class="text-dark">{{cart_item.product.product_name }}</a>
                                             {% for item in cart_item.variations.all %}<br>
                                             <small class="text-muted">{{ item.variation_value }}</small>
                                             {% endfor %}
@@ -116,12 +299,12 @@
                                 </td>
 
                                 <td>
-                                   {{ cart_item.quantity }} 
+                                    {{ cart_item.quantity }}
                                 </td>
                                 <td>
                                     <var class="price">Rs.{{ cart_item.sub_total }}/-</var>
                                     <small class="text-muted">Rs.{{ cart_item.product.price }}/-</small>
-                                 </td>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -129,7 +312,7 @@
                     <div class="card-body">
                         <button type='submit' name="submit" class="btn btn-primary btn-block">Checkout</button>
                         <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
-                </form>
+                        </form>
                     </div> <!-- card-body.// -->
                 </div> <!-- card.// -->
 
@@ -138,13 +321,58 @@
 
 
 
-        </div> <!-- row.// -->
-        <!-- ============================ COMPONENT 1 END .// ================================= -->
+        </div>
+    </div>
 
-    </div> <!-- container .//  -->
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
 </body>
+<style>
+    .dpjmKp:hover ._1UHYca {
+        display: block;
+    }
+
+    ._1UHYca {
+        z-index: 1;
+        white-space: nowrap;
+        display: none;
+        position: absolute;
+        font-size: 14px;
+        color: #878787;
+        border: 1px solid rgba(0, 0, 0, .05);
+        box-shadow: 0 6px 6px 0 rgb(0 0 0 / 12%), 0 1px 3px 0 rgb(0 0 0 / 18%);
+        right: 23px;
+        padding: 5px;
+        border-radius: 3px;
+        top: 10px;
+    }
+
+    ._3E8aIl {
+        background-color: #fff;
+
+    }
+</style>
+<script>
+    function billingAddress(id) {
+        let name = document.getElementById("name-" + id).innerText;
+        document.getElementById("id_name").value=name;
+        let phone = document.getElementById("phone-" + id).innerText;
+        document.getElementById("id_phone").value=phone;
+        let address = document.getElementById("address-" + id).innerText;
+        document.getElementById("id_address").value = address;
+        let city = document.getElementById("city-" + id).innerText;
+        document.getElementById("id_city").value = city;
+        let state = document.getElementById("state-" + id).innerText;
+        document.getElementById("id_state").value = state;
+        let locality = document.getElementById("locality-" + id).innerText;
+        document.getElementById("id_locality").value = locality;
+        let landmark = document.getElementById("landmark-" + id).innerText;
+        document.getElementById("id_landmark").value = landmark;
+        let pincode = document.getElementById("pincode-" + id).innerText;
+        document.getElementById("id_pincode").value = pincode;
+        let alternate_phone = document.getElementById("alternate_phone-" + id).innerText;
+        document.getElementById("id_alternate_phone").value = alternate_phone;
+    }
+</script>
 
 </html>
 {% endblock %}

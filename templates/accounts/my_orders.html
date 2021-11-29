@@ -11,35 +11,69 @@
 
     <div class="container">
         <div class="row">
-        <aside class="col-md-3">
-            <!--   SIDEBAR   -->
-            <ul class="list-group">
-				<a class="list-group-item" href="#"> Profile </a>
-                <a class="list-group-item active" href="{% url 'my_orders' %}"> My order</a>
-                <a class="list-group-item" href="#">Settings </a>
-                <a class="list-group-item" href="#"> Change Password </a>
-    
-            </ul>
-            <br>
-            <a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
-            <!--   SIDEBAR .//END   -->
-        </aside>
-	<main class="col-md-9">
-		<article class="card">
-		<header class="card-header">
-			<strong class="d-inline-block mr-3">My Orders</strong>
-		</header>
-		<div class="card-body">
-			<div class="row"> 
-				
-			
-			</div> <!-- row.// -->
-		</div> <!-- card-body .// -->
-		
-		</article> <!-- order-group.// --> 
-	</main>
-</div> <!-- row.// -->
-</div>
+            <div class="col-md-3 col-sm-12">
+                <!--   SIDEBAR   -->
+                <ul class="list-group">
+                    <a class="list-group-item" href="{% url 'profile' %}"> Profile </a>
+                    <a class="list-group-item active" href="{% url 'my_orders' %}"> My order</a>
+                    <a class="list-group-item" href="{% url 'change_password' %}"> Change Password </a>
+                    <a class="list-group-item" href="{% url 'address_management' %}"> Address Management </a>
+                </ul>
+                <br>
+                <a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log
+                        out</span> </a>
+                <!--   SIDEBAR .//END   -->
+            </div>
+            <div class="col-md-9 col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">image</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">quantity</th>
+                            <th scope="col">price</th>
+                            <th scope="col">Status</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in orderproduct %}
+                        <tr>
+                            <td>
+                                <div>
+                                <img src="{{ x.product.images_one.url }}" height="50px" width="50px">
+                                </div></td>
+                            <td><a href="{{ x.product.get_url }}">{{ x.product.product_name }}</a></td>
+                            <td>{{ x.quantity }}</td>
+                            <td>{{ x.product_price }}</td>
+                            {% if x.status == 1 %}
+                            <td>Order Accepted<br><small>{{ x.created_at }}</small></td>
+                            {% elif x.status == 2 %}
+                            <td>Shipped<br><small>{{ x.created_at }}</small></td>
+                            {% elif x.status == 3 %}
+                            <td>Out for delivery <br><small>{{ x.created_at }}</small></td>
+                            {% elif x.status == 4 %}
+                            <td>Order delivered<br><small>{{ x.created_at }}</small></td>
+                            {% else %}
+                            <td>Order Cancelled<br><small></small></td>
+                            {% endif %}
+                            {% if x.status == 4 %}
+                            <td><a class="btn btn-primary" href="">Delivered</a></td>
+                            {% elif x.status == 0 %}
+                            <td><a class="btn btn-primary" href="">Order Cancelled</a></td>
+                            {% else %}
+                            <td><a class="btn btn-danger" href="{% url 'cancel_order' x.order.id %}">Cancel</a></td>
+                            {% endif %}
+                            <td><a href="{% url 'orderdetails' x.id %}">Details</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> <!-- row.// -->
+        </div> <!-- card-body .// -->
+
+    </div>
 
 
 </section>
@@ -50,6 +84,7 @@
 
 
 </body>
+
 </html>
 
 

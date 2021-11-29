@@ -50,8 +50,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span class="nav-link-text">Variation List</span>
+                        <a class="nav-link" href="{% url 'order_list' %}">
+                            <span class="nav-link-text">Active Orders</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'order_history' %}">
+                            <span class="nav-link-text">Orders History</span>
                         </a>
                     </li>
                 </ul>

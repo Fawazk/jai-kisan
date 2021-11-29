@@ -17,5 +17,7 @@ urlpatterns = [
     path('deleteuser/<user_id>',views.deleteuser,name='deleteuser'),
     path('blockuser/<user_id>',views.blockuser,name='blockuser'),
     path('unblockuser/<user_id>',views.unblockuser,name='unblockuser'),
-    
+    path('order_list',views.order_list,name='order_list'),
+    path('edit_order/<int:order_product_id>/',views.order_edit,name='order_edit'),
+    path('order_history',views.order_history,name='order_history'),
     ]

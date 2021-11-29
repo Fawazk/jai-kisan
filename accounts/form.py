@@ -36,3 +36,10 @@ class RegisterationForm(forms.ModelForm):
             raise forms.ValidationError(
                 "password does not match"
             )
+            
+class edit_profileForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['first_name','last_name','email','phone_number','profile_img','state','city']
+
+    

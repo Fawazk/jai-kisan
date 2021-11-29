@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from accounts.models import Account
 from category.models import category
+from orders.forms import OrderProductForm
+from orders.models import Order, OrderProduct
 from store.models import Product
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
@@ -159,6 +161,35 @@ def unblockuser(request,user_id):
     return redirect('user_management')
 
 
+
+def order_list(request):
+    order_list = OrderProduct.objects.all()
+    context = {
+        'order_list':order_list,
+    }
+    return render(request,'adminpanel/order_list.html',context)
+
+def order_edit(request,order_product_id):
+    list_order = OrderProduct.objects.get(id=order_product_id)
+    form = OrderProductForm(instance=list_order)
+    if request.method == 'POST':
+        form=OrderProductForm(request.POST,request.FILES,instance=list_order)
+        if form.is_valid():
+            try:
+                form.save()                
+            except:
+                context = {'form':form}
+                return render(request,'adminpanel/order_edit.html',context)
+            return redirect('order_list')
+    context = {'form':form}     
+    return render(request,'adminpanel/order_edit.html',context)
+
+def order_history(request):
+    order_history = OrderProduct.objects.all()
+    context = {
+        'order_history':order_history,
+    }
+    return render(request,'adminpanel/order_history.html',context)
     
 
 

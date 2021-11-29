@@ -65,17 +65,6 @@ def payments(request):
     # # Clear cart
     CartItem.objects.filter(user=request.user).delete()
 
-    # # Send order recieved email to customer
-    # mail_subject = 'Thank you for your order!'
-    # message = render_to_string('orders/order_recieved_email.html', {
-    #     'user': request.user,
-    #     'order': order,
-    # })
-    # to_email = request.user.email
-    # send_email = EmailMessage(mail_subject, message, to=[to_email])
-    # send_email.send()
-
-    # Send order number and transaction id back to sendData method via JsonResponse
     data = {
         'order_number': order.order_number,
         'transID': payment.payment_id,
@@ -83,7 +72,6 @@ def payments(request):
     return JsonResponse(data)
 
 def place_order(request, total=0, quantity=0):
-    print('-------------------------------------')
     current_user = request.user
     cart_items = CartItem.objects.filter(user=current_user)
     cart_count = cart_items.count()
@@ -97,7 +85,6 @@ def place_order(request, total=0, quantity=0):
     tax = (2*total)/100
     grand_total = total+tax
     if request.method == 'POST':
-        print('-------------------------------------')
         form = OrderForm(request.POST)
         if form.is_valid():
 
@@ -137,7 +124,7 @@ def place_order(request, total=0, quantity=0):
                 'grand_total': grand_total,
             }
             return render(request, 'orders/payments.html', context)
-  
+    print('------------------------------=======')
     return redirect('checkout')
 
 def order_complete(request):
@@ -166,3 +153,31 @@ def order_complete(request):
     except (Payment.DoesNotExist, Order.DoesNotExist):
         return redirect('home')
 
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('created_at')
+    orderproduct = OrderProduct.objects.filter(user=request.user)
+    context = {
+        'orders': orders,
+        'orderproduct':orderproduct,
+    }
+    return render(request, 'accounts/my_orders.html', context)
+def orderdetails(request,order_id):
+    orderproduct = OrderProduct.objects.get(id=order_id)
+    context = {
+        'orderproduct':orderproduct,
+    }
+    return render(request,'accounts/orderdetails.html',context)
+
+def cancel_order(request,order_id):
+    orders = Order.objects.get(id=order_id,user=request.user)
+    orderproduct = OrderProduct.objects.get(user=request.user,order=orders)
+    item_id=orderproduct.product.id
+    product = Product.objects.get(id=item_id)
+    print(product)
+    product.stock += orderproduct.quantity
+    print(product.stock)
+    orderproduct.status = 0
+    orderproduct.save()
+    product.save()
+    
+    return redirect('my_orders')

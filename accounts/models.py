@@ -47,7 +47,9 @@ class Account(AbstractBaseUser):
     username = models.CharField(max_length=50)
     email = models.CharField(max_length=50,unique=True)
     phone_number = models.CharField(max_length=50)
-
+    profile_img = models.ImageField(blank=True,upload_to='userprofile')
+    city = models.CharField(max_length=50,null=True)
+    state = models.CharField(max_length=50,null=True)
     # required
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now_add=True)
@@ -70,4 +72,5 @@ class Account(AbstractBaseUser):
     
     def has_module_perms(self,add_labels): 
         return True
+
 
