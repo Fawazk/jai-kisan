@@ -1,32 +1,85 @@
-{% extends 'base.html' %}
 
-{% load static %}
-{% block content %}
-
-<div class="d-flex justify-content-center align-items-center container text-center ">
-    <div class="card py-5 px-3">
-        <form action="{% url 'confirm_register_otp' %}" method="POST">
-        {% csrf_token %}
-        <h5 class="m-0">Mobile phone verification</h5><span class="mobile-text">Enter the code we just send on your mobile phone <b class="text-danger">{{ mobile_number }}</b></span>
-        <div class="d-flex flex-row mt-5">
-            <input type="text" class="form-control" name="otp1">
-            <input type="text" class="form-control" name="otp2">
-            <input type="text" class="form-control" name="otp3">
-            <input type="text" class="form-control" name="otp4">
-            <input type="text" class="form-control" name="otp5">
-            <input type="text" class="form-control" name="otp6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" ></script>
+<div class="container height-100 d-flex justify-content-center align-items-center">
+    <div class="position-relative">
+        <div class="card p-2 text-center">
+            <h6>Please enter the one time password <br> to verify your account</h6>
+            <div> <span>A code has been sent to your phone number</span></div>
+            <form action="{% url 'confirm_register_otp' %}" method="POST">
+                {% csrf_token %}
+            <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                <input class="m-2 text-center form-control rounded" type="text" name="otp1" id="first" maxlength="1" /> 
+                <input class="m-2 text-center form-control rounded" type="text" name="otp2" id="second" maxlength="1" /> 
+                <input class="m-2 text-center form-control rounded" type="text" name="otp3" id="third" maxlength="1" /> 
+                <input class="m-2 text-center form-control rounded" type="text" name="otp4" id="fourth" maxlength="1" />
+                 <input class="m-2 text-center form-control rounded" type="text" name="otp5" id="fifth" maxlength="1" />
+                  <input class="m-2 text-center form-control rounded" type="text" name="otp6" id="sixth" maxlength="1" />
+                 </div>
+            <div class="mt-4"> <button type="submit" class="btn btn-outline-success px-4 validate">Validate</button> </div>
+            </form>
+            {% include 'includes/alert.html' %} 
         </div>
-        <button type="submit" class="btn btn-success">Submit</button>
-    </form>
-    <div class="text-center mt-5"><span class="d-block mobile-text">Don't receive the code?</span><span class="font-weight-bold text-danger cursor">Resend</span></div>
-
-        {% include 'includes/alert.html' %} 
-
+        <div class="card-2">
+            <div class="content d-flex justify-content-center align-items-center"> <span>Didn't get the code</span> <a href="{% url 'resent_register_otp' %}" class="text-decoration-none ms-3">Resend(1/3)</a> </div>
+        </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
 
+        function OTPInput() {
+        const inputs = document.querySelectorAll('#otp > *[id]');
+        for (let i = 0; i < inputs.length; i++) { inputs[i].addEventListener('keydown', function(event) { if (event.key==="Backspace" ) { inputs[i].value='' ; if (i !==0) inputs[i - 1].focus(); } else { if (i===inputs.length - 1 && inputs[i].value !=='' ) { return true; } else if (event.keyCode> 47 && event.keyCode < 58) { inputs[i].value=event.key; if (i !==inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } else if (event.keyCode> 64 && event.keyCode < 91) { inputs[i].value=String.fromCharCode(event.keyCode); if (i !==inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } } }); } } OTPInput(); });
+</script>
+<style>
 
+    .height-100 {
+        height: 100vh
+    }
+    
+    .card {
+        width: 400px;
+        border: none;
+        height: 300px;
+        box-shadow: 0px 5px 20px 0px #d2dae3;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center
+    }
+    
+    .card h6 {
+        font-size: 20px
+    }
+    
+    .inputs input {
+        width: 40px;
+        height: 40px
+    }
+    
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0
+    }
+    
+    .card-2 {
+        background-color: #fff;
+        padding: 10px;
+        width: 350px;
+        height: 100px;
+        bottom: -50px;
+        left: 20px;
+        position: absolute;
+        border-radius: 5px
+    }
+    
+    .card-2 .content {
+        margin-top: 50px
+    }
+ 
 
-</body>
-</html>
-{% endblock %}
+</style>

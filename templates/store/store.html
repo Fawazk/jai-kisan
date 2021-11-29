@@ -53,39 +53,7 @@
 								<h6 class="title">Price range </h6>
 							</a>
 						</header>
-						<div class="filter-content collapse show" id="collapse_3">
-							<div class="card-body">
 
-								<div class="form-row">
-									<div class="form-group col-md-6">
-										<label>Min</label>
-										<!-- <input class="form-control" placeholder="$0" type="number"> -->
-										<select class="mr-2 form-control">
-											<option value="0">$0</option>
-											<option value="50">$50</option>
-											<option value="100">$100</option>
-											<option value="150">$150</option>
-											<option value="200">$200</option>
-											<option value="500">$500</option>
-											<option value="1000">$1000</option>
-										</select>
-									</div>
-									<div class="form-group text-right col-md-6">
-										<label>Max</label>
-										<select class="mr-2 form-control">
-											<option value="50">$50</option>
-											<option value="100">$100</option>
-											<option value="150">$150</option>
-											<option value="200">$200</option>
-											<option value="500">$500</option>
-											<option value="1000">$1000</option>
-											<option value="2000">$2000+</option>
-										</select>
-									</div>
-								</div> <!-- form-row.// -->
-								<button class="btn btn-block btn-primary">Apply</button>
-							</div><!-- card-body.// -->
-						</div>
 					</article> <!-- filter-group .// -->
 
 				</div> <!-- card.// -->
@@ -95,7 +63,7 @@
 
 				<header class="border-bottom mb-4 pb-3">
 					<div class="form-inline">
-						<span class="mr-md-auto">{{ products.count }} items Found</span>
+						<span class="mr-md-auto">{{ count }} items Found</span>
 
 					</div>
 				</header><!-- sect-heading -->
@@ -106,18 +74,28 @@
 
 
 					<div class="col-md-4">
-						<figure class="card card-product-grid">
+						<figure class="card card-product-grid"  style="box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);
+						-webkit-box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);
+						-moz-box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);">
 							<div class="img-wrap">
 
 								<a href="{{ x.get_url }}"><img src="{{ x.images_one.url}}"></a>
 
 							</div> <!-- img-wrap.// -->
 							<figcaption class="info-wrap">
-								<div class="fix-height">
-									<a href="{{ x.get_url }}" class="title">{{ x.product_name }}</a>
+								<div >
+									<a href="{{ x.get_url }}" class="title">{{ x.product_name }}</a><br>
+									<span>
+										<i class="fa fa-star{% if x.averageReview < 0.5 %}-o{% elif x.averageReview >= 0.5 and x.averageReview < 1 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+										<i class="fa fa-star{% if x.averageReview < 1.5 %}-o{% elif x.averageReview >= 1.5 and x.averageReview < 2 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+										<i class="fa fa-star{% if x.averageReview < 2.5 %}-o{% elif x.averageReview >= 2.5 and x.averageReview < 3 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+										<i class="fa fa-star{% if x.averageReview < 3.5 %}-o{% elif x.averageReview >= 3.5 and x.averageReview < 4 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+										<i class="fa fa-star{% if x.averageReview < 4.5 %}-o{% elif x.averageReview >= 4.5 and x.averageReview < 5 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+										</span>
 									<div class="price-wrap mt-2">										
-										<span class="price">Rs.{{ x.price }}/-</span><br>
-										
+										<span class="price">Rs.{{ x.get_price|floatformat:0 }}/-</span>
+										&emsp;<del class="price-old">Rs.{{ x.price }}</del><br>
+										<p style="color: green;">Off-{{ x.productoffer.discount_offer }}%</p>
 
 									</div> <!-- price-wrap.// -->
 								</div>
@@ -130,14 +108,11 @@
 										<a href="#" class="btn btn-outline-success"> <span class="text">Added to
 												cart</span></a>
 										{% else %}
-										<a href="{% url 'add_cart' x.id %}" class="btn btn-success"> <span
-												class="text">Add to
-												cart</span></a>
+										<a href="{% url 'add_cart' x.id %}" class="btn btn-success"> <span>Add to cart</span></a>
 										{% endif %}
 										{% endif %}
 								</div>
 
-							</figcaption>
 						</figure>
 					</div>
 					{% endfor %}

@@ -30,14 +30,22 @@
 	
 <div class="row">
 	{% for x in products %}
+
 	<div class="col-md-3">
-		<div class="card card-product-grid" >
+		<div class="card card-product-grid"  style="box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);
+		-webkit-box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);
+		-moz-box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);">
 			<a href="{{ x.get_url }}" class="img-wrap p-3"> <img src="{{ x.images_one.url }}"> </a>
 			<div class="info-wrap pl-4 border">
-				<a href="{{ x.get_url }}" class="text-success">{{ x.product_name }}</a>
-				<br><b>Rs.{{ x.price }}/-</b>
-				<!-- {% for v in x.variation_set.reverse|slice:":1" %} -->
-				<!-- {% endfor %} -->
+				<a href="{{ x.get_url }}" class="text-success">{{ x.product_name }}</a><br>
+				<span>
+					<i class="fa fa-star{% if x.averageReview < 0.5 %}-o{% elif x.averageReview >= 0.5 and x.averageReview < 1 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+					<i class="fa fa-star{% if x.averageReview < 1.5 %}-o{% elif x.averageReview >= 1.5 and x.averageReview < 2 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+					<i class="fa fa-star{% if x.averageReview < 2.5 %}-o{% elif x.averageReview >= 2.5 and x.averageReview < 3 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+					<i class="fa fa-star{% if x.averageReview < 3.5 %}-o{% elif x.averageReview >= 3.5 and x.averageReview < 4 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+					<i class="fa fa-star{% if x.averageReview < 4.5 %}-o{% elif x.averageReview >= 4.5 and x.averageReview < 5 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
+					</span>
+				<br><b>Rs.{{ x.get_price |floatformat:0 }}/-</b>&emsp;<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{ x.productoffer.discount_offer }}%</p>
 			</div>
 
 		</div>

@@ -171,8 +171,9 @@ def cart(request, total=0, quantity=0, cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
+            total += (cart_item.product.get_price()* cart_item.quantity)
             quantity += cart_item.quantity
+        offer_price=total-cart_item.product.price
         tax = (3 * total)/100
         grand_total = tax + total
     except ObjectDoesNotExist:
@@ -183,6 +184,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
         'cart_items': cart_items,
         'tax': tax,
         'grand_total': grand_total,
+        'offer_price':offer_price,
         # 'variations':variations,
     }
     return render(request, 'store/cart.html', context)
@@ -202,7 +204,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
+            total += (cart_item.product.get_price() * cart_item.quantity)
             quantity += cart_item.quantity
         tax = (3 * total)/100
         grand_total = tax + total
@@ -218,33 +220,3 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         'address':address,
     }
     return render(request, 'store/checkout.html',context)
-
-
-# def checkout(request):
-#     addresses = Address.objects.filter(user=request.user)
-#     try:
-#         default_address = addresses.get(default=True)
-#         form = OrderForm(
-#             initial={
-#                 'full_name': default_address.full_name,
-#                 'phone': default_address.phone,
-#                 'email': default_address.email,
-#                 'house_no': default_address.house_no,
-#                 'area': default_address.area,
-#                 'landmark': default_address.landmark,
-#                 'town': default_address.town,
-#                 'state': default_address.state,
-#                 'pin': default_address.pin
-#             }
-#         )
-#     except ObjectDoesNotExist:
-#         form = OrderForm()
-
-#     context = {
-#         'from': form,
-#         'addresses': addresses,
-#         'tax': intcomma(request.session['tax']),
-#         'total': intcomma(request.session['total_price']),
-#         'grand_total': intcomma(request.session['grand_total']),
-#     }
-#     return render(request, 'cart/checkout.html', context)

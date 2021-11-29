@@ -9,8 +9,10 @@ urlpatterns = [
     path('signin',views.signin,name='signin'),
     path('forgot_password',views.forgot_password,name='forgot_password'),
     path('otp',views.otp,name='otp'),
+    path('resent_otp',views.resent_otp,name="resent_otp"),
     path('new_password',views.new_password,name='new_password'),
     path('confirm_register_otp',views.confirm_register_otp,name='confirm_register_otp'),
+    path('resent_register_otp',views.resent_register_otp,name="resent_register_otp"),
     path('logout',views.logout,name="logout"),
     # ----------------------------------------
     path('profile',views.profile,name='profile'),

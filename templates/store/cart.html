@@ -81,8 +81,8 @@
 								<td>
 									<div class="price-wrap">
 
-										<var class="price">Rs.{{ x.sub_total }}/-</var>
-										<small class="text-muted">Rs.{{ variations.price }}/-</small>
+										<var class="price">Rs.{{ x.sub_total |floatformat:0 }}/-</var>
+										<small class="text-muted">Rs. {{ x.product.get_price|floatformat:0 }}/-</small>
 										
 									</div> <!-- price-wrap .// -->
 								</td>
@@ -105,19 +105,23 @@
 					<div class="card-body">
 						<dl class="dlist-align">
 							<dt>Total price:</dt>
-							<dd class="text-right">{{total}}</dd>
+							<dd class="text-right">Rs. {{total|floatformat:0}}/-</dd>
 						</dl>
 						<dl class="dlist-align">
 							<dt>Tax:</dt>
-							<dd class="text-right"> {{tax}}</dd>
+							<dd class="text-right">Rs. {{tax|floatformat:0}}/-</dd>
 						</dl>
 						<dl class="dlist-align">
-							<dt>Total:</dt>
-							<dd class="text-right text-dark b"><strong>{{grand_total}}</strong></dd>
+							<dt>Discount Price:</dt>
+							<dd class="text-right">Rs. {{offer_price|floatformat:0}}/-</dd>
+						</dl>
+						<dl class="dlist-align">
+							<dt><b>Total:</b></dt>
+							<dd class="text-right text-dark b"><strong>Rs. {{grand_total|floatformat:0}}/-</strong></dd>
 						</dl>
 						<hr>
 						<p class="text-center mb-3">
-							<img src="./images/misc/payments.png" height="26">
+							<img src="{% static './images/misc/payments.png' %}" height="26">
 						</p>
 						<a href="{% url 'checkout' %}" class="btn btn-primary btn-block"> Checkout </a>
 						<a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>

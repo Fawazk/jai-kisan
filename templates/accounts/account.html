@@ -30,7 +30,11 @@
                             <div class="row m-l-0 m-r-0">
                                 <div class="col-sm-4 bg-c-lite-green user-profile">
                                     <div class="card-block text-center text-white">
+                                        {% if account.profile_img %}
                                         <div class="m-b-25"> <img src="{{ account.profile_img.url }}" width="25%" class="img-radius" alt="User-Profile-Image"> </div>
+                                        {% else %}
+                                        <div class="m-b-25"> <img src="http://naikenviro.net/wp-content/uploads/2018/06/null.jpg" width="25%" class="img-radius" alt="User-Profile-Image"> </div>
+                                        {% endif %}           
                                         <h4 class="f-w-600">{{ account.username }}</h4>
                                         <p>{{ account.phone_number }}</p> <a href="{% url 'edit_profile' account.id %}">Edit<i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i></a>
                                     </div>

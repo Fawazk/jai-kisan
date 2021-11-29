@@ -24,6 +24,23 @@ class Product(models.Model):
     
     def get_url(self):
         return reverse('product_detail',args=[self.p_category.slug, self.slug])
+    def get_price(self):
+        try:
+            if self.productoffer.is_active:
+                offer_price = (self.price / 100) * self.productoffer.discount_offer
+                p_price = self.price - offer_price
+                return p_price
+            raise
+        except:
+            try:
+                if self.product.category.categoryoffer.is_active:
+                    offer_price = (self.price / 100) * self.product.category.categoryoffer.discount_offer
+                    p_price = self.price - offer_price
+                    return p_price
+                raise
+            except:
+                pass
+            return self.price
     
     def averageReview(self):
         reviews = ReviewRating.objects.filter(product=self,status=True).aggregate(average=Avg('rating'))
@@ -34,6 +51,7 @@ class Product(models.Model):
     
     def __str__(self):
         return self.product_name
+    
     
     
 variation_category_choice =(
