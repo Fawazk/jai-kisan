@@ -1,6 +1,9 @@
 from django.shortcuts import render,redirect
 from accounts.models import Account
+from category.form import CategoryForm
 from category.models import category
+from offer.form import CategoryOfferForm, ProductOfferForm
+from offer.models import CategoryOffer, ProductOffer
 from orders.forms import OrderProductForm
 from orders.models import Order, OrderProduct
 from store.models import Product
@@ -45,35 +48,34 @@ def deletecategory(request,cat_id):
 @staff_member_required
 def editcategory(request,cat_id):
     list_cats = category.objects.get(id=cat_id)
-    print(list_cats)
-    context = { 'list_cats' : list_cats }
-    if request.method == 'POST':
-        category_Name         = request.POST['category_Name']
-        category_slug         = request.POST['category_slug']
-        category_Description  = request.POST['category_Description']
-        
-        list_cats.category_name  = category_Name
-        list_cats.slug           = category_slug
-        list_cats.description    = category_Description
-        list_cats.save()
-        return redirect('category_list')
+    form = CategoryForm(instance=list_cats)
+    if request.method=='POST':
+        form=CategoryForm(request.POST,request.FILES,instance=list_cats)
+        if form.is_valid():
+            try:
+                form.save()                
+            except:
+                context = {'form':form}
+                return render(request,'adminpanel/edit_category.html',context)
+            return redirect('category_list')
+    context = {'form':form}  
     return render(request,'adminpanel/edit_category.html',context)
     
 @staff_member_required
 def addcategory(request):
-    if request.method=='POST':
-        category_Name = request.POST['category_Name']
-        category_slug         = request.POST['category_slug']
-        category_Description  = request.POST['category_Description']
-        if category.objects.filter(category_name=category_Name).exists():
-            messages.info(request,'Category name taken')
-            return redirect('addcategory')
-        else:
-            added_cat = category.objects.create(category_name=category_Name,slug=category_slug,description=category_Description)
-            added_cat.save()
+    form = CategoryForm()
+    if request.method == 'POST':
+        form = CategoryForm(request.POST,request.FILES)
+
+        if form.is_valid():
+            category=form.save(commit=False)
+            category.slug=category.category_name.lower().replace("","-")
+            category.save()
             return redirect('category_list')
-        
-    return render(request,'adminpanel/add_category.html')   
+    context = {
+            'form':form
+        } 
+    return render(request,'adminpanel/add_category.html',context)   
     
 @staff_member_required
 def Product_list(request):
@@ -95,28 +97,14 @@ def addProduct(request):
         form = ProductForm(request.POST,request.FILES)
 
         if form.is_valid():
-            form.save()
+            product=form.save(commit=False)
+            product.slug=product.product_name.lower().replace(" ","-")
+            product.save()
             return redirect('Product_list')
     context = {
             'form':form
         }
     return render(request,'adminpanel/add_product.html',context) 
-
-
-# @staff_member_required
-# def editproduct(request,cat_id):
-#     list_cats = Product.objects.get(id=cat_id)
-#     form = ProductForm(instance=list_cats)
-#     print(list_cats)
-#     context = { 'list_cats' : list_cats }
-#     if request.method == 'POST':
-        
-#         list_cats.save()
-#         return redirect('Product_list')
-#     return render(request,'adminpanel/editproduct.html',context)
-
-
-
 @staff_member_required
 def editproduct(request,cat_id):
         list_cats = Product.objects.get(id=cat_id)
@@ -145,20 +133,20 @@ def user_list(request):
 def deleteuser(request,user_id):
     products = Account.objects.get(id=user_id)
     products.delete()
-    return redirect('user_management')
+    return redirect('user_list')
 
 
 def blockuser(request,user_id):
     user = Account.objects.get(id=user_id)
     user.is_active = False
     user.save()
-    return redirect('user_management')
+    return redirect('user_list')
 
 def unblockuser(request,user_id):
     user = Account.objects.get(id=user_id)
     user.is_active = True
     user.save()
-    return redirect('user_management')
+    return redirect('user_list')
 
 
 
@@ -190,8 +178,83 @@ def order_history(request):
         'order_history':order_history,
     }
     return render(request,'adminpanel/order_history.html',context)
-    
+
+def product_offer(request):
+    productoffer=ProductOffer.objects.all()
+    context={
+        'productoffer':productoffer,
+    }
+    return render(request,'adminpanel/product_offer.html',context)
+def deleteproductoffer(request,offer_id):
+    productoffer=ProductOffer.objects.get(id=offer_id)
+    productoffer.delete()
+    return redirect('product_offer')
+
+def editproductoffer(request,offer_id):
+    list_order_product=ProductOffer.objects.get(id=offer_id)
+    form = ProductOfferForm(instance=list_order_product)
+    if request.method == 'POST':
+        form = ProductOfferForm(request.POST,request.FILES,instance=list_order_product)
+        print(form)
+        if form.is_valid():
+            try:
+                form.save()
+            except:
+                context = {'form':form}
+                return render(request,'adminpanel/editoffer.html',context)
+            return redirect('product_offer')
+    context = {'form':form}     
+    return render(request,'adminpanel/editoffer.html',context)
+
+def category_offer(request):
+    category_offer = CategoryOffer.objects.all()
+    context ={
+        'category_offer':category_offer,
+    }
+    return render(request,'adminpanel/category_offer.html',context)
+
+def deletecategoryoffer(request,offer_id):
+    category_list=CategoryOffer.objects.get(id=offer_id)
+    category_list.delete()
+    return redirect('category_offer')
 
 
+def editcategoryoffer(request,offer_id):
+    category = CategoryOffer.objects.get(id=offer_id)
+    form = CategoryOfferForm(instance=category)
+    if request.method == 'POST':
+        form = CategoryOfferForm(request.POST,request.FILES,instance=category)
+        if form.is_valid():
+            try:
+                form.save()
+            except:
+                context = {'form':form}
+                return render(request,'adminpanel/editcategoryoffer.html',context)
+            return redirect('category_offer')
+    context = {'form':form}
+    return render(request,'adminpanel/editcategoryoffer.html',context)
 
-    
+
+def add_productoffer(request):
+    form = ProductOfferForm()
+    if request.method == 'POST':
+        form = ProductOfferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('category_offer')
+    context = {
+            'form':form,
+    }
+    return render(request,'adminpanel/add_productoffer.html',context)
+
+def add_categoryoffer(request):
+    form = CategoryOfferForm()
+    if request.method == 'POST':
+        form = CategoryOfferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('category_offer')
+    context = {
+            'form':form,
+    }
+    return render(request,'adminpanel/add_categoryoffer.html',context)

@@ -14,10 +14,10 @@
                             <div class="card p-4">
                                 <div class="card-header" id="headingOne">
                                     <h5 class="mb-0">
-                                        <button class="" data-toggle="collapse" data-target="#collapsetwo"
+                                        <a class="" data-toggle="collapse" data-target="#collapsetwo"
                                             aria-expanded="true" aria-controls="collapsetwo">
                                             Address
-                                        </button>
+                                    </a>
                                     </h5>
                                 </div>
 
@@ -269,7 +269,6 @@
             <aside class="col-lg-5">
 
                 <div class="card">
-
                     <table class="table table-borderless table-shopping-cart">
                         <thead class="text-muted">
                             <tr class="small text-uppercase">
@@ -280,6 +279,7 @@
 
                         </thead>
                         <tbody>
+                            {% if cart_items %}
                             {% for cart_item in cart_items %}
                             <tr>
                                 <td>
@@ -290,9 +290,9 @@
                                         <figcaption class="info">
                                             <a href="{{ cart_item.product.get_url }}"
                                                 class="text-dark">{{cart_item.product.product_name }}</a>
-                                            {% for item in cart_item.variations.all %}<br>
+                                            <!-- {% for item in cart_item.variations.all %}<br>
                                             <small class="text-muted">{{ item.variation_value }}</small>
-                                            {% endfor %}
+                                            {% endfor %} -->
                                         </figcaption>
                                     </figure>
                                 </td>
@@ -301,11 +301,35 @@
                                     {{ cart_item.quantity }}
                                 </td>
                                 <td>
-                                    <var class="price">Rs.{{ grand_total }}/-</var>
-                                    <small class="text-muted">Rs.{{ cart_item.sub_total }}/-</small>
+                                    <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var>
                                 </td>
                             </tr>
                             {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside"><img src="{{ product.images_one.url }}"
+                                                class="img-sm">
+                                        </div>
+                                        <figcaption class="info">
+                                            <a href="{{ product.get_url }}"
+                                                class="text-dark">{{product.product_name }}</a>
+                                            <!-- {% for item in cart_item.variations.all %}<br>
+                                            <small class="text-muted">{{ item.variation_value }}</small>
+                                            {% endfor %} -->
+                                        </figcaption>
+                                    </figure>
+                                </td>
+
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var>
+                                </td>
+                            </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                     <div class="card-body">

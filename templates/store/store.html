@@ -109,6 +109,7 @@
 												cart</span></a>
 										{% else %}
 										<a href="{% url 'add_cart' x.id %}" class="btn btn-success"> <span>Add to cart</span></a>
+										<a href="{% url 'direct_checkout' x.id %}" class="btn btn-success"> <span>Buy Now</span></a>
 										{% endif %}
 										{% endif %}
 								</div>

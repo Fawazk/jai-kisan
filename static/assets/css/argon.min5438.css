@@ -88,11 +88,7 @@ body {
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important;
 }
-hr {
-  overflow: visible;
-  box-sizing: content-box;
-  height: 0;
-}
+
 h1,
 h2,
 h3,

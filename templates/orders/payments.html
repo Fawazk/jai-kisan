@@ -11,9 +11,6 @@
 <section class="section-content padding-y bg">
   <div class="container">
 
-    <!-- ============================ COMPONENT 1 ================================= -->
-
-
     <div class="row">
       <aside class="col-lg-8">
         <div class="card m-1" style="box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3); transition: 0.3s; opacity: 1;">
@@ -29,7 +26,6 @@
         <div class="card m-1" style="box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3); transition: 0.3s; opacity: 1;">
         </div>
         <div class="card m-1" style="box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3); transition: 0.3s; opacity: 1;">
-          <h5 class="card-header">Review Products</h5>
           <div class="card-body">
             <h5 class="card-title">Special title treatment</h5>
             <table class="table table-borderless table-shopping-cart">
@@ -90,7 +86,7 @@
             </dl>
             <hr>
             <p class="text-center mb-3">
-              <img src="./images/misc/payments.png" height="26">
+              <img src="{% static './images/misc/payments.png' %}" height="26">
             </p>
             <div id="paypal-button-container">
               <!-- paypal button will load -->
@@ -127,8 +123,8 @@
     }
     return cookieValue;
   }
-
-  var amount = "{{ grand_total }}"
+  
+  var amount = "{{ paypal_amount }}"
   var url = "{% url 'payments' %}"
   var csrftoken = getCookie('csrftoken');
   var orderID = "{{order.order_number}}"

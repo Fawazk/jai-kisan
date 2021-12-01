@@ -173,8 +173,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
         for cart_item in cart_items:
             total += (cart_item.product.get_price()* cart_item.quantity)
             quantity += cart_item.quantity
-        offer_price=total-cart_item.product.price
-        tax = (3 * total)/100
+            tax = (cart_item.product.tax * total)/100
         grand_total = tax + total
     except ObjectDoesNotExist:
         pass
@@ -184,7 +183,6 @@ def cart(request, total=0, quantity=0, cart_items=None):
         'cart_items': cart_items,
         'tax': tax,
         'grand_total': grand_total,
-        'offer_price':offer_price,
         # 'variations':variations,
     }
     return render(request, 'store/cart.html', context)

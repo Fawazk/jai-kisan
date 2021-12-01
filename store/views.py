@@ -1,7 +1,8 @@
 from django.core import paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from cart.models import CartItem
-from orders.models import OrderProduct
+from orders.forms import AddressForm
+from orders.models import Address, OrderProduct
 from store.models import Product, ReviewRating, Variation
 from category.models import category
 from cart.views import _cart_id
@@ -91,3 +92,28 @@ def submit_review(request, product_id):
                 data.save()
                 messages.success(request, 'Thank you! Your review has been submitted.')
                 return redirect(url)
+
+
+def direct_checkout(request,product_id):
+    url = request.META.get('HTTP_REFERER')
+    user=request.user
+    form = AddressForm()
+    address = Address.objects.filter(user=user)
+    total=0
+    tax = 0
+    if request.user.is_authenticated:
+        product = Product.objects.get(id=product_id)
+        total = product.get_price()
+        tax  = (product.tax * total)/100
+        grand_total=total+tax
+        context ={
+            'product':product,
+            'total':total,
+            'tax':tax,
+            'grand_total':grand_total,
+            'address':address,
+            'form':form,
+        }
+        request.session['direct_order']=product.id
+        return render(request, 'store/checkout.html',context)
+    return redirect(url)      

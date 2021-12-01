@@ -128,7 +128,9 @@ def forgot_password(request):
         return redirect('home')
     if request.method == 'POST':
         mobile_number = request.POST['mobile']
+        print(mobile_number)
         if Account.objects.filter(phone_number=mobile_number).exists():
+            print('----------------')
             otpverify(mobile_number)
             request.session['keys'] = mobile_number
             return redirect('otp')
@@ -178,6 +180,7 @@ def new_password(request):
                 user = Account.objects.get(phone_number=number)
                 user.set_password(password)
                 user.save()
+                messages.error(request, 'Password changed successfully ')
                 return redirect('signin')
             else:
                 messages.error(request, 'Password is not matching!!!')
@@ -249,8 +252,8 @@ def address_management(request):
     }
     return render(request,'accounts/address_management.html',context)
 def edit_address(request,id):
+    url = request.META.get('HTTP_REFERER')
     address = Address.objects.get(id=id)    
-    print(address)
     form = AddressForm(instance=address)
     if request.method=='POST':
         form = AddressForm(request.POST, request.FILES, instance=address)
@@ -263,7 +266,7 @@ def edit_address(request,id):
                     'form':form
                     }
                 return render(request,'accounts/edit_address.html',context)
-            return redirect('address_management')
+            return redirect(url)
     context = {
         'form':form,
         }
@@ -288,6 +291,9 @@ def add_address(request):
         'form':form,
     }
     return render(request,'accounts/address_management.html',context)
+
+def buynow(request):
+    return redirect('check')
 
 def logout(request):
     auth.logout(request)

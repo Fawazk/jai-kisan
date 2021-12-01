@@ -1,0 +1,140 @@
+{% load static %}
+{% include 'adminpanel/nav.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="{% static 'admincss/admin_home.css' %}"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>Product_list</title>
+</head>
+
+<body>
+    <div class="header ">
+        <div class="align-items-">
+            <div class="px-2 col-lg-12 col-7">
+                <div class="mb-2 d-flex justify-content-between align-items-center">
+                    <!-- <div class="position-relative"> <span class="position-absolute search"><i class="fa fa-search"></i></span> <input class="form-control w-100" placeholder="Search by order#, name..."> </div> -->
+                    <!-- <div class="px-2"> <span>Filters <i class="fa fa-angle-down"></i></span> <i class="fa fa-ellipsis-h ms-3"></i> </div> -->
+                </div>
+                <div class="table-responsive">
+                    <div>
+                        <h1 style="color:#5cb85c" class="m-5">Product offer List</h1>
+                    </div>
+                    <table id="table" class="display">
+                        <thead>
+
+                            <tr>
+                                <th scope="col">product id</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Discount</th>
+                                <th scope="col">is_active</th>
+                                <th scope="col">Delete</th>
+                                <th scope="col">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for x in productoffer %}
+                            <tr>
+                                <th scope="row">
+                                    {{ x.id }}
+                                </th>
+                                <td>
+                                    {{ x.product.product_name }}
+                                </td>
+                                <td>
+                                    {{ x.discount_offer }}
+                                </td>
+                                <td>
+                                    {{ x.is_active }}
+                                </td>
+                                    <td><a class="btn btn-danger" href="" onclick="deleteproductoffer('{{x.id}}')" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >delete</a></td>
+                                    <td><a class="btn btn-info" href="" onclick="editproductoffer('{{x.id}}')" data-bs-toggle="modal" data-bs-target="#staticBackdrop">edit</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+ 
+
+    <!-- Modal -->
+     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <p id="model-body-content" class="text-danger"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="" type="button" class="btn btn-primary"  id="delete"></a>
+      </div>
+    </div>
+  </div>
+</div>
+{% for x in messages %}
+
+<script>
+  
+  swal({
+    title: "edit success!",
+    text: "You clicked the button!",
+    icon: "success",
+    button: "Aww yiss!",
+  });
+   
+</script>
+{% endfor %}
+
+
+<script>
+  function deleteproductoffer(id){
+    document.getElementById('delete').href = 'deleteproductoffer/'+id;
+    document.getElementById('staticBackdropLabel').innerText = 'Delete offer';
+    document.getElementById('delete').innerText = 'Delete';
+    document.getElementById('model-body-content').innerText = 'Are you sure to delete this product .'
+  }
+
+
+  function editproductoffer(id){
+    document.getElementById('delete').href = 'editproductoffer/'+id;
+    document.getElementById('staticBackdropLabel').innerText = 'Edit offer';
+    document.getElementById('delete').innerText = 'edit';
+    document.getElementById('model-body-content').innerText = 'Are you sure to edit this product .'
+  }
+</script> 
+
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>
+
+</body>
+
+</html>

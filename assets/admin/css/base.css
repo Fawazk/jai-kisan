@@ -248,17 +248,7 @@ code strong {
     color: #930;
 }
 
-hr {
-    clear: both;
-    color: var(--hairline-color);
-    background-color: var(--hairline-color);
-    height: 1px;
-    border: none;
-    margin: 0;
-    padding: 0;
-    font-size: 1px;
-    line-height: 1px;
-}
+
 
 /* TEXT STYLES & MODIFIERS */
 

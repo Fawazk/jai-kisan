@@ -13,9 +13,10 @@ class Product(models.Model):
     slug          = models.SlugField(max_length=200, unique=True)
     description   = models.TextField(max_length=200,blank=True)
     price         = models.IntegerField(null=True)
-    images_one    = models.ImageField(upload_to='images/products',null=True)
-    images_two    = models.ImageField(upload_to='images/products',null=True)
-    images_three  = models.ImageField(upload_to='images/products',null=True)
+    tax           = models.IntegerField(null=True)
+    images_one    = models.ImageField(upload_to='images/products',blank=True)
+    images_two    = models.ImageField(upload_to='images/products',blank=True)
+    images_three  = models.ImageField(upload_to='images/products',blank=True)
     stock         = models.IntegerField()
     is_available  = models.BooleanField(default=True)
     p_category    = models.ForeignKey(category,on_delete=models.CASCADE)
@@ -27,14 +28,16 @@ class Product(models.Model):
     def get_price(self):
         try:
             if self.productoffer.is_active:
+                print('pininpinpikm')
                 offer_price = (self.price / 100) * self.productoffer.discount_offer
                 p_price = self.price - offer_price
                 return p_price
             raise
         except:
             try:
-                if self.product.category.categoryoffer.is_active:
-                    offer_price = (self.price / 100) * self.product.category.categoryoffer.discount_offer
+                if self.p_category.categoryoffer.is_active:
+                    print('=================')
+                    offer_price = (self.price / 100) * self.p_category.categoryoffer.discount_offer
                     p_price = self.price - offer_price
                     return p_price
                 raise

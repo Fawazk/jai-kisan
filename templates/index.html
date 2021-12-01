@@ -45,7 +45,12 @@
 					<i class="fa fa-star{% if x.averageReview < 3.5 %}-o{% elif x.averageReview >= 3.5 and x.averageReview < 4 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
 					<i class="fa fa-star{% if x.averageReview < 4.5 %}-o{% elif x.averageReview >= 4.5 and x.averageReview < 5 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
 					</span>
-				<br><b>Rs.{{ x.get_price |floatformat:0 }}/-</b>&emsp;<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{ x.productoffer.discount_offer }}%</p>
+				<br><b>Rs.{{ x.get_price |floatformat:0 }}/-</b>&emsp;
+				{% if x.productoffer.is_active %}
+				<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{ x.productoffer.discount_offer }}%</p>
+				{% elif x.p_category.categoryoffer.is_active  %}
+				<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{ x.p_category.categoryoffer }}%</p>
+				{% endif %}
 			</div>
 
 		</div>

@@ -6,7 +6,10 @@ from .models import Order, OrderProduct,Payment
 import json
 from django.http import HttpResponse, JsonResponse
 from store.models import Product
-
+from django.conf import settings
+from forex_python.converter import CurrencyRates
+# import razorpay
+# client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 # from django.shortcuts import render, redirect
 # from cart.models import CartItem
 # from .forms import OrderForm
@@ -16,7 +19,10 @@ from store.models import Product
 # from django.template.loader import render_to_string
 # Create your views here.
 
-
+def dollar_rate():
+    c = CurrencyRates()
+    rate = c.get_rate('USD', 'INR')
+    return rate
 
 def payments(request):
     body = json.loads(request.body)
@@ -75,15 +81,24 @@ def place_order(request, total=0, quantity=0):
     current_user = request.user
     cart_items = CartItem.objects.filter(user=current_user)
     cart_count = cart_items.count()
-    if cart_count <= 0:
-        return redirect('store')
+
     grand_total = 0
     tax = 0
-    for cart_item in cart_items:
-        total += (cart_item.product.price * cart_item.quantity)
-        quantity += cart_item.quantity
-    tax = (2*total)/100
-    grand_total = total+tax
+    print("hekkk")
+    if 'direct_order' in request.session:
+        product=request.session['direct_order']
+        item=Product.objects.get(id=product)
+        tax=(2*item.get_price())/100
+        total=item.get_price()
+        grand_total=total+tax  
+        del request.session['direct_order']
+    else:
+        for cart_item in cart_items:
+            total += (cart_item.product.price * cart_item.quantity)
+            quantity += cart_item.quantity
+        tax = (2*total)/100
+        grand_total = total+tax
+        paypal_amount = grand_total/dollar_rate()
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -122,9 +137,9 @@ def place_order(request, total=0, quantity=0):
                 'total': total,
                 'tax': tax,
                 'grand_total': grand_total,
+                'paypal_amount':round(paypal_amount,2),
             }
             return render(request, 'orders/payments.html', context)
-    print('------------------------------=======')
     return redirect('checkout')
 
 def order_complete(request):
