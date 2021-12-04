@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% load static %}
@@ -8,64 +7,89 @@
 
 <!-- ========================= SECTION MAIN ========================= -->
 <section class="section-intro padding-y-sm">
-<div class="container">
+	<div class="container">
 
-<div class="intro-banner-wrap">
-	<img src="{% static 'images/banners/1.jpg' %}" class="img-fluid rounded">
-</div>
+		<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+			<div class="carousel-inner">
+				
+			  <div class="carousel-item active">
+				<img class="d-block w-100" src="{% static 'images/banners/banner_static.jpg' %}" alt="First slide">
+			  </div>
+			  {% for x in banner %}
+			  <div class="carousel-item" style="position: relative;">
+				  <!-- <p style="position: absolute;">{{ x.description }}</p> -->
+				<img class="d-block w-100" src="{{ x.image.url }}" alt="Second slide">
+			  </div>
+			  {% endfor %}
+			</div>
+			<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+			  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			  <span class="sr-only">Previous</span>
+			</a>
+			<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+			  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+			  <span class="sr-only">Next</span>
+			</a>
+		  </div>
 
-</div> <!-- container //  -->
+	</div> <!-- container //  -->
 </section>
 <!-- ========================= SECTION MAIN END// ========================= -->
 
 <!-- ========================= SECTION  ========================= -->
 <section class="section-name padding-y-sm">
-<div class="container">
+	<div class="container">
 
-<header class="section-heading">
-	<a href="{% url 'store' %}" class="btn btn-outline-success float-right">See all</a>
-	<h3 class="section-title text-success">Popular products</h3>
-</header><!-- sect-heading -->
+		<header class="section-heading">
+			<a href="{% url 'store' %}" class="btn btn-outline-success float-right">See all</a>
+			<h3 class="section-title text-success">Popular products</h3>
+		</header><!-- sect-heading -->
 
-	
-<div class="row">
-	{% for x in products %}
 
-	<div class="col-md-3">
-		<div class="card card-product-grid"  style="box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);
+		<div class="row">
+			{% for x in products %}
+
+			<div class="col-md-3">
+				<div class="card card-product-grid" style="box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);
 		-webkit-box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);
 		-moz-box-shadow: 1px 2px 24px 3px rgba(0,0,0,0.31);">
-			<a href="{{ x.get_url }}" class="img-wrap p-3"> <img src="{{ x.images_one.url }}"> </a>
-			<div class="info-wrap pl-4 border">
-				<a href="{{ x.get_url }}" class="text-success">{{ x.product_name }}</a><br>
-				<span>
-					<i class="fa fa-star{% if x.averageReview < 0.5 %}-o{% elif x.averageReview >= 0.5 and x.averageReview < 1 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
-					<i class="fa fa-star{% if x.averageReview < 1.5 %}-o{% elif x.averageReview >= 1.5 and x.averageReview < 2 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
-					<i class="fa fa-star{% if x.averageReview < 2.5 %}-o{% elif x.averageReview >= 2.5 and x.averageReview < 3 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
-					<i class="fa fa-star{% if x.averageReview < 3.5 %}-o{% elif x.averageReview >= 3.5 and x.averageReview < 4 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
-					<i class="fa fa-star{% if x.averageReview < 4.5 %}-o{% elif x.averageReview >= 4.5 and x.averageReview < 5 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
-					</span>
-				<br><b>Rs.{{ x.get_price |floatformat:0 }}/-</b>&emsp;
-				{% if x.productoffer.is_active %}
-				<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{ x.productoffer.discount_offer }}%</p>
-				{% elif x.p_category.categoryoffer.is_active  %}
-				<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{ x.p_category.categoryoffer }}%</p>
-				{% endif %}
+					<a href="{{ x.get_url }}" class="img-wrap p-3"> <img src="{{ x.images_one.url }}"> </a>
+					<div class="info-wrap pl-4 border">
+						<a href="{{ x.get_url }}" class="text-success">{{ x.product_name }}</a><br>
+						<span>
+							<i class="fa fa-star{% if x.averageReview < 0.5 %}-o{% elif x.averageReview >= 0.5 and x.averageReview < 1 %}-half-o {% endif %}"
+								style="color:#ffb503" aria-hidden="true"></i>
+							<i class="fa fa-star{% if x.averageReview < 1.5 %}-o{% elif x.averageReview >= 1.5 and x.averageReview < 2 %}-half-o {% endif %}"
+								style="color:#ffb503" aria-hidden="true"></i>
+							<i class="fa fa-star{% if x.averageReview < 2.5 %}-o{% elif x.averageReview >= 2.5 and x.averageReview < 3 %}-half-o {% endif %}"
+								style="color:#ffb503" aria-hidden="true"></i>
+							<i class="fa fa-star{% if x.averageReview < 3.5 %}-o{% elif x.averageReview >= 3.5 and x.averageReview < 4 %}-half-o {% endif %}"
+								style="color:#ffb503" aria-hidden="true"></i>
+							<i class="fa fa-star{% if x.averageReview < 4.5 %}-o{% elif x.averageReview >= 4.5 and x.averageReview < 5 %}-half-o {% endif %}"
+								style="color:#ffb503" aria-hidden="true"></i>
+						</span>
+						<br><b>Rs.{{ x.get_price |floatformat:0 }}/-</b>&emsp;
+						{% if x.productoffer.is_active %}
+						<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{x.productoffer.discount_offer }}%</p>
+						{% elif x.p_category.categoryoffer.is_active %}
+						<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{x.p_category.categoryoffer }}%</p>
+						{% endif %}
+					</div>
+
+				</div>
 			</div>
+			{% endfor %}
 
-		</div>
-	</div>
-	{% endfor %}
-	
-	
-	
-</div> <!-- row.// -->
 
-</div><!-- container // -->
+
+		</div> <!-- row.// -->
+
+	</div><!-- container // -->
 </section>
 
 
 </body>
+
 </html>
 {% include 'includes/footer.html' %}
 {% endblock %}

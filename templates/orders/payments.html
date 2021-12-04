@@ -74,15 +74,25 @@
           <div class="card-body">
             <dl class="dlist-align">
               <dt>Total price:</dt>
-              <dd class="text-right">{{total}}</dd>
+              <dd class="text-right">Rs.{{total}}/-</dd>
             </dl>
             <dl class="dlist-align">
               <dt>Tax:</dt>
-              <dd class="text-right"> {{tax}}</dd>
+              <dd class="text-right">Rs.{{tax}}/-</dd>
+            </dl>
+            {% if coupen_discount_price %}
+            <dl class="dlist-align">
+              <dt>Total savings:</dt>
+              <dd style="color: green;" class="text-right">Rs.{{coupen_discount_price|floatformat:0}}/-</dd>
+            </dl>
+            {% endif %}
+            <dl class="dlist-align">
+              <dt>Total savings:</dt>
+              <dd style="color: green;" class="text-right">Rs.{{total_savings|floatformat:0}}/-</dd>
             </dl>
             <dl class="dlist-align">
               <dt>Total:</dt>
-              <dd class="text-right text-dark b"><strong>{{grand_total}}</strong></dd>
+              <dd class="text-right text-dark b"><strong>Rs.{{grand_total|floatformat:0}}/-</strong></dd>
             </dl>
             <hr>
             <p class="text-center mb-3">
@@ -91,9 +101,49 @@
             <div id="paypal-button-container">
               <!-- paypal button will load -->
             </div>
+            <!-- razor pay -->
+            <div>
+              <button type="submit" id="pay-btn" class="btn btn-outline-success" >  Razorpay  </button>
+          </div>
+          <div>
+              <a class="btn btn-outline-danger" href="{% url 'cash_on_delivery' %}">Cash On Delivery</a>
+          </div>
+
+
+
+              <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+              <script>
+                var options = {
+                   
+                  // Enter the Key ID generated from the Dashboard
+                  key: "{{ rzp_test_SdVfYoVMPU2xtZ }}",
+                   
+                  // Amount is in currency subunits.
+                  // Default currency is INR. Hence,
+                  // 50000 refers to 50000 paise
+                  amount: "{{ grand_total }}",
+                  currency: "{{ currency }}",
+                   
+                  // Your/store name.
+                  name: "Jai Kisan",
+                   
+                  // Pass the `id` obtained in the response of Step 1
+                  order_id: "{{ payment_order_id }}",
+                  callback_url: "{{ paymenthandler }}",
+                };
+                 
+                // initialise razorpay with the options.
+                var rzp1 = new Razorpay(options);
+                 
+                // add event listener to the payment button.
+                document.getElementById("pay-btn").onclick = function (e) {
+                  rzp1.open();
+                  e.preventDefault();
+                };
+              </script>
+            </div>
           </div> <!-- card-body.// -->
         </div> <!-- card.// -->
-
       </aside>
 
 

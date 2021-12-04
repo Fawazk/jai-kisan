@@ -1,5 +1,7 @@
+import datetime
 from django.shortcuts import render,redirect
-from accounts.models import Account
+from accounts.form import BannerForm
+from accounts.models import Account, Banner
 from category.form import CategoryForm
 from category.models import category
 from offer.form import CategoryOfferForm, ProductOfferForm
@@ -11,15 +13,94 @@ from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from store.form import ProductForm
 from django.contrib.admin.views.decorators import staff_member_required
+from django.utils import timezone
+from datetime import date, timedelta
+from django.db.models import Sum
 # Create your views here.
 
 
 @staff_member_required
 def admin_dashboard(request):
-    return render(request,'adminpanel/index.html')
+    if request.user.is_authenticated:
+        #sales/orders
+        products = Product.objects.all().count()
+        categories = category.objects.all().count()
+        users = Account.objects.all().count()
+
+        total_orders = Order.objects.filter(is_ordered=True).count()
+        total_revenue = Order.objects.aggregate(Sum('order_total'))
+        total_sales_amount = float(total_revenue['order_total__sum'])
+        current_year = timezone.now().year
+        current_month = timezone.now().month
+        order_detail = OrderProduct.objects.filter(created_at__month=current_month, status = 4)
+        print(order_detail)        
+        #daily bookings
+        today = date.today()
+        today_1 = today - timedelta(days=1)
+        today_2 = today - timedelta(days=2)
+        today_3 = today - timedelta(days=3)
+        today_4 = today - timedelta(days=4)
+        today_5 = today - timedelta(days=5)
+        today_6 = today - timedelta(days=6)
+        today_7 = today - timedelta(days=7)
+        tomorrow = today + timedelta(days=1)
+        
+        last_week_days=[
+            today_6.strftime("%a %m/%d/%Y"),
+            today_5.strftime("%a %m/%d/%Y"),
+            today_4.strftime("%a %m/%d/%Y"),
+            today_3.strftime("%a %m/%d/%Y"),
+            today_2.strftime("%a %m/%d/%Y"),
+            today_1.strftime("%a %m/%d/%Y"),
+            today.strftime("%a %m/%d/%Y"),
+            
+            ]
+        today_order      =   OrderProduct.objects.filter(created_at__range=[today,tomorrow]).count()
+        today_1_order    =   OrderProduct.objects.filter(created_at__range=[today_1,today]).count()
+        today_2_order    =   OrderProduct.objects.filter(created_at__range=[today_2,today_1]).count()
+        today_3_order    =   OrderProduct.objects.filter(created_at__range=[today_3,today_2]).count()
+        today_4_order    =   OrderProduct.objects.filter(created_at__range=[today_4,today_3]).count()
+        today_5_order    =   OrderProduct.objects.filter(created_at__range=[today_5,today_4]).count()
+        today_6_order    =   OrderProduct.objects.filter(created_at__range=[today_6,today_5]).count()
+        
+
+        lastweek_orders=[today_6_order,today_5_order,today_4_order,today_3_order,today_2_order,today_1_order,today_order]
+        #status
+        order_accepted = OrderProduct.objects.filter(status=1).count()
+        shipped = OrderProduct.objects.filter(status=2).count()
+        out_for_delivery = OrderProduct.objects.filter(status=3).count()
+        delivered = OrderProduct.objects.filter(status=4).count()
+        cancelled_count = OrderProduct.objects.filter(status=0).count()
+        #most moving product
+        # most_moving_product_count = list()
+        # most_moving_product = list()
+        # for i in products:
+        #     most_moving_product.append(i)
+        #     most_moving_product_count.append(OrderProduct.objects.filter(product=i, status=4).count())
+        context = {
+            'order_detail':order_detail,
+            'status_counter':[order_accepted,shipped,out_for_delivery,delivered,cancelled_count],
+            # 'most_moving_product_count':most_moving_product_count,
+            # 'most_moving_product':most_moving_product,
+            'last_week_days':last_week_days,
+            'lastweek_orders':lastweek_orders,
+            'total_orders':total_orders,
+            'products':products,
+            'categories':categories,
+            'users':users,
+            'total_sales_amount':round(total_sales_amount),
+            'order_detail':order_detail,
+        }
+        return render(request,'adminpanel/index.html',context)
+    else:
+        return redirect('adminpanel')
+
+
+
 
 def adminpanel(request):
-    print('rtyuiop')
+    if request.user.is_authenticated:
+        return redirect('admin_dashboard')
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -258,3 +339,40 @@ def add_categoryoffer(request):
             'form':form,
     }
     return render(request,'adminpanel/add_categoryoffer.html',context)
+
+def banner_list(request):
+    banner_list= Banner.objects.all()
+    context={
+        'banner_list':banner_list,
+    }
+    return render(request,'adminpanel/banner/banner_list.html',context)
+
+def add_banner(request):
+    form = BannerForm()
+    if request.method=='POST':
+        form = BannerForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('banner_list')
+    context = {
+        'form':form,
+    }
+    return render(request,'adminpanel/banner/add_banner.html',context)
+
+
+def banner_edit(request,banner_id):
+    banner_list = Banner.objects.get(id=banner_id)
+    form = BannerForm(instance=banner_list)
+    if request.method == 'POST':
+        form = BannerForm(request.POST,request.FILES,instance=banner_list)
+        if form.is_valid():
+            form.save()
+            return redirect('banner_list')
+    context= {
+        'form':form,
+    }
+    return render(request,'adminpanel/banner/banner_edit.html',context)
+def banner_delete(request,banner_id):
+    banner_delete = Banner.objects.get(id=banner_id)
+    banner_delete.delete()
+    return redirect('banner_list')

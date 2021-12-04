@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import fields
-from .models import Account
+from .models import Account, Banner
 
 class RegisterationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -41,5 +41,10 @@ class edit_profileForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['first_name','last_name','email','phone_number','profile_img','state','city']
+        
+class BannerForm(forms.ModelForm):
+    class Meta:
+        model = Banner
+        fields = ['image','description']
 
     

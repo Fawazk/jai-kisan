@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'offer',
-    'banner',
 ]
 
 MIDDLEWARE = [
@@ -156,6 +155,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT= BASE_DIR /'media'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -165,3 +166,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
 TWILIO_VERIFICATION_SID =config('TWILIO_VERIFICATION_SID')
+

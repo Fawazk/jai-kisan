@@ -301,7 +301,9 @@
                                     {{ cart_item.quantity }}
                                 </td>
                                 <td>
-                                    <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var>
+                                    <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var><br>
+                                    <var class="price">Rs.{{ coupen_discount_price|floatformat:0 }}/-</var>
+
                                 </td>
                             </tr>
                             {% endfor %}
@@ -335,6 +337,12 @@
                     <div class="card-body">
                         <button type='submit' name="submit" class="btn btn-primary btn-block">Checkout</button>
                         <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+                        </form>
+                        <form action="{% url 'apply_coupon' %}" method="post">
+                            {% csrf_token %}
+                            <input name="coupon_code" type="text">
+                            <input type="submit" placeholder="Coupon Code" >
+                            {% include 'includes/alert.html' %}
                         </form>
                     </div> <!-- card-body.// -->
                 </div> <!-- card.// -->

@@ -30,4 +30,10 @@ urlpatterns = [
     path('deletecategoryoffer/<int:offer_id>/',views.deletecategoryoffer,name='deletecategoryoffer'),
     path('editcategoryoffer/<int:offer_id>/',views.editcategoryoffer,name="editcategoryoffer"),
     path('add_categoryoffer',views.add_categoryoffer,name='add_categoryoffer'),
+    
+    #banner management
+    path('banner_list',views.banner_list,name='banner_list'),
+    path('add_banner',views.add_banner,name='add_banner'),
+    path('banner_edit/<int:banner_id>/',views.banner_edit,name='banner_edit'),
+    path('banner_delete/<int:banner_id>/',views.banner_delete,name='banner_delete'),
     ]

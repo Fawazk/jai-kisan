@@ -74,3 +74,6 @@ class Account(AbstractBaseUser):
         return True
 
 
+class Banner(models.Model):
+    image    = models.ImageField(upload_to='images/banner',blank=True)
+    description   = models.TextField(max_length=200,blank=True)

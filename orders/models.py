@@ -11,6 +11,11 @@ STATUS = (
     (4,'Deliverd'),
     (0,'cancelled'),
 )
+PAYMENT_METHOD=(
+    ('cash_on_delivery','cash_on_delivery'),
+    ('paypal','paypal'),
+    ('rezorpay','rezorpay'),
+)
 class Payment(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     payment_id = models.CharField(max_length=200)
@@ -43,7 +48,7 @@ class Order(models.Model):
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE)
-    payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
+    payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True,default=None)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     variations = models.ManyToManyField(Variation, blank=True)

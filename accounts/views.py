@@ -1,3 +1,4 @@
+from .models import Banner
 from orders.forms import AddressForm
 from orders.models import Address, Order, OrderProduct
 from django import forms
@@ -16,9 +17,10 @@ from cart.views import _cart_id
 
 def home(request):
     products = Product.objects.all().filter(is_available=True)
-
+    banner = Banner.objects.all()
     context = {
         'products': products,
+        'banner':banner,
     }
     print(context)
     return render(request, 'index.html', context)
@@ -142,7 +144,6 @@ def resent_otp(request):
     phone_number=request.session['keys']
     otpverify(phone_number)
     return redirect('otp')
-
 
 def otp(request):
     if request.user.is_authenticated:

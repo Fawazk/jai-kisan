@@ -208,10 +208,21 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         grand_total = tax + total
     except ObjectDoesNotExist:
         pass
+    if request.session.has_key('coupon_id'):
+        couponid=request.session['coupon_id']
+        request.session['couponid']=couponid
+        del request.session['coupon_id']
+        coupen_discount= request.session['coupon_discount']
+        coupen_discount_price = total*(coupen_discount)/100
+        grand_total=grand_total-coupen_discount_price
+    else:
+        coupen_discount_price = 0
+    request.session['grand_total']=grand_total  
     context = {
         'total': total,
         'quantity': quantity,
         'cart_items': cart_items,
+        'coupen_discount_price':coupen_discount_price,
         'tax': tax,
         'grand_total': grand_total,
         'form':form,
