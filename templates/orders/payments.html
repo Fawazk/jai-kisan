@@ -7,6 +7,7 @@
 
 
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <section class="section-content padding-y bg">
   <div class="container">
@@ -19,7 +20,7 @@
             <h5 class="card-title">Special title treatment</h5>
             <b class="card-text">{{ order.name }}&emsp;&emsp;{{ order.phone }}</b>
             <p class="card-text"></p>
-            <p class="card-text">{{ order.landmark }},{{ order.locality }},{{ order.city }},{{ order.state }}-{{order.pincode }}</p>
+            <p class="card-text">{{ order.landmark }},{{ order.locality }},{{ order.city }},{{ order.state}}-{{order.pincode }}</p>
             <!-- <a href="#" class="btn btn-success">Go somewhere</a> -->
           </div>
         </div>
@@ -45,7 +46,8 @@
                       </div>
                       <figcaption class="info">
 
-                        <a href="{{ cart_item.product.get_url }}" class="text-dark">{{ cart_item.product.product_name}}</a>
+                        <a href="{{ cart_item.product.get_url }}" class="text-dark">{{
+                          cart_item.product.product_name}}</a>
                         {% for item in cart_item.variations.all %}<br>
                         <small class="text-muted">{{ item.variation_value }}</small>
                         {% endfor %}
@@ -83,7 +85,7 @@
             {% if coupen_discount_price %}
             <dl class="dlist-align">
               <dt>Total savings:</dt>
-              <dd style="color: green;" class="text-right">Rs.{{coupen_discount_price|floatformat:0}}/-</dd>
+              <dd style="color: green;" class="text-right">Rs.{{coupen_discount_price |floatformat:0}}/-</dd>
             </dl>
             {% endif %}
             <dl class="dlist-align">
@@ -91,7 +93,7 @@
               <dd style="color: green;" class="text-right">Rs.{{total_savings|floatformat:0}}/-</dd>
             </dl>
             <dl class="dlist-align">
-              <dt>Total:</dt>
+              <dt><b>Total:</b></dt>
               <dd class="text-right text-dark b"><strong>Rs.{{grand_total|floatformat:0}}/-</strong></dd>
             </dl>
             <hr>
@@ -103,54 +105,87 @@
             </div>
             <!-- razor pay -->
             <div>
-              <button type="submit" id="pay-btn" class="btn btn-outline-success" >  Razorpay  </button>
-          </div>
-          <div>
-              <a class="btn btn-outline-danger" href="{% url 'cash_on_delivery' %}">Cash On Delivery</a>
-          </div>
+              <button id="rzp-button1" class="btn btn-block btn-outline-success p-2">Razorpay</button>
+            </div>
+            <div class="mt-2">
+              <a class="btn btn-block btn-danger p-2" href="{% url 'cash_on_delivery' %}">Cash On Delivery</a>
+            </div>
 
+            <script>
+              function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                  const cookies = document.cookie.split(';');
+                  for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                    }
+                  }
+                }
+                return cookieValue;
+              }
+              let amounts= "{{ grand_total }}"
 
-
-              <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-              <script>
-                var options = {
-                   
-                  // Enter the Key ID generated from the Dashboard
-                  key: "{{ rzp_test_SdVfYoVMPU2xtZ }}",
-                   
-                  // Amount is in currency subunits.
-                  // Default currency is INR. Hence,
-                  // 50000 refers to 50000 paise
-                  amount: "{{ grand_total }}",
-                  currency: "{{ currency }}",
-                   
-                  // Your/store name.
-                  name: "Jai Kisan",
-                   
-                  // Pass the `id` obtained in the response of Step 1
-                  order_id: "{{ payment_order_id }}",
-                  callback_url: "{{ paymenthandler }}",
-                };
-                 
-                // initialise razorpay with the options.
-                var rzp1 = new Razorpay(options);
-                 
-                // add event listener to the payment button.
-                document.getElementById("pay-btn").onclick = function (e) {
+                document.getElementById('rzp-button1').onclick = function (e) {
                   rzp1.open();
                   e.preventDefault();
-                };
-              </script>
-            </div>
-          </div> <!-- card-body.// -->
-        </div> <!-- card.// -->
-      </aside>
+                }
+
+              var options = {
+                "key": "{{ RZORPAY_API_KEY }}", // Enter the Key ID generated from the Dashboard
+                "amount": amounts, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Jai Kisan",
+                "description": "Payment",
+                "order_id": "{{ payment_order_id }}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 2
+                "handler": function (response) {
+
+                  $.ajax({
+                    type: 'POST',
+                    url: "{% url 'razorpay_payment_verification' %}",
+                    dataType: 'json',
+                    data: {
+                      csrfmiddlewaretoken: csrftoken,
+                      razorpay_payment_id: response.razorpay_payment_id,
+                      razorpay_order_id: response.razorpay_order_id,
+                      razorpay_signature: response.razorpay_signature,
+                    },
+                    success: function (data) {
+                      console.log(data)
+                      if (data.message === 'success') {
+
+                        window.location.replace("{% url 'order_complete' %}")
+                      } else {
+                        window.location.replace("payment_failed")
+                      }
+                    }
+                  })
+                },
+                "prefill": {
+                  "name": "{{ request.user.name }}",
+                  "email": "{{ request.user.email }}",
+                  "contact": "{{ request.user.phone_number }}"
+                },
+                "theme": {
+                  "color": "#3399cc"
+                }
+              };
+              var rzp1 = new Razorpay(options);
+              rzp1.on('payment.failed', function (response) {
+                window.location.replace("{% url 'payment_failed' %}")
+              });
+            </script>
+          </div>
+        </div> <!-- card-body.// -->
+    </div> <!-- card.// -->
+    </aside>
 
 
 
-    </div> <!-- row.// -->
-    <!-- ============================ COMPONENT 1 END .// ================================= -->
-
+  </div> <!-- row.// -->
   </div> <!-- container .//  -->
 </section>
 </body>
@@ -173,7 +208,7 @@
     }
     return cookieValue;
   }
-  
+
   var amount = "{{ paypal_amount }}"
   var url = "{% url 'payments' %}"
   var csrftoken = getCookie('csrftoken');

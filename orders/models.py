@@ -19,7 +19,7 @@ PAYMENT_METHOD=(
 class Payment(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     payment_id = models.CharField(max_length=200)
-    payment_method = models.CharField(max_length=200)
+    payment_method = models.CharField(max_length=200,choices=PAYMENT_METHOD,default='cash_on_delivery')
     amount_paid = models.CharField(max_length=200)
     status = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)

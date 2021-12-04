@@ -302,7 +302,9 @@
                                 </td>
                                 <td>
                                     <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var><br>
+                                    {% if coupen_discount_price %}
                                     <var class="price">Rs.{{ coupen_discount_price|floatformat:0 }}/-</var>
+                                    {% endif %}
 
                                 </td>
                             </tr>
@@ -317,9 +319,7 @@
                                         <figcaption class="info">
                                             <a href="{{ product.get_url }}"
                                                 class="text-dark">{{product.product_name }}</a>
-                                            <!-- {% for item in cart_item.variations.all %}<br>
-                                            <small class="text-muted">{{ item.variation_value }}</small>
-                                            {% endfor %} -->
+
                                         </figcaption>
                                     </figure>
                                 </td>
@@ -338,10 +338,10 @@
                         <button type='submit' name="submit" class="btn btn-primary btn-block">Checkout</button>
                         <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
                         </form>
-                        <form action="{% url 'apply_coupon' %}" method="post">
+                        <form class="pt-2" action="{% url 'apply_coupon' %}" method="post">
                             {% csrf_token %}
-                            <input name="coupon_code" type="text">
-                            <input type="submit" placeholder="Coupon Code" >
+                            <input class="btn btn-block btn-light" name="coupon_code" placeholder="Coupon Code" type="text">
+                            <input class="btn btn-block btn-success" type="submit" >
                             {% include 'includes/alert.html' %}
                         </form>
                     </div> <!-- card-body.// -->

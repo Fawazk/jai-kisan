@@ -38,7 +38,7 @@ def payments(request):
     payment = Payment(
         user = request.user,
         payment_id = body['transID'],
-        payment_method = body['payment_method'],
+        payment_method = 'paypal',
         amount_paid = order.order_total,
         status = body['status'],
     )
@@ -69,12 +69,12 @@ def payments(request):
         orderproduct.save()
 
 
-    #     # Reduce the quantity of the sold products
+        # Reduce the quantity of the sold products
         product = Product.objects.get(id=item.product_id)
         product.stock -= item.quantity
         product.save()
 
-    # # Clear cart
+    # Clear cart
     CartItem.objects.filter(user=request.user).delete()
 
     data = {
@@ -82,6 +82,72 @@ def payments(request):
         'transID': payment.payment_id,
     }
     return JsonResponse(data)
+
+def razorpay_payment_verification(request):
+    order_number=request.session['order_number']
+    order = Order.objects.get(user=request.user, is_ordered=False, order_number=order_number)
+    if request.method == 'POST':
+        razorpay_payment_id = request.POST.get('razorpay_payment_id')
+        razorpay_order_id = request.POST.get('razorpay_order_id')
+        razorpay_signature = request.POST.get('razorpay_signature')
+
+        params_dict = {
+
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': razorpay_payment_id,
+            'razorpay_signature': razorpay_signature
+        }
+        request.session['razorpay_order_id']=razorpay_order_id
+        try:
+            razorpay_client.utility.verify_payment_signature(params_dict)
+        except:
+            return JsonResponse({'messages': 'error'})
+    # Store transaction details inside Payment model
+        payment = Payment(
+            user = request.user,
+            payment_id = razorpay_order_id,
+            payment_method = 'rezorpay',
+            amount_paid = order.order_total,
+            status ='Completed',
+        )
+        payment.save()
+
+        order.payment = payment
+        order.is_ordered = True
+        order.save()
+
+    # Move the cart items to Order Product table
+    cart_items = CartItem.objects.filter(user=request.user)
+
+    for item in cart_items:
+        orderproduct = OrderProduct()
+        orderproduct.order_id = order.id
+        orderproduct.payment = payment
+        orderproduct.user_id = request.user.id
+        orderproduct.product_id = item.product_id
+        orderproduct.quantity = item.quantity
+        orderproduct.product_price = item.product.price
+        orderproduct.ordered = True
+        orderproduct.save()
+
+        cart_item = CartItem.objects.get(id=item.id)
+        product_variation = cart_item.variations.all()
+        orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+        orderproduct.variations.set(product_variation)
+        orderproduct.save()
+
+
+    #     # Reduce the quantity of the sold products
+        product = Product.objects.get(id=item.product_id)
+        product.stock -= item.quantity
+        product.save()
+
+    # # Clear cart
+    CartItem.objects.filter(user=request.user).delete()
+    return JsonResponse({'message': 'success'})
+
+def payment_failed(request):
+    return render(request,'payment_failed.html')
 
 def place_order(request, total=0, quantity=0):
     current_user = request.user
@@ -98,11 +164,14 @@ def place_order(request, total=0, quantity=0):
 
     grand_total = 0
     tax = 0
+    total_savings=0
+    offer_savings=0
     if 'direct_order' in request.session:
         product=request.session['direct_order']
         item=Product.objects.get(id=product)
         tax=(2*item.get_price())/100
         total=item.get_price()
+        offer_savings=total-item.price
         grand_total=total+tax  
         del request.session['direct_order']
         if request.session.has_key('couponid'):
@@ -114,16 +183,17 @@ def place_order(request, total=0, quantity=0):
             total += (cart_item.product.get_price() * cart_item.quantity)
             offer_savings=total-(cart_item.product.price*cart_item.quantity)
             quantity += cart_item.quantity
+            total_savings= grand_total-offer_savings
         tax = (2*total)/100
         grand_total = total+tax
         if request.session.has_key('couponid'):
             coupen_discount= request.session['coupon_discount']
             coupen_discount_price = total*(coupen_discount)/100
             grand_total=grand_total-coupen_discount_price
+            total_savings= grand_total-(coupen_discount_price-offer_savings)
         else:
             coupen_discount_price=0
     paypal_amount = grand_total/dollar_rate()
-    total_savings= grand_total-(coupen_discount_price-offer_savings)
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -157,14 +227,12 @@ def place_order(request, total=0, quantity=0):
             order_currency = 'INR'
             razorpay_order = razorpay_client.order.create(dict(amount=int(order_amount),currency=order_currency,payment_capture='0'))
             payment_order_id = razorpay_order['id']
-            callback_url = 'paymenthandler/'
-            order = Order.objects.get(
-                user=current_user, is_ordered=False, order_number=order_number)
+            order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             context = {
                 'order': order,
                 'cart_items': cart_items,
-                'total': total,
-                'tax': tax,
+                'total': round(total),
+                'tax': round(tax,2),
                 'grand_total': grand_total,
                 'paypal_amount':round(paypal_amount,2),
                 'payment_order_id':payment_order_id,
@@ -173,59 +241,17 @@ def place_order(request, total=0, quantity=0):
                 'razorpay_merchant_key':settings.RAZOR_KEY_ID,
                 'razorpay_amount':order_amount,
                 'currency': order_currency,
-                'callback_url' : callback_url,
             }
             return render(request, 'orders/payments.html', context)
     return redirect('checkout')
-
-@csrf_exempt
-def paymenthandler(request):
-    print('peatruurioihriehwhiusih')
-    # only accept POST request.
-    if request.method == "POST":
-        try:
-            # get the required parameters from post request.
-            payment_id = request.POST.get('razorpay_payment_id', '')
-            razorpay_order_id = request.POST.get('razorpay_order_id', '')
-            signature = request.POST.get('razorpay_signature', '')
-            params_dict = {
-                'razorpay_order_id': razorpay_order_id,
-                'razorpay_payment_id': payment_id,
-                'razorpay_signature': signature
-            }
-            # verify the payment signature.
-            result = razorpay_client.utility.verify_payment_signature(params_dict)
-            if result is None:
-                grand_total=request.session['grand_total']
-                amount = grand_total
-                try:
-                    # capture the payemt
-                    razorpay_client.payment.capture(payment_id, amount)
-                    # render success page on successful caputre of payment
-                    return redirect('order_complete')
-                except:
- 
-                    # if there is an error while capturing payment.
-                    return redirect('payments')
-            else:
- 
-                # if signature verification fails.
-                return redirect('payments')
-        except:
- 
-            # if we don't find the required parameters in POST data
-            return HttpResponseBadRequest()
-    else:
-       # if other than POST request is made.
-        return HttpResponseBadRequest()
 
 def order_complete(request):
     order_number = request.session['order_number']
     del request.session['order_number']
     transID = request.GET.get('payment_id')
     try:
-        order = Order.objects.get(order_number=order_number, is_ordered=False)
-        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+        order = Order.objects.get(is_ordered=False,order_number=order_number)
+        ordered_products = OrderProduct.objects.get(order_id=order.id)
         order.is_ordered=True
         order.save()
         subtotal = 0
@@ -241,7 +267,7 @@ def order_complete(request):
     except Exception as e:
         print(e)
         try:
-            order = Order.objects.get(payment=transID,order_number=order_number, is_ordered=True)
+            order = Order.objects.get(order_number=order_number, is_ordered=True)
             ordered_products = OrderProduct.objects.filter(order_id=order.id)
 
             subtotal = 0
@@ -259,9 +285,28 @@ def order_complete(request):
                 'subtotal': subtotal,
             }
             return render(request, 'orders/order_complete.html', context)
-        except (Order.DoesNotExist):
-            print('fawaz__________________________________')
-            return redirect('home')
+        except:
+            try:
+                order = Order.objects.get(order_number=order_number, is_ordered=True)
+                ordered_products = OrderProduct.objects.filter(order_id=order.id)
+
+                subtotal = 0
+                for i in ordered_products:
+                    subtotal += i.product_price * i.quantity
+                razorpay_order_id=request.session['razorpay_order_id']
+                payment = Payment.objects.get(payment_id=razorpay_order_id)
+
+                context = {
+                    'order': order,
+                    'ordered_products': ordered_products,
+                    'order_number': order.order_number,
+                    'transID': payment.payment_id,
+                    'payment': payment,
+                    'subtotal': subtotal,
+                }
+                return render(request, 'orders/order_complete.html', context)
+            except (Order.DoesNotExist):
+                return redirect('home')
         
 
 def my_orders(request):
