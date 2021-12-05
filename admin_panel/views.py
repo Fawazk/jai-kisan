@@ -71,12 +71,7 @@ def admin_dashboard(request):
         out_for_delivery = OrderProduct.objects.filter(status=3).count()
         delivered = OrderProduct.objects.filter(status=4).count()
         cancelled_count = OrderProduct.objects.filter(status=0).count()
-        #most moving product
-        # most_moving_product_count = list()
-        # most_moving_product = list()
-        # for i in products:
-        #     most_moving_product.append(i)
-        #     most_moving_product_count.append(OrderProduct.objects.filter(product=i, status=4).count())
+        latest_orders = OrderProduct.objects.filter(user=request.user).order_by('-created_at')[:5]
         context = {
             'order_detail':order_detail,
             'status_counter':[order_accepted,shipped,out_for_delivery,delivered,cancelled_count],
@@ -87,6 +82,7 @@ def admin_dashboard(request):
             'total_orders':total_orders,
             'products':products,
             'categories':categories,
+            'latest_orders':latest_orders,
             'users':users,
             'total_sales_amount':round(total_sales_amount),
             'order_detail':order_detail,
@@ -376,3 +372,4 @@ def banner_delete(request,banner_id):
     banner_delete = Banner.objects.get(id=banner_id)
     banner_delete.delete()
     return redirect('banner_list')
+

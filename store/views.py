@@ -95,25 +95,10 @@ def submit_review(request, product_id):
 
 
 def direct_checkout(request,product_id):
-    url = request.META.get('HTTP_REFERER')
-    user=request.user
-    form = AddressForm()
-    address = Address.objects.filter(user=user)
-    total=0
-    tax = 0
     if request.user.is_authenticated:
         product = Product.objects.get(id=product_id)
-        total = product.get_price()
-        tax  = (product.tax * total)/100
-        grand_total=total+tax
-        context ={
-            'product':product,
-            'total':total,
-            'tax':tax,
-            'grand_total':grand_total,
-            'address':address,
-            'form':form,
-        }
         request.session['direct_order']=product.id
-        return render(request, 'store/checkout.html',context)
-    return redirect(url)      
+        return redirect('checkout')
+    else:
+        messages.error(request,'Please login')
+        return redirect('store') 

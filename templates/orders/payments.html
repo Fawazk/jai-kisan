@@ -38,6 +38,7 @@
 
               </thead>
               <tbody>
+                {% if cart_items %}
                 {% for cart_item in cart_items %}
                 <tr>
                   <td>
@@ -46,8 +47,7 @@
                       </div>
                       <figcaption class="info">
 
-                        <a href="{{ cart_item.product.get_url }}" class="text-dark">{{
-                          cart_item.product.product_name}}</a>
+                        <a href="{{ cart_item.product.get_url }}" class="text-dark">{{cart_item.product.product_name}}</a>
                         {% for item in cart_item.variations.all %}<br>
                         <small class="text-muted">{{ item.variation_value }}</small>
                         {% endfor %}
@@ -64,6 +64,32 @@
                   </td>
                 </tr>
                 {% endfor %}
+                {% else %}
+                <tr>
+                  <td>
+                    <figure class="itemside align-items-center">
+                      <div class="aside"><img src="{{ item.images_one.url }}" class="img-sm">
+                      </div>
+                      <figcaption class="info">
+
+                        <a href="{{ item.get_url }}" class="text-dark">{{cart_item.product.product_name}}</a>
+                        {% for item in cart_item.variations.all %}<br>
+                        <small class="text-muted">{{ item.variation_value }}</small>
+                        {% endfor %}
+                      </figcaption>
+                    </figure>
+                  </td>
+
+                  <td>
+                    {{ quantity }}
+                  </td>
+                  <td>
+                    <var class="price">Rs.{{ item.sub_total }}/-</var>
+                    <small class="text-muted">Rs.{{ item.price }}/-</small>
+                  </td>
+                </tr>
+
+                {% endif %}
               </tbody>
             </table>
             <!-- <a href="#" class="btn btn-success">Go somewhere</a> -->

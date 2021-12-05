@@ -12,6 +12,7 @@ from django.contrib import auth, messages
 from .otp_verify import otpverify, verify
 from django.contrib.auth import logout
 from cart.views import _cart_id
+from django.contrib.auth import get_user_model
 # Create your views here.
 
 
@@ -64,7 +65,6 @@ def confirm_register_otp(request):
         otp5 = request.POST['otp5']
         otp6 = request.POST['otp6']
         otp = [otp1+otp2+otp3+otp4+otp5+otp6]
-        print(otp)
         if verify(phone_number,otp):
             user.phone_number=phone_number
             user.save()
@@ -80,7 +80,7 @@ def signin(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
-        user = auth.authenticate(email=email, password=password)
+        user = auth.authenticate(email=email, password=password,)
         if user is not None:
             try:
                 cart = Cart.objects.get(cart_id=_cart_id(request))
@@ -167,12 +167,10 @@ def otp(request):
 
 
 def new_password(request):
-    print('________________________')
     if 'keys' not in request.session:
         return redirect('signin')
     else:
         number = request.session['keys']
-        print(number+'-----------------')
         if request.method == 'POST':
             password = request.POST['password1']
             password2 = request.POST['password2']
@@ -181,7 +179,7 @@ def new_password(request):
                 user = Account.objects.get(phone_number=number)
                 user.set_password(password)
                 user.save()
-                messages.error(request, 'Password changed successfully ')
+                messages.success(request, 'Password changed successfully ')
                 return redirect('signin')
             else:
                 messages.error(request, 'Password is not matching!!!')

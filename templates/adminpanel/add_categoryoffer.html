@@ -21,7 +21,9 @@
             <form action="{% url 'add_categoryoffer' %}" method="post" enctype="multipart/form-data" class="col-xl-10">
                 {% csrf_token %}
                 {{ form | crispy }}
-                <input class="btn btn-info" type="submit" id="btn-submit" value="submit">
+                <button class="btn btn-info" type="submit" value="submit">
+                    Submit
+                </button>
             </form>
         </div>
     </div>

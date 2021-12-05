@@ -93,20 +93,22 @@
 										<i class="fa fa-star{% if x.averageReview < 4.5 %}-o{% elif x.averageReview >= 4.5 and x.averageReview < 5 %}-half-o {% endif %}" style="color:#ffb503" aria-hidden="true"></i>
 										</span>
 									<div class="price-wrap mt-2">										
-										<span class="price">Rs.{{ x.get_price|floatformat:0 }}/-</span>
-										&emsp;<del class="price-old">Rs.{{ x.price }}</del><br>
-										<p style="color: green;">Off-{{ x.productoffer.discount_offer }}%</p>
-
+										<span class="price">Rs.{{ x.get_price|floatformat:0 }}/-</span>&emsp;
+										{% if x.productoffer.is_active %}
+										<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{x.productoffer.discount_offer }}%</p>
+										{% elif x.p_category.categoryoffer.is_active %}
+										<del class="price-old">Rs.{{ x.price }}</del>&emsp;<p style="color: green;">Off-{{x.p_category.categoryoffer }}%</p>
+										{% endif %}
 									</div> <!-- price-wrap.// -->
 								</div>
 								<div>
 									<!-- <a href="{% url 'add_cart' x.id %}" style="background-color: #5cb85c; color:#fff;" class="btn mr-3" >Add to cart </a>
                     <a href="#" style="background-color: #5cb85c; color:#fff;" class="btn" >BUY NOW</a> -->
-									{% if x.stock <= 0 %} <span class="text btn btn-danger">Out of Stock</span>
+									{% if x.stock <= 0 %} 
+									<span class="text btn btn-danger">Out of Stock</span>
 										{% else %}
 										{% if in_cart %}
-										<a href="#" class="btn btn-outline-success"> <span class="text">Added to
-												cart</span></a>
+										<a href="#" class="btn btn-outline-success"> <span class="text">Added to cart</span></a>
 										{% else %}
 										<a href="{% url 'add_cart' x.id %}" class="btn btn-success"> <span>Add to cart</span></a>
 										<a href="{% url 'direct_checkout' x.id %}" class="btn btn-success"> <span>Buy Now</span></a>

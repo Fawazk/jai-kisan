@@ -76,7 +76,7 @@
                                           				</p>
                                                 </td>
                                                 <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">${{item.product_price}} USD</td>
+                                                <td class="text-center">Rs.{{item.product_price}}/-</td>
                                             </tr>
                                           {% endfor %}
                                         </tbody>
@@ -92,7 +92,7 @@
 
                                             <tr>
                                                 <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">${{order.order_total}} USD</th>
+                                                <th class="text-center">{{order.order_total}} </th>
                                             </tr>
                                         </tfoot>
                                     </table>

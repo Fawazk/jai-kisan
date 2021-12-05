@@ -13,12 +13,12 @@
 			<div class="carousel-inner">
 				
 			  <div class="carousel-item active">
-				<img class="d-block w-100" src="{% static 'images/banners/banner_static.jpg' %}" alt="First slide">
+				<a href="{% url 'store' %}"><img class="d-block w-100" src="{% static 'images/banners/banner_static.jpg' %}" alt="First slide"></a>
 			  </div>
 			  {% for x in banner %}
 			  <div class="carousel-item" style="position: relative;">
 				  <!-- <p style="position: absolute;">{{ x.description }}</p> -->
-				<img class="d-block w-100" src="{{ x.image.url }}" alt="Second slide">
+				<a href="{% url 'store' %}"><img class="d-block w-100" src="{{ x.image.url }}" alt="Second slide"></a>
 			  </div>
 			  {% endfor %}
 			</div>

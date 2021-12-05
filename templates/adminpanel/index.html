@@ -4,139 +4,173 @@
 {% include 'adminpanel/nav.html' %}
 <!-- Main content -->
 
-  <!-- Header -->
-  <!-- Header -->
-  <div class="header bg-primary">
-    <div class="container-fluid">
-      <div class="header-body">
-        <div class="row container-fluid ml-2" style="align-items: space-between;">
-          <div class="card m-4" style="background-color:#fff" >
-            <div class="p-5 text-center">
-              <h1>Total Revenue</h1><br>
-              <b>{{ total_sales_amount }}</b>
-            </div>
-          </div>
-          <div class="card m-4" style="background-color:#fff" >
-            <div class="p-5 text-center">
-              <h1>Users</h1><br>
-            <b>{{ users }}</b>
-            </div>
-          </div>
-          <div class="card m-4" style="background-color:#fff" >
-            <div class="p-5 text-center">
-              <h1>Total Sales</h1><br>
-              <b>{{ total_orders }}</b>
-            </div>
-            
-          </div>
-          <div class="card m-4" style="background-color:#fff" >
-            <div class="p-5 text-center">
-              <h1>Categories</h1><br>
-              <b>{{ categories }}</b>
-            </div>
-            
+<!-- Header -->
+<!-- Header -->
+<div class="header bg-primary">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row container-fluid ml-2" style="align-items: space-between;">
+        <div class="card m-4" style="background-color:#fff">
+          <div class="p-5 text-center">
+            <h1>Total Revenue</h1><br>
+            <b>{{ total_sales_amount }}</b>
           </div>
         </div>
-<div class="row ">
-  <div class="col-md-5" style="background-color: #fff;" >
-    <div class="m-3">
-      <h2>Order Status</h2>
-      <canvas id="myChart"></canvas>
-    </div>
-  </div>
-  <div class="col-md-7 text-center" style="background-color: #fff;" >
-    <div class="m-2">
-      <h2>Daily sales</h2>
-      <canvas id="my_doughnut_chart"></canvas>
-    </div>
-  </div>
+        <div class="card m-4" style="background-color:#fff">
+          <div class="p-5 text-center">
+            <h1>Users</h1><br>
+            <b>{{ users }}</b>
+          </div>
+        </div>
+        <div class="card m-4" style="background-color:#fff">
+          <div class="p-5 text-center">
+            <h1>Total Sales</h1><br>
+            <b>{{ total_orders }}</b>
+          </div>
 
- 
-  <div class="col-md-6 p-5 " >
+        </div>
+        <div class="card m-4" style="background-color:#fff">
+          <div class="p-5 text-center">
+            <h1>Categories</h1><br>
+            <b>{{ categories }}</b>
+          </div>
 
-    <canvas id=""></canvas>
-  </div>
-
-</div>
-
+        </div>
+      </div>
+      <div class="row ">
+        <div class="col-md-5" style="background-color: #fff;">
+          <div class="m-3">
+            <h2>Order Status</h2>
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+        <div class="col-md-7 text-center" style="background-color: #fff;">
+          <div class="m-2">
+            <h2>Daily sales</h2>
+            <canvas id="my_doughnut_chart"></canvas>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="col-md-12 p-5 ">
+      <div class="table-responsive">
+        <div>
+          <h1 class="m-3" style="font-weight:1000;">Latest Orders</h1>
+        </div>
+        <table class="table table-striped table-dark">
+          <thead>
+            <tr>
+              <th scope="col">User</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Order Number</th>
+              <th scope="col">Product price</th>
+              <th scope="col">Total payment</th>
+              <th scope="col">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for x in latest_orders %}
+          <tr>
+              <th scope="row">
+                {{ x.user.username }}
+              </th>
+              <td>
+                {{ x.product }}
+              </td>
+              <td>
+                {{ x.order.order_number }}
+              </td>
+              <td>
+                {{ x.product_price }}
+              </td>
+              <td>
+                {{ x.order.order_total }}
+              </td>
+              <td>
+                {{ x.quantity }}
+              </td>
+          </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
 
 
-
-</body>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const ctx = document.getElementById('myChart').getContext('2d');
-  const myChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById('myChart').getContext('2d');
+      const myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
           labels: ['Order Accepted', 'Shipped', 'out_for_delivery', 'delivered', 'cancelled_count'],
           datasets: [{
-              label: 'order status',
-              data: {{ status_counter }},
-              backgroundColor: [
-                  'red',
-                  'blue',
-                  'yellow',
-                  'green',
-                  'violet',
-              ],
-              borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-              ],
-              borderWidth: 1
-          }]
+            label: 'order status',
+            data: {{ status_counter }},
+        backgroundColor: [
+          'red',
+          'blue',
+          'yellow',
+          'green',
+          'violet',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+        ],
+        borderWidth: 1
+      }]
       },
       options: {
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
+        scales: {
+          y: {
+            beginAtZero: true
           }
+        }
       }
   });
-   //three
-   const ctx3 = document.getElementById('my_doughnut_chart').getContext('2d');
-   const my_doughnut_chart = new Chart(ctx3, {
-       type: 'line',
-       data: {
-           labels: {{ last_week_days|safe }},
-           datasets: [{
-               label: 'sales count',
-               data:  {{ lastweek_orders|safe }},
-               backgroundColor: [
-                   'rgba(255, 99, 132, 0.2)',
-                   'rgba(54, 162, 235, 0.2)',
-                   'rgba(255, 206, 86, 0.2)',
-                   'rgba(75, 192, 192, 0.2)',
-                   'rgba(153, 102, 255, 0.2)',
-                   'rgba(255, 159, 64, 0.2)'
-               ],
-               borderColor: [
-                   'rgba(255, 99, 132, 1)',
-                   'rgba(54, 162, 235, 1)',
-                   'rgba(255, 206, 86, 1)',
-                   'rgba(75, 192, 192, 1)',
-                   'rgba(153, 102, 255, 1)',
-                   'rgba(255, 159, 64, 1)'
-               ],
-               borderWidth: 1
+      //three
+      const ctx3 = document.getElementById('my_doughnut_chart').getContext('2d');
+      const my_doughnut_chart = new Chart(ctx3, {
+        type: 'line',
+        data: {
+          labels: {{ last_week_days| safe }},
+      datasets: [{
+        label: 'sales count',
+        data: {{ lastweek_orders| safe }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+        borderWidth: 1
            }]
        },
-       options: {
-           scales: {
-               y: {
-                   beginAtZero: true
-               }
-           }
-       }
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
    });
-  </script>
+    </script>
 
-</html>
-{% endblock %}
+    </html>
+    {% endblock %}

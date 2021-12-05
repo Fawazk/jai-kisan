@@ -279,7 +279,34 @@
 
                         </thead>
                         <tbody>
-                            {% if cart_items %}
+                            {% if item %}
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside"><img src="{{ item.images_one.url }}"
+                                                class="img-sm">
+                                        </div>
+                                        <figcaption class="info">
+                                            <a href="{{ item.get_url }}"
+                                                class="text-dark">{{product.product_name }}</a>
+
+                                        </figcaption>
+                                    </figure>
+                                </td>
+
+                                <td>
+                                    {{ quantity }}
+                                </td>
+                                <td>
+                                    <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var><br>
+                                    {% if coupen_discount_price %}
+                                    <var class="price">Rs.{{ coupen_discount_price|floatformat:0 }}/-</var>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+
+                            {% else %}
                             {% for cart_item in cart_items %}
                             <tr>
                                 <td>
@@ -309,28 +336,6 @@
                                 </td>
                             </tr>
                             {% endfor %}
-                            {% else %}
-                            <tr>
-                                <td>
-                                    <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="{{ product.images_one.url }}"
-                                                class="img-sm">
-                                        </div>
-                                        <figcaption class="info">
-                                            <a href="{{ product.get_url }}"
-                                                class="text-dark">{{product.product_name }}</a>
-
-                                        </figcaption>
-                                    </figure>
-                                </td>
-
-                                <td>
-                                    1
-                                </td>
-                                <td>
-                                    <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var>
-                                </td>
-                            </tr>
                             {% endif %}
                         </tbody>
                     </table>

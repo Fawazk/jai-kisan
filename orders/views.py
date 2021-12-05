@@ -92,7 +92,6 @@ def razorpay_payment_verification(request):
         razorpay_signature = request.POST.get('razorpay_signature')
 
         params_dict = {
-
             'razorpay_order_id': razorpay_order_id,
             'razorpay_payment_id': razorpay_payment_id,
             'razorpay_signature': razorpay_signature
@@ -166,11 +165,13 @@ def place_order(request, total=0, quantity=0):
     tax = 0
     total_savings=0
     offer_savings=0
+    item=None
     if 'direct_order' in request.session:
         product=request.session['direct_order']
         item=Product.objects.get(id=product)
         tax=(2*item.get_price())/100
         total=item.get_price()
+        quantity=1
         offer_savings=total-item.price
         grand_total=total+tax  
         del request.session['direct_order']
@@ -233,6 +234,7 @@ def place_order(request, total=0, quantity=0):
                 'cart_items': cart_items,
                 'total': round(total),
                 'tax': round(tax,2),
+                'quantity':quantity,
                 'grand_total': grand_total,
                 'paypal_amount':round(paypal_amount,2),
                 'payment_order_id':payment_order_id,
@@ -310,8 +312,8 @@ def order_complete(request):
         
 
 def my_orders(request):
-    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('created_at')
-    orderproduct = OrderProduct.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user, is_ordered=True)
+    orderproduct = OrderProduct.objects.filter(user=request.user).order_by('-created_at')
     context = {
         'orders': orders,
         'orderproduct':orderproduct,

@@ -58,22 +58,23 @@
 								<td>
 
 									<!-- col.// -->
-									<div class="col">
+									<div>
 										<div class="input-group input-spinner">
-											<div class="input-group-prepend">
-												<a href="{% url 'remove_cart' x.product.id x.id %}" class="btn btn-light"
-													type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+											<div>
+												<div class="input-group-prepend">
+													<a href="{% url 'remove_cart' x.product.id x.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+													<input type="text" class="form-control" value="{{ x.quantity }}">
+													<form action="{% url 'add_cart' x.product.id %}" method='POST'>
+														{% csrf_token %}
+														{% for item in x.variations.all %}
+															<input type="hidden" name="{{ item.variation_category }}" value="{{ item.variation_value }}">
+															{% endfor %}
+														<button class="btn btn-light" type="submit" id="button-minus"> <i class="fa fa-plus"></i> </button>
+													</form>
+												</div>
+												
 											</div>
-											<input type="text" class="form-control" value="{{ x.quantity }}">
-											<div class="input-group-append">
-												<form action="{% url 'add_cart' x.product.id %}" method='POST'>
-													{% csrf_token %}
-													{% for item in x.variations.all %}
-														<input type="hidden" name="{{ item.variation_category }}" value="{{ item.variation_value }}">
-														{% endfor %}
-													<button class="btn btn-light" type="submit" id="button-minus"> <i class="fa fa-plus"></i> </button>
-												</form>
-											</div>
+											
 										</div> <!-- input-group.// -->
 									</div> <!-- col.// -->
 
@@ -114,7 +115,7 @@
 
 						<dl class="dlist-align">
 							<dt><b>Total:</b></dt>
-							<dd class="text-right text-dark b"><strong>Rs. {{grand_total|floatformat:0}}/-</strong></dd>
+							<dd class="text-right text-dark b"><strong>Rs.{{grand_total|floatformat:0}}/-</strong></dd>
 						</dl>
 						<hr>
 						<p class="text-center mb-3">
