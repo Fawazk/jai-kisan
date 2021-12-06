@@ -49,34 +49,52 @@ def payments(request):
     order.save()
 
     # Move the cart items to Order Product table
-    cart_items = CartItem.objects.filter(user=request.user)
-
-    for item in cart_items:
+    if 'direct_order' in request.session:
+        product_id=request.session['direct_order']
+        direct_item=Product.objects.get(id=product_id)
+        item=Product.objects.get(id=product_id)
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
-        orderproduct.payment = payment
         orderproduct.user_id = request.user.id
-        orderproduct.product_id = item.product_id
-        orderproduct.quantity = item.quantity
-        orderproduct.product_price = item.product.price
+        orderproduct.product_id = product_id
+        orderproduct.quantity = 1
+        orderproduct.product_price = direct_item.price
         orderproduct.ordered = True
         orderproduct.save()
-
-        cart_item = CartItem.objects.get(id=item.id)
-        product_variation = cart_item.variations.all()
-        orderproduct = OrderProduct.objects.get(id=orderproduct.id)
-        orderproduct.variations.set(product_variation)
-        orderproduct.save()
-
-
-        # Reduce the quantity of the sold products
-        product = Product.objects.get(id=item.product_id)
-        product.stock -= item.quantity
+        
+        product = Product.objects.get(id=product_id)
+        product.stock -= 1
         product.save()
+    else:
+        cart_items = CartItem.objects.filter(user=request.user)
+        for item in cart_items:
+            orderproduct = OrderProduct()
+            orderproduct.order_id = order.id
+            orderproduct.payment = payment
+            orderproduct.user_id = request.user.id
+            orderproduct.product_id = item.product_id
+            orderproduct.quantity = item.quantity
+            orderproduct.product_price = item.product.price
+            orderproduct.ordered = True
+            orderproduct.save()
+
+            cart_item = CartItem.objects.get(id=item.id)
+            product_variation = cart_item.variations.all()
+            orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+            orderproduct.variations.set(product_variation)
+            orderproduct.save()
+
+
+            # Reduce the quantity of the sold products
+            product = Product.objects.get(id=item.product_id)
+            product.stock -= item.quantity
+            product.save()
 
     # Clear cart
-    CartItem.objects.filter(user=request.user).delete()
-
+    if 'direct_order' in request.session:
+        del request.session['direct_order']
+    else:
+        CartItem.objects.filter(user=request.user).delete()
     data = {
         'order_number': order.order_number,
         'transID': payment.payment_id,
@@ -116,33 +134,52 @@ def razorpay_payment_verification(request):
         order.save()
 
     # Move the cart items to Order Product table
-    cart_items = CartItem.objects.filter(user=request.user)
-
-    for item in cart_items:
+    if 'direct_order' in request.session:
+        product_id=request.session['direct_order']
+        direct_item=Product.objects.get(id=product_id)
+        item=Product.objects.get(id=product_id)
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
-        orderproduct.payment = payment
         orderproduct.user_id = request.user.id
-        orderproduct.product_id = item.product_id
-        orderproduct.quantity = item.quantity
-        orderproduct.product_price = item.product.price
+        orderproduct.product_id = product_id
+        orderproduct.quantity = 1
+        orderproduct.product_price = direct_item.price
         orderproduct.ordered = True
         orderproduct.save()
-
-        cart_item = CartItem.objects.get(id=item.id)
-        product_variation = cart_item.variations.all()
-        orderproduct = OrderProduct.objects.get(id=orderproduct.id)
-        orderproduct.variations.set(product_variation)
-        orderproduct.save()
-
-
-    #     # Reduce the quantity of the sold products
-        product = Product.objects.get(id=item.product_id)
-        product.stock -= item.quantity
+        
+        product = Product.objects.get(id=product_id)
+        product.stock -= 1
         product.save()
+    else:
+        cart_items = CartItem.objects.filter(user=request.user)
+        for item in cart_items:
+            orderproduct = OrderProduct()
+            orderproduct.order_id = order.id
+            orderproduct.payment = payment
+            orderproduct.user_id = request.user.id
+            orderproduct.product_id = item.product_id
+            orderproduct.quantity = item.quantity
+            orderproduct.product_price = item.product.price
+            orderproduct.ordered = True
+            orderproduct.save()
 
-    # # Clear cart
-    CartItem.objects.filter(user=request.user).delete()
+            cart_item = CartItem.objects.get(id=item.id)
+            product_variation = cart_item.variations.all()
+            orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+            orderproduct.variations.set(product_variation)
+            orderproduct.save()
+
+
+        # Reduce the quantity of the sold products
+            product = Product.objects.get(id=item.product_id)
+            product.stock -= item.quantity
+            product.save()
+
+    # # Clear cart/session of buy now
+    if 'direct_order' in request.session:
+        del request.session['direct_order']
+    else:
+        CartItem.objects.filter(user=request.user).delete()
     return JsonResponse({'message': 'success'})
 
 def payment_failed(request):
@@ -150,6 +187,7 @@ def payment_failed(request):
 
 def place_order(request, total=0, quantity=0):
     current_user = request.user
+    item=None
     cart_items = CartItem.objects.filter(user=current_user)
     cart_count = cart_items.count()
     if request.session.has_key('couponid'):
@@ -165,7 +203,6 @@ def place_order(request, total=0, quantity=0):
     tax = 0
     total_savings=0
     offer_savings=0
-    item=None
     if 'direct_order' in request.session:
         product=request.session['direct_order']
         item=Product.objects.get(id=product)
@@ -173,12 +210,14 @@ def place_order(request, total=0, quantity=0):
         total=item.get_price()
         quantity=1
         offer_savings=total-item.price
-        grand_total=total+tax  
-        del request.session['direct_order']
+        grand_total=total+tax
         if request.session.has_key('couponid'):
             coupen_discount= request.session['coupon_discount']
             coupen_discount_price = total*(coupen_discount)/100
             grand_total=grand_total-coupen_discount_price
+            total_savings= grand_total-offer_savings
+        else:
+            coupen_discount_price=0    
     else:
         for cart_item in cart_items:
             total += (cart_item.product.get_price() * cart_item.quantity)
@@ -231,6 +270,7 @@ def place_order(request, total=0, quantity=0):
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             context = {
                 'order': order,
+                'item':item,
                 'cart_items': cart_items,
                 'total': round(total),
                 'tax': round(tax,2),
@@ -253,7 +293,7 @@ def order_complete(request):
     transID = request.GET.get('payment_id')
     try:
         order = Order.objects.get(is_ordered=False,order_number=order_number)
-        ordered_products = OrderProduct.objects.get(order_id=order.id)
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
         order.is_ordered=True
         order.save()
         subtotal = 0
@@ -271,7 +311,6 @@ def order_complete(request):
         try:
             order = Order.objects.get(order_number=order_number, is_ordered=True)
             ordered_products = OrderProduct.objects.filter(order_id=order.id)
-
             subtotal = 0
             for i in ordered_products:
                 subtotal += i.product_price * i.quantity
@@ -344,31 +383,50 @@ def cash_on_delivery(request,total=0, quantity=0):
     # Move the cart items to Order Product table
     order_number = request.session['order_number']
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=order_number)
-    cart_items = CartItem.objects.filter(user=request.user)
-
-    for item in cart_items:
+    if 'direct_order' in request.session:
+        product_id=request.session['direct_order']
+        direct_item=Product.objects.get(id=product_id)
+        item=Product.objects.get(id=product_id)
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
         orderproduct.user_id = request.user.id
-        orderproduct.product_id = item.product_id
-        orderproduct.quantity = item.quantity
-        orderproduct.product_price = item.product.price
+        orderproduct.product_id = product_id
+        orderproduct.quantity = 1
+        orderproduct.product_price = direct_item.price
         orderproduct.ordered = True
         orderproduct.save()
-
-
-        cart_item = CartItem.objects.get(id=item.id)
-        product_variation = cart_item.variations.all()
-        orderproduct = OrderProduct.objects.get(id=orderproduct.id)
-        orderproduct.variations.set(product_variation)
-        orderproduct.save()
-
-
-    #   # Reduce the quantity of the sold products
-        product = Product.objects.get(id=item.product_id)
-        product.stock -= item.quantity
+        
+        product = Product.objects.get(id=product_id)
+        product.stock -= 1
         product.save()
+    else:
+        cart_items = CartItem.objects.filter(user=request.user)
+        for item in cart_items:
+            orderproduct = OrderProduct()
+            orderproduct.order_id = order.id
+            orderproduct.user_id = request.user.id
+            orderproduct.product_id = item.product_id
+            orderproduct.quantity = item.quantity
+            orderproduct.product_price = item.product.price
+            orderproduct.ordered = True
+            orderproduct.save()
+
+
+            cart_item = CartItem.objects.get(id=item.id)
+            product_variation = cart_item.variations.all()
+            orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+            orderproduct.variations.set(product_variation)
+            orderproduct.save()
+
+
+        #   # Reduce the quantity of the sold products
+            product = Product.objects.get(id=item.product_id)
+            product.stock -= item.quantity
+            product.save()
 
     # # Clear cart
-    CartItem.objects.filter(user=request.user).delete()
+    if 'direct_order' in request.session:
+        del request.session['direct_order']
+    else:
+        CartItem.objects.filter(user=request.user).delete()
     return redirect('order_complete')

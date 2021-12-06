@@ -288,7 +288,7 @@
                                         </div>
                                         <figcaption class="info">
                                             <a href="{{ item.get_url }}"
-                                                class="text-dark">{{product.product_name }}</a>
+                                                class="text-dark">{{item.product_name }}</a>
 
                                         </figcaption>
                                     </figure>
@@ -298,10 +298,7 @@
                                     {{ quantity }}
                                 </td>
                                 <td>
-                                    <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var><br>
-                                    {% if coupen_discount_price %}
-                                    <var class="price">Rs.{{ coupen_discount_price|floatformat:0 }}/-</var>
-                                    {% endif %}
+                                    <var class="price">Rs.{{ item.price }}/-</var><br>
                                 </td>
                             </tr>
 
@@ -328,17 +325,33 @@
                                     {{ cart_item.quantity }}
                                 </td>
                                 <td>
-                                    <var class="price">Rs.{{ grand_total|floatformat:0 }}/-</var><br>
-                                    {% if coupen_discount_price %}
-                                    <var class="price">Rs.{{ coupen_discount_price|floatformat:0 }}/-</var>
-                                    {% endif %}
-
+                                    {{ cart_item.sub_total }}
                                 </td>
                             </tr>
-                            {% endfor %}
-                            {% endif %}
-                        </tbody>
-                    </table>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                            <div class="container" >
+                                <div class="card-body">
+                                    <dl class="dlist-align">
+                                        <dt>Tax:</dt>
+                                        <dd class="text-right">Rs.{{tax|floatformat:0}}/-</dd>
+                                      </dl>
+                                      {% if coupen_discount_price %}
+                                      <dl class="dlist-align">
+                                        <dt>Coupen saved:</dt>
+                                        <dd class="text-right">Rs.{{ coupen_discount_price|floatformat:0 }}/-</dd>
+                                      </dl>
+                                      {% endif %}
+                                    <dl class="dlist-align">
+                                      <dt>Total price:</dt>
+                                      <dd class="text-right"><b>Rs.{{total}}/-</b></dd>
+                                    </dl>
+                                </div>
+                                </div>
+                           
+
                     <div class="card-body">
                         <button type='submit' name="submit" class="btn btn-primary btn-block">Checkout</button>
                         <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>

@@ -16,27 +16,34 @@ from django.contrib import messages
 def store(request, category_slug=None):
     Categories = None
     products = None
-    if category_slug != None:
-        Categories = get_object_or_404(category, slug=category_slug)
-        products = Product.objects.filter(p_category=Categories, is_available=True)
-        paginator = Paginator(products,2)
-        page = request.GET.get('page')
-        paged_products = paginator.get_page(page)
-        count = products.count()
-    else:
-        products = Product.objects.all().filter(is_available=True).order_by('id')
-        paginator = Paginator(products,6)
-        page = request.GET.get('page')
-        paged_products = paginator.get_page(page)
-        count = products.count()
-    context = {
-        'products': paged_products,
-        'count':count,
-    }
-    return render(request, 'store/store.html', context)
+    try:
+        if 'direct_order' in request.session:
+            del request.session['direct_order']
+        if category_slug != None:
+            Categories = get_object_or_404(category, slug=category_slug)
+            products = Product.objects.filter(p_category=Categories, is_available=True)
+            paginator = Paginator(products,2)
+            page = request.GET.get('page')
+            paged_products = paginator.get_page(page)
+            count = products.count()
+        else:
+            products = Product.objects.all().filter(is_available=True).order_by('id')
+            paginator = Paginator(products,6)
+            page = request.GET.get('page')
+            paged_products = paginator.get_page(page)
+            count = products.count()
+        context = {
+            'products': paged_products,
+            'count':count,
+        }
+        return render(request, 'store/store.html', context)
+    except:
+        pass
 
 def product_detail(request,category_slug, product_slug):
     try:
+        if 'direct_order' in request.session:
+            del request.session['direct_order']
         single_product = Product.objects.get(p_category__slug=category_slug,slug=product_slug)
         in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request),product=single_product).exists()
     except Exception as e:
@@ -61,6 +68,8 @@ def product_detail(request,category_slug, product_slug):
 
 
 def search(request):
+    if 'direct_order' in request.session:
+        del request.session['direct_order']
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:
@@ -101,4 +110,4 @@ def direct_checkout(request,product_id):
         return redirect('checkout')
     else:
         messages.error(request,'Please login')
-        return redirect('store') 
+        return redirect('store')

@@ -38,7 +38,32 @@
 
               </thead>
               <tbody>
-                {% if cart_items %}
+                {% if item %}
+                <tr>
+                  <td>
+                    <figure class="itemside align-items-center">
+                      <div class="aside"><img src="{{ item.images_one.url }}" class="img-sm">
+                      </div>
+                      <figcaption class="info">
+
+                        <a href="{{ item.get_url }}" class="text-dark">{{item.product_name}}</a>
+                        {% for item in cart_item.variations.all %}<br>
+                        <small class="text-muted">{{ item.variation_value }}</small>
+                        {% endfor %}
+                      </figcaption>
+                    </figure>
+                  </td>
+
+                  <td>
+                    {{ quantity }}
+                  </td>
+                  <td>
+                    <var class="price">Rs.{{ item.sub_total }}/-</var>
+                    <small class="text-muted">Rs.{{ item.price }}/-</small>
+                  </td>
+                </tr>
+
+                {% else %}
                 {% for cart_item in cart_items %}
                 <tr>
                   <td>
@@ -64,31 +89,6 @@
                   </td>
                 </tr>
                 {% endfor %}
-                {% else %}
-                <tr>
-                  <td>
-                    <figure class="itemside align-items-center">
-                      <div class="aside"><img src="{{ item.images_one.url }}" class="img-sm">
-                      </div>
-                      <figcaption class="info">
-
-                        <a href="{{ item.get_url }}" class="text-dark">{{cart_item.product.product_name}}</a>
-                        {% for item in cart_item.variations.all %}<br>
-                        <small class="text-muted">{{ item.variation_value }}</small>
-                        {% endfor %}
-                      </figcaption>
-                    </figure>
-                  </td>
-
-                  <td>
-                    {{ quantity }}
-                  </td>
-                  <td>
-                    <var class="price">Rs.{{ item.sub_total }}/-</var>
-                    <small class="text-muted">Rs.{{ item.price }}/-</small>
-                  </td>
-                </tr>
-
                 {% endif %}
               </tbody>
             </table>
@@ -110,7 +110,7 @@
             </dl>
             {% if coupen_discount_price %}
             <dl class="dlist-align">
-              <dt>Total savings:</dt>
+              <dt>Coupen savings:</dt>
               <dd style="color: green;" class="text-right">Rs.{{coupen_discount_price |floatformat:0}}/-</dd>
             </dl>
             {% endif %}

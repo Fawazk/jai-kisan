@@ -85,10 +85,8 @@
 							{% if single_product.stock <= 0 %} <span class="text btn btn-danger">Out of stock</span>
 								{% else %}
 								<button type="submit" style="background-color: #5cb85c; color:#fff;" class="btn"> <span
-										class="text">Add
-										to
-										cart</span> <i class="fas fa-shopping-cart"></i></button>
-
+										class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i></button>
+								<a href="{% url 'direct_checkout' single_product.id %}" class="btn btn-outline-success"> <span>Buy Now</span></a>
 								{% endif %}
 						</article>
 					</form>
@@ -167,7 +165,8 @@
 				{% for x in reviews %}
 				<article class="box mb-3">
 					<div class="icontext w-100">
-						<img src="./images/avatars/avatar1.jpg" class="img-xs icon rounded-circle">
+						
+						<img src="{{ x.user.profile_img.url }}" class="img-xs icon rounded-circle">
 						<div class="text">
 							<span class="date text-muted float-md-right">{{ x.created_at }}</span>
 							<h6 class="mb-1">{{ x.user.username }}</h6>
