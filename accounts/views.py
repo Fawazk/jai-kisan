@@ -44,6 +44,7 @@ def register(request):
             request.session['key']=phone_number
             user = Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username,password=password)
             otpverify(phone_number)
+            messages.info('you were registered then please verify phone number')
             return redirect('confirm_register_otp')
     context ={
         'form':form
@@ -71,7 +72,7 @@ def confirm_register_otp(request):
             messages.success(request,'Registered successfully')
             return redirect('signin')
         else:
-            print('OTP not matching')
+            messages.error('please enter valid otp')
             return redirect('confirm_register_otp')
     return render(request,'confirm_register_otp.html')
 
