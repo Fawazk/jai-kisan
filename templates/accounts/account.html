@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
+{% include 'includes/header.html' %}
 <section class="section-conten padding-y bg">
 
     <div class="container">
@@ -36,7 +37,7 @@
                                         <div class="m-b-25"> <img src="http://naikenviro.net/wp-content/uploads/2018/06/null.jpg" width="25%" class="img-radius" alt="User-Profile-Image"> </div>
                                         {% endif %}           
                                         <h4 class="f-w-600">{{ account.username }}</h4>
-                                        <p>{{ account.phone_number }}</p> <a href="{% url 'edit_profile' account.id %}">Edit<i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i></a>
+                                        <p>{{ account.phone_number }}</p> <a style="color: black;" href="{% url 'edit_profile' account.id %}">Edit<i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i></a>
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
@@ -79,6 +80,8 @@
                             </div>
                         </div>
                     </div>
+                    {% include 'includes/sweet.alert.html' %}
+
               
         </div>
 </div> <!-- row.// -->
@@ -91,7 +94,7 @@
 
 
 
-
+{% include 'includes/footer.html' %}
 </body>
 </html>
 

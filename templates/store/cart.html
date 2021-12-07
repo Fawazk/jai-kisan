@@ -7,11 +7,114 @@
 
 
 
+{% include 'includes/header.html' %}
 
+<section class="section-content padding-y" style="height:100vh;">
+	<div class="container">
+		{% if not cart_items %}
+
+		<div class="text-center">
+			<h1>Your Cart is Empty</h1>
+			<br>
+			<a href="{% url 'store' %}" class="btn btn-success">Continue Shopping</a>
+		</div>
+		{% else %}
+		
+		<div class="row">
+			<div class="col-md-8 col-sm-12 ">
+				<div class="col-md-12 col-sm-12">
+					<strong>Your cart</strong>
+				</div>
+				{% for x in cart_items %}
+				<div class="row justify-content-around  shadow p-3 align-items-center mb-2" >
+					<div class="col-md-3 col-sm-4 col-4">
+						<div>
+							<a href="{{ x.product.get_url }}" class="title text-dark">{{ x.product.product_name }}</a>
+							<p class="small text-muted">{{ x.product.p_category }}</p>
+							<img src="{{ x.product.images_one.url  }}" class="img-sm">
+							
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-4 col-3 row" >
+							<div class="col-sm-3">
+								<a href="{% url 'remove_cart' x.product.id x.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+							<!-- <p class="form-control" value=""</p> -->
+							</div>
+							<div class="col-sm-3">
+								<b class="btn">{{ x.quantity }}</b>
+							</div>
+
+							<div class="col-sm-3">
+								<form action="{% url 'add_cart' x.product.id %}" method='POST'>
+									{% csrf_token %}
+									<button class="btn btn-light" type="submit" id="button-minus"> <i class="fa fa-plus"></i> </button>
+								</form>
+						</div>
+						
+					</div>
+					<div class="col-md-5 col-sm-5 col-5 row">
+						<div class="col-md-6 col-sm-6">
+							<var class="price">Rs.{{ x.sub_total |floatformat:0 }}/-</var><br>
+											<small class="text-muted">Rs. {{ x.product.get_price|floatformat:0 }}/-</small>
+						</div>
+						<div class="col-md-6 col-sm-6 ">
+							<a href="{% url 'remove_cart_item' x.product.id x.id %}" class="btn btn-danger">Remove</a>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			<div class="col-md-4 summary">
+				<div class="card">
+					<div class="card-body">
+						<dl class="dlist-align">
+							<dt>Total price:</dt>
+							<dd class="text-right">Rs. {{total|floatformat:0}}/-</dd>
+						</dl>
+						<dl class="dlist-align">
+							<dt>Tax:</dt>
+							<dd class="text-right">Rs. {{tax|floatformat:0}}/-</dd>
+						</dl>
+
+						<dl class="dlist-align">
+							<dt><b>Total:</b></dt>
+							<dd class="text-right text-dark b">
+								<strong>Rs.{{grand_total|floatformat:0}}/-</strong>
+							</dd>
+						</dl>
+						<hr>
+						<p class="text-center mb-3">
+							<img src="{% static './images/misc/payments.png' %}" height="26">
+						</p>
+						<a href="{% url 'checkout' %}" class="btn btn-primary btn-block"> Checkout </a>
+						<a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+					</div> <!-- card-body.// -->
+				</div>
+			</div>
+		</div>
+	
+		{% endif %}
+
+
+	</div> <!-- row.// -->
+	<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+	</div> <!-- container .//  -->
+</section>
+{% include 'includes/footer.html' %}
+
+</body>
+
+
+</html>
+{% endblock %}
+
+
+
+<!-- 
 <section class="section-content padding-y bg">
 	<div class="container">
 
-		<!-- ============================ COMPONENT 1 ================================= -->
 
 		{% if not cart_items %}
 
@@ -57,7 +160,6 @@
 
 								<td>
 
-									<!-- col.// -->
 									<div>
 										<div class="input-group input-spinner">
 											<div>
@@ -75,8 +177,8 @@
 												
 											</div>
 											
-										</div> <!-- input-group.// -->
-									</div> <!-- col.// -->
+										</div> 
+									</div>
 
 								</td>
 								<td>
@@ -85,7 +187,7 @@
 										<var class="price">Rs.{{ x.sub_total |floatformat:0 }}/-</var>
 										<small class="text-muted">Rs. {{ x.product.get_price|floatformat:0 }}/-</small>
 										
-									</div> <!-- price-wrap .// -->
+									</div> 
 								</td>
 								<td class="text-right">
 									<a href="{% url 'remove_cart_item' x.product.id x.id %}" class="btn btn-danger">
@@ -96,10 +198,10 @@
 
 						</tbody>
 					</table>
-				</div> <!-- card.// -->
+				</div>
 				{% if not cart_items %}
 				{% else %}
-			</aside> <!-- col.// -->
+			</aside>
 			<aside class="col-lg-3">
 
 				<div class="card">
@@ -123,21 +225,19 @@
 						</p>
 						<a href="{% url 'checkout' %}" class="btn btn-primary btn-block"> Checkout </a>
 						<a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
-					</div> <!-- card-body.// -->
-				</div> <!-- card.// -->
+					</div>
+				</div> 
 
 			</aside>
 			{% endif %}
 
 
 
-		</div> <!-- row.// -->
-		<!-- ============================ COMPONENT 1 END .// ================================= -->
+		</div> 
 
-	</div> <!-- container .//  -->
+	</div> 
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
+{% include 'includes/footer.html' %}
 </body>
 
 </html>
-{% endblock %}

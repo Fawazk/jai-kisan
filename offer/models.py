@@ -25,7 +25,15 @@ class Coupon(models.Model):
     coupon_code = models.CharField(max_length=50, unique=True)
     discount = models.PositiveIntegerField(help_text="Offer in percentage", null=True)
     is_active = models.BooleanField(default=False)
+   
+   
+    def __str__(self):
+        return str(self.coupon_code)
+    
 
 class RedeemedCoupon(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return str(self.coupon)

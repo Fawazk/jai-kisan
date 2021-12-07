@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from orders.forms import AddressForm, OrderForm
 from orders.models import Address
 from store.models import Product, Variation
+from django.views.decorators.cache import never_cache
+
 from django.contrib import auth, messages
 
 
@@ -186,7 +188,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
     }
     return render(request, 'store/cart.html', context)
 
-
+@never_cache
 @login_required(login_url='signin')
 def checkout(request, total=0, quantity=0, cart_items=None):
     user=request.user

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+
+  {% for message in messages %}
+  <script> 
+       Swal.fire({
+        position: 'middle',
+        icon: '{{ message.tags }}',
+        title: '{{ message }}',
+        showConfirmButton: false,
+        timer: 1500
+      })
+  </script>
+  {% endfor %}
+  
+  {% endif %}
+  {% endblock %}

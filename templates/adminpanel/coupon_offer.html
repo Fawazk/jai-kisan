@@ -27,8 +27,8 @@
 </head>
 
 <body>
-    <div class="header ">
-        <div class="align-items-">
+    <div class="header">
+        <div class="align-items-center">
             <div class="px-2 col-lg-12 col-7">
                 <div class="mb-2 d-flex justify-content-between align-items-center">
                     <!-- <div class="position-relative"> <span class="position-absolute search"><i class="fa fa-search"></i></span> <input class="form-control w-100" placeholder="Search by order#, name..."> </div> -->
@@ -36,33 +36,37 @@
                 </div>
                 <div class="table-responsive">
                     <div>
-                        <h1 style="color:#5cb85c" class="m-5">Banner List</h1>
+                        <h1 style="color:#5cb85c" class="m-5">Coupon List</h1>
                     </div>
-                    <table id="table" class="display">
-                        <thead>
+                    <table id="table" class="display"  style="border:None;">
+                        <thead  style="border:None;">
 
-                            <tr>
-                                <th scope="col">id</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Delete</th>
-                                <th scope="col">Edit</th>
+                            <tr  style="border:None;">
+                                <th  style="border:None;" scope="col">id</th>
+                                <th  style="border:None;" scope="col">Coupon code</th>
+                                <th  style="border:None;" scope="col">Discount</th>
+                                <th  style="border:None;" scope="col">is_active</th>
+                                <th  style="border:None;" scope="col">Delete</th>
+                                <th  style="border:None;" scope="col">Edit</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for x in banner_list %}
+                        <tbody  style="border:None;">
+                            {% for x in coupon_list %}
                             <tr>
                                 <th scope="row">
                                     {{ x.id }}
                                 </th>
                                 <td>
-                                    <img src="{{ x.image.url }}" width="100px" height="auto" alt="">
+                                    {{ x.coupon_code }}
                                 </td>
                                 <td>
-                                    {{ x.description }}
+                                    {{ x.discount }}
                                 </td>
-                                    <td><a class="btn btn-danger" href="" onclick="banner_delete('{{x.id}}')" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >delete</a></td>
-                                    <td><a class="btn btn-info" href="" onclick="banner_edit('{{x.id}}')" data-bs-toggle="modal" data-bs-target="#staticBackdrop">edit</a></td>
+                                <td>
+                                    {{ x.is_active }}
+                                </td>
+                                    <td><a class="btn btn-danger" href="" onclick="delete_coupon('{{x.id}}')" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >delete</a></td>
+                                    <td><a class="btn btn-info" href="" onclick="edit_coupon('{{x.id}}')" data-bs-toggle="modal" data-bs-target="#staticBackdrop">edit</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -109,19 +113,19 @@
 
 
 <script>
-  function banner_delete(id){
-    document.getElementById('delete').href = 'banner_delete/'+id;
-    document.getElementById('staticBackdropLabel').innerText = 'Delete Banner';
+  function delete_coupon(id){
+    document.getElementById('delete').href = 'delete_coupon/'+id;
+    document.getElementById('staticBackdropLabel').innerText = 'Delete Coupon';
     document.getElementById('delete').innerText = 'Delete';
-    document.getElementById('model-body-content').innerText = 'Are you sure to delete this product .'
+    document.getElementById('model-body-content').innerText = 'Are you sure to delete this Coupon .'
   }
 
 
-  function banner_edit(id){
-    document.getElementById('delete').href = 'banner_edit/'+id;
-    document.getElementById('staticBackdropLabel').innerText = 'Edit Banner';
+  function edit_coupon(id){
+    document.getElementById('delete').href = 'edit_coupon/'+id;
+    document.getElementById('staticBackdropLabel').innerText = 'Edit Coupon';
     document.getElementById('delete').innerText = 'edit';
-    document.getElementById('model-body-content').innerText = 'Are you sure to edit this product .'
+    document.getElementById('model-body-content').innerText = 'Are you sure to edit this Coupon .'
   }
 </script> 
 

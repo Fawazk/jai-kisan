@@ -45,7 +45,7 @@
                     </form>
 
                     {% if user.is_authenticated %}
-                        <a  style="color:#FFF" href=""><h3><b>{{ user.username }}</b></h3></a>
+                        <a  style="color:#FFF" href=""><h4>{{ user.username }}</h4></a>
                     {% else %}
                         <div class="navbar-nav">
                             <a href="{% url 'register' %} " class="nav-item nav-link text-white">Register</a>

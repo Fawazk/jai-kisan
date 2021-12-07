@@ -208,6 +208,7 @@ def edit_profile(request,id):
             except:
                 context = {'form':form}
                 return render(request,'accounts/edit_profile.html',context)
+            messages.success(request, 'profile edited')
             return redirect('profile')
     context = {'form':form}
     return render(request,'accounts/edit_profile.html',context)

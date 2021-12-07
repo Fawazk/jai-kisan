@@ -42,7 +42,7 @@
 
 
 
-                                <form id="myform" action="{% url 'add_address' %}" method="post">
+                                <form id="myform" action="{% url 'add_address' %}"  method="post">
 
                                     {% csrf_token %}
                                     <div class="justify-content-center">
@@ -129,8 +129,10 @@
                                                 <div class="float-end ">
                                                     <!-- Submit button -->
                                                     <button type="submit" class="btn btn-primary btn-rounded"
-                                                        style="background-color: #0062CC ;">Place order</button>
+                                                        style="background-color: #0062CC ;">Add Address</button>
                                                 </div>
+                                                {{ form.email.error }}
+                                                {{ form.non_field_errors }}
                                 </form>
 
 
@@ -178,10 +180,14 @@
     </div>
 </section>
 <style>
+    .error{
+        color:red !important;
+    }
+</style>
+<style>
     .dpjmKp:hover ._1UHYca {
         display: block;
     }
-
     ._1UHYca {
         z-index: 1;
         white-space: nowrap;
@@ -200,10 +206,6 @@
 
     }
 </style>
-
-
-
-
 </body>
 
 </html>

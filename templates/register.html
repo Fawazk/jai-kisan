@@ -9,6 +9,7 @@
  <!-- section-header.// -->
 
 
+ {% include 'includes/header.html' %}
 
 <!-- ========================= SECTION CONTENT ========================= -->
 
@@ -60,7 +61,7 @@
 			    </div> <!-- form-group// -->      
 			        {{ form.email.error }}
 					{{ form.non_field_errors }}
-					{% include 'includes/alert.html' %}
+						{% include 'includes/alert.html' %}
 				</form>
 			<style>
 				.error{

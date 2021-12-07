@@ -7,7 +7,7 @@
 
 
 
-
+{% include 'includes/header.html' %}
 <!-- ========================= SECTION PAGETOP ========================= -->
 <section class="section-pagetop bg">
 	<div class="container">
@@ -44,18 +44,6 @@
 							</div> <!-- card-body.// -->
 						</div>
 					</article> <!-- filter-group  .// -->
-
-
-					<article class="filter-group">
-						<header class="card-header">
-							<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
-								<i class="icon-control fa fa-chevron-down"></i>
-								<h6 class="title">Price range </h6>
-							</a>
-						</header>
-
-					</article> <!-- filter-group .// -->
-
 				</div> <!-- card.// -->
 
 			</aside> <!-- col.// -->
@@ -111,7 +99,7 @@
 										<a href="#" class="btn btn-outline-success"> <span class="text">Added to cart</span></a>
 										{% else %}
 										<a href="{% url 'add_cart' x.id %}" class="btn btn-success"> <span>Add to cart</span></a>
-										<a href="{% url 'direct_checkout' x.id %}" class="btn btn-success"> <span>Buy Now</span></a>
+										<a href="{% url 'direct_checkout' x.id %}" class="btn btn-outline-success"> <span>Buy Now</span></a>
 										{% endif %}
 										{% endif %}
 								</div>
@@ -166,7 +154,7 @@
 	</div> <!-- container .//  -->
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
-
+{% include 'includes/footer.html' %}
 </body>
 
 </html>

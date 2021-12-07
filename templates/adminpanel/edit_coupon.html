@@ -1,8 +1,10 @@
-{% extends 'base.html' %}
-{% block content %}
+
+
 {% load crispy_forms_tags %}
 {% load crispy_forms_filters %}
 {% load static %}
+{% include 'adminpanel/nav.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,45 +32,15 @@
 
 
 
-{% include 'includes/header.html' %}
 
-<h4 style="font-weight: 700; font-size: 30px;" class="card-title mb-4 m-5 text-center">Edit Profile
+<h4 style="color: #5cb85c; font-weight: 700; font-size: 30px;" class="card-title mb-4 m-5 text-center">Edit Coupon
 </h4>
 
 <body style="background-color: #E5E5E5;">
-    <div style=" background-color:#fff" class="col-6 container">
-        <form id="myform" action="{{ edit_profile }}" method="post" class="container container-fluid p-5" enctype="multipart/form-data" >
+    <div style="width:50%; margin-top:50px; background-color:#fff" class="col-12 p-5 container">
+        <form id="myform" action="{{ edit_coupon }}" method="post"enctype="multipart/form-data" class="col-xl-10" >
             {% csrf_token %}
-            <!-- {{ form | crispy }} -->
-                <div class="form-row p-2">
-                  <div class="col">
-                    {{form.first_name}}
-                  </div>
-                  <div class="col">
-                    {{form.last_name}}
-                  </div>
-                </div>
-                <div class="form-row p-2">
-                    <div class="col">
-                      {{form.email}}
-                    </div>
-                    <div class="col">
-                      {{form.phone_number}}
-                    </div>
-                  </div>
-                  <div class="form-row p-2">
-                    <div class="col">
-                      {{form.profile_img}}
-                    </div>
-                </div>
-                    <div class="form-row p-2">
-                        <div class="col">
-                            {{form.state}}
-                          </div>
-                          <div class="col">
-                            {{form.city}}
-                          </div>
-                    </div>
+            {{ form | crispy }}
             <div class="pt-5">
                 <button type="submit" id="btn-submit" form="myform" class="btn btn-primary">Update</button>
                 <a class="btn btn-primary" href="">cancel</a>
@@ -76,7 +48,7 @@
         </form>
     </div>
     <script>
-        $(document).on('click', '#btnsubmit-', function (e) {
+        $(document).on('click', '#btn-submit', function (e) {
             e.preventDefault();
             swal({
                 title: "Do you want to update ?",
@@ -91,11 +63,6 @@
             });
         });
     </script>
-    <div class="pt-5" >
-        {% include 'includes/footer.html' %}
-    </div>
 </body>
 
-
 </html>
-{% endblock %}

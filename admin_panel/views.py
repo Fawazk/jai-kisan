@@ -4,8 +4,8 @@ from accounts.form import BannerForm
 from accounts.models import Account, Banner
 from category.form import CategoryForm
 from category.models import category
-from offer.form import CategoryOfferForm, ProductOfferForm
-from offer.models import CategoryOffer, ProductOffer
+from offer.form import CategoryOfferForm, CouponForm, ProductOfferForm
+from offer.models import CategoryOffer, Coupon, ProductOffer, RedeemedCoupon
 from orders.forms import OrderProductForm
 from orders.models import Order, OrderProduct
 from store.models import Product
@@ -335,6 +335,50 @@ def add_categoryoffer(request):
             'form':form,
     }
     return render(request,'adminpanel/add_categoryoffer.html',context)
+def coupon_offer(request):
+    coupon_list = Coupon.objects.all()
+    context={
+        'coupon_list':coupon_list,
+    }
+    return render(request,'adminpanel/coupon_offer.html',context)
+def coupon_add(request):
+    form = CouponForm()
+    if request.method == 'POST':
+        form = CouponForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('coupon_offer')
+    context = {
+        'form':form,
+    }
+    return render(request,'adminpanel/coupon_add.html',context)
+def edit_coupon(request,coupon_id):
+    coupon = Coupon.objects.get(id=coupon_id)
+    form = CouponForm(instance=coupon)
+    if request.method == 'POST':
+        form = CouponForm(request.POST,request.FILES,instance=coupon)
+        if form.is_valid():
+            try:
+                form.save()
+            except:
+                context = {
+                    'form':form,
+                }
+                return render(request,'adminpanel/edit_coupon.html',context)
+            return redirect('coupon_offer')
+    context = {'form':form}
+    return render(request,'adminpanel/edit_coupon.html',context)
+def delete_coupon(request,coupon_id):
+    coupon=Coupon.objets.get(id=coupon_id)
+    coupon.delete()
+    return redirect('coupon_offer')
+
+def redeemed_coupon(request):
+    redeemed_coupon= RedeemedCoupon.objects.all()
+    context={
+        'redeemed_coupon':redeemed_coupon,         
+    }
+    return render(request,'adminpanel/redeem_coupon.html',context)
 
 def banner_list(request):
     banner_list= Banner.objects.all()

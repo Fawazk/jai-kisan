@@ -46,7 +46,7 @@ class Account(AbstractBaseUser):
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50)
     email = models.CharField(max_length=50,unique=True)
-    phone_number = models.CharField(max_length=50)
+    phone_number=models.CharField(('mobile number'), max_length=20, unique=True)
     profile_img = models.ImageField( null=True, blank=True, upload_to='userprofile')
     city = models.CharField(max_length=50,null=True)
     state = models.CharField(max_length=50,null=True)

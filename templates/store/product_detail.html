@@ -6,7 +6,7 @@
 
 
 
-
+{% include 'includes/header.html' %}
 <section class="section-content padding-y bg">
 	<div class="container">
 
@@ -133,12 +133,10 @@
 							<input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
 							<input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
 						</div>
+						
 						<br>
-						Review Title:
-						<input type="text" class="form-control" name="subject">
-						<br>
-						Review:
-						<textarea name="review" rows="4" class="form-control"></textarea>
+						<b>Review :</b>
+						<textarea style="border: none;" name="review" rows="4" class="form-control"></textarea>
 						<br>
 						{% if user.is_authenticated %}
 							{% if orderproduct %}
@@ -163,9 +161,8 @@
 					{% include 'includes/alert.html' %}
 				</form>
 				{% for x in reviews %}
-				<article class="box mb-3">
+				<article class="box mb-3 mt-3">
 					<div class="icontext w-100">
-						
 						<img src="{{ x.user.profile_img.url }}" class="img-xs icon rounded-circle">
 						<div class="text">
 							<span class="date text-muted float-md-right">{{ x.created_at }}</span>
@@ -201,6 +198,7 @@
 <!-- ========================= SECTION CONTENT END// ========================= -->
 
 </body>
+{% include 'includes/footer.html' %}
 
 </html>
 </body>

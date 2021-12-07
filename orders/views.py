@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.views.decorators.cache import never_cache
 from cart.models import CartItem
 from offer.models import Coupon, RedeemedCoupon
 from .forms import OrderForm
@@ -185,6 +186,8 @@ def razorpay_payment_verification(request):
 def payment_failed(request):
     return render(request,'payment_failed.html')
 
+
+@never_cache
 def place_order(request, total=0, quantity=0):
     current_user = request.user
     item=None

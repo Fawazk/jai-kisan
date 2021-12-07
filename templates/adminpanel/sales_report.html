@@ -36,34 +36,60 @@
                 </div>
                 <div class="table-responsive">
                     <div>
-                        <h1 style="color:#5cb85c" class="m-5">Banner List</h1>
+                        <h1 style="color:#5cb85c" class="m-5">Product List</h1>
                     </div>
                     <table id="table" class="display">
                         <thead>
 
                             <tr>
-                                <th scope="col">id</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Description</th>
+                                <th scope="col">product id</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">slug</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">image</th>
+                                <th scope="col">stock</th>
+                                <th scope="col">is_available</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">create_date</th>
                                 <th scope="col">Delete</th>
                                 <th scope="col">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for x in banner_list %}
+                            {% for x in products %}
                             <tr>
                                 <th scope="row">
                                     {{ x.id }}
                                 </th>
                                 <td>
-                                    <img src="{{ x.image.url }}" width="100px" height="auto" alt="">
+                                    {{ x.product_name }}
                                 </td>
                                 <td>
-                                    {{ x.description }}
+                                    {{ x.slug }}
                                 </td>
-                                    <td><a class="btn btn-danger" href="" onclick="banner_delete('{{x.id}}')" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >delete</a></td>
-                                    <td><a class="btn btn-info" href="" onclick="banner_edit('{{x.id}}')" data-bs-toggle="modal" data-bs-target="#staticBackdrop">edit</a></td>
-                            </tr>
+                                <td>
+                                    {{ x.price }}
+                                </td>
+                                <td>
+                                    <div>
+                                        <img src="{{ x.images_one.url }}" width="25%">
+                                        <img src="{{ x.images_two.url }}" width="25%">
+                                        <img src="{{ x.images_three.url }}" width="25%">
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ x.stock }}
+                                </td>
+                                <td>
+                                    {{ x.is_available }}
+                                </td>
+                                <td>
+                                    {{ x.p_category }}
+                                </td>
+                                <td>
+                                    {{ x.create_date }}
+                                </td>
+                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -72,65 +98,6 @@
 
         </div>
     </div>
-
- 
-
-    <!-- Modal -->
-     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <p id="model-body-content" class="text-danger"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a href="" type="button" class="btn btn-primary"  id="delete"></a>
-      </div>
-    </div>
-  </div>
-</div>
-{% for x in messages %}
-
-<script>
-  
-  swal({
-    title: "edit success!",
-    text: "You clicked the button!",
-    icon: "success",
-    button: "Aww yiss!",
-  });
-   
-</script>
-{% endfor %}
-
-
-<script>
-  function banner_delete(id){
-    document.getElementById('delete').href = 'banner_delete/'+id;
-    document.getElementById('staticBackdropLabel').innerText = 'Delete Banner';
-    document.getElementById('delete').innerText = 'Delete';
-    document.getElementById('model-body-content').innerText = 'Are you sure to delete this product .'
-  }
-
-
-  function banner_edit(id){
-    document.getElementById('delete').href = 'banner_edit/'+id;
-    document.getElementById('staticBackdropLabel').innerText = 'Edit Banner';
-    document.getElementById('delete').innerText = 'edit';
-    document.getElementById('model-body-content').innerText = 'Are you sure to edit this product .'
-  }
-</script> 
-
-    <script>
-        $(document).ready(function () {
-            $('#table').DataTable();
-        });
-    </script>
-
 </body>
 
 </html>
