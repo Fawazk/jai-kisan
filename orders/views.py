@@ -54,7 +54,7 @@ def payments(request):
         print('fawaz paypal')
         product_id=request.session['direct_order']
         direct_item=Product.objects.get(id=product_id)
-        payment_amount=direct_item.product.get_price()
+        payment_amount=direct_item.get_price()
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
         orderproduct.user_id = request.user.id
@@ -140,7 +140,7 @@ def razorpay_payment_verification(request):
     if 'direct_order' in request.session:
         product_id=request.session['direct_order']
         direct_item=Product.objects.get(id=product_id)
-        payment_amount=direct_item.product.get_price()
+        payment_amount=direct_item.get_price()
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
         orderproduct.user_id = request.user.id
