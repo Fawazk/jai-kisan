@@ -29,7 +29,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG',default=False,cast=(bool))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['139.59.92.95']
 
 
 # Application definition
@@ -167,5 +167,5 @@ TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
 TWILIO_VERIFICATION_SID =config('TWILIO_VERIFICATION_SID')
 
-RAZOR_KEY_ID ='rzp_test_SdVfYoVMPU2xtZ'
-RAZOR_KEY_SECRET = 'cAEgBsWqUugKPN0GXBqtl2jU'
+RAZOR_KEY_ID =config('RAZOR_KEY_ID')
+RAZOR_KEY_SECRET = config('RAZOR_KEY_SECRET')

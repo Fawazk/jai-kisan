@@ -51,6 +51,7 @@ def payments(request):
 
     # Move the cart items to Order Product table
     if 'direct_order' in request.session:
+        print('fawaz paypal')
         product_id=request.session['direct_order']
         direct_item=Product.objects.get(id=product_id)
         payment_amount=direct_item.product.get_price()
