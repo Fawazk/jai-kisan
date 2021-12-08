@@ -41,4 +41,10 @@ urlpatterns = [
     path('add_banner',views.add_banner,name='add_banner'),
     path('banner_edit/<int:banner_id>/',views.banner_edit,name='banner_edit'),
     path('banner_delete/<int:banner_id>/',views.banner_delete,name='banner_delete'),
+    
+        
+    # product_sales
+    
+    path('product_sales',views.product_sales,name='product_sales'),
+    path('download_product_sales_report',views.download_product_sales_report,name='download_product_sales_report'),
     ]

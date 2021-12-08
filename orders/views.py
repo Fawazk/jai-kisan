@@ -53,13 +53,13 @@ def payments(request):
     if 'direct_order' in request.session:
         product_id=request.session['direct_order']
         direct_item=Product.objects.get(id=product_id)
-        item=Product.objects.get(id=product_id)
+        payment_amount=direct_item.product.get_price()
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
         orderproduct.user_id = request.user.id
         orderproduct.product_id = product_id
         orderproduct.quantity = 1
-        orderproduct.product_price = direct_item.price
+        orderproduct.product_price = payment_amount
         orderproduct.ordered = True
         orderproduct.save()
         
@@ -69,13 +69,14 @@ def payments(request):
     else:
         cart_items = CartItem.objects.filter(user=request.user)
         for item in cart_items:
+            payment_amount=item.quantity*item.product.get_price()
             orderproduct = OrderProduct()
             orderproduct.order_id = order.id
             orderproduct.payment = payment
             orderproduct.user_id = request.user.id
             orderproduct.product_id = item.product_id
             orderproduct.quantity = item.quantity
-            orderproduct.product_price = item.product.price
+            orderproduct.product_price = payment_amount
             orderproduct.ordered = True
             orderproduct.save()
 
@@ -138,13 +139,13 @@ def razorpay_payment_verification(request):
     if 'direct_order' in request.session:
         product_id=request.session['direct_order']
         direct_item=Product.objects.get(id=product_id)
-        item=Product.objects.get(id=product_id)
+        payment_amount=direct_item.product.get_price()
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
         orderproduct.user_id = request.user.id
         orderproduct.product_id = product_id
         orderproduct.quantity = 1
-        orderproduct.product_price = direct_item.price
+        orderproduct.product_price = payment_amount
         orderproduct.ordered = True
         orderproduct.save()
         
@@ -154,13 +155,14 @@ def razorpay_payment_verification(request):
     else:
         cart_items = CartItem.objects.filter(user=request.user)
         for item in cart_items:
+            payment_amount=item.quantity*item.product.get_price()
             orderproduct = OrderProduct()
             orderproduct.order_id = order.id
             orderproduct.payment = payment
             orderproduct.user_id = request.user.id
             orderproduct.product_id = item.product_id
             orderproduct.quantity = item.quantity
-            orderproduct.product_price = item.product.price
+            orderproduct.product_price = payment_amount
             orderproduct.ordered = True
             orderproduct.save()
 
@@ -201,7 +203,6 @@ def place_order(request, total=0, quantity=0):
             coupon_redeem.user=current_user
             coupon_redeem.coupon=coupon
             coupon_redeem.save()
-
     grand_total = 0
     tax = 0
     total_savings=0
@@ -216,6 +217,7 @@ def place_order(request, total=0, quantity=0):
         grand_total=total+tax
         if request.session.has_key('couponid'):
             coupen_discount= request.session['coupon_discount']
+            del request.session['couponid']
             coupen_discount_price = total*(coupen_discount)/100
             grand_total=grand_total-coupen_discount_price
             total_savings= grand_total-offer_savings
@@ -231,6 +233,7 @@ def place_order(request, total=0, quantity=0):
         grand_total = total+tax
         if request.session.has_key('couponid'):
             coupen_discount= request.session['coupon_discount']
+            del request.session['couponid']
             coupen_discount_price = total*(coupen_discount)/100
             grand_total=grand_total-coupen_discount_price
             total_savings= grand_total-(coupen_discount_price-offer_savings)
@@ -389,13 +392,13 @@ def cash_on_delivery(request,total=0, quantity=0):
     if 'direct_order' in request.session:
         product_id=request.session['direct_order']
         direct_item=Product.objects.get(id=product_id)
-        item=Product.objects.get(id=product_id)
+        payment_amount=direct_item.get_price()
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
         orderproduct.user_id = request.user.id
         orderproduct.product_id = product_id
         orderproduct.quantity = 1
-        orderproduct.product_price = direct_item.price
+        orderproduct.product_price = payment_amount
         orderproduct.ordered = True
         orderproduct.save()
         
@@ -405,12 +408,13 @@ def cash_on_delivery(request,total=0, quantity=0):
     else:
         cart_items = CartItem.objects.filter(user=request.user)
         for item in cart_items:
+            payment_amount=item.quantity*item.product.get_price()
             orderproduct = OrderProduct()
             orderproduct.order_id = order.id
             orderproduct.user_id = request.user.id
             orderproduct.product_id = item.product_id
             orderproduct.quantity = item.quantity
-            orderproduct.product_price = item.product.price
+            orderproduct.product_price = payment_amount
             orderproduct.ordered = True
             orderproduct.save()
 

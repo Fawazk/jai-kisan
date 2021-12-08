@@ -36,16 +36,21 @@ def register(request):
         form = RegisterationForm(request.POST)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
+            request.session['first_name']=first_name
             last_name = form.cleaned_data['last_name']
+            request.session['last_name']=last_name
             phone_number = form.cleaned_data['phone_number']
             email = form.cleaned_data['email']
+            request.session['email']=email
             password = form.cleaned_data['password']
+            request.session['password']=password
             username = str(first_name+last_name)
-            request.session['key']=phone_number
-            user = Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username,password=password)
+            request.session['username']=username
             otpverify(phone_number)
-            messages.info('you were registered then please verify phone number')
+            messages.info(request,'you were registered then please verify phone number')
             return redirect('confirm_register_otp')
+        else:
+            messages.error(request,'please enter a valid form')
     context ={
         'form':form
     }
@@ -67,6 +72,14 @@ def confirm_register_otp(request):
         otp6 = request.POST['otp6']
         otp = [otp1+otp2+otp3+otp4+otp5+otp6]
         if verify(phone_number,otp):
+            first_name=request.session['first_name']
+            del request.session['first_name']
+            last_name=request.session['last_name']
+            del request.session['last_name']
+            email=request.session['email']
+            username=request.session['username']
+            password=request.session['password']
+            user = Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username,password=password)
             user.phone_number=phone_number
             user.save()
             messages.success(request,'Registered successfully')
@@ -81,7 +94,7 @@ def signin(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
-        user = auth.authenticate(email=email, password=password,)
+        user = auth.authenticate(email=email, password=password)
         if user is not None:
             try:
                 cart = Cart.objects.get(cart_id=_cart_id(request))
@@ -133,7 +146,6 @@ def forgot_password(request):
         mobile_number = request.POST['mobile']
         print(mobile_number)
         if Account.objects.filter(phone_number=mobile_number).exists():
-            print('----------------')
             otpverify(mobile_number)
             request.session['keys'] = mobile_number
             return redirect('otp')
@@ -159,10 +171,10 @@ def otp(request):
         otp = [otp1+otp2+otp3+otp4+otp5+otp6]
         phone_number=request.session['keys']
         if verify(phone_number, otp):
-            print(otp)
+            messages.info('you can change your password')
             return redirect('new_password')
         else:
-            print('OTP not matching')
+            messages.error('otp is not matching')
             return redirect('otp')
     return render(request, 'confirm_password_otp.html')
 

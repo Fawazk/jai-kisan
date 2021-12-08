@@ -27,19 +27,16 @@
 <body style="background-color: #E5E5E5;">
     <div style="width:50%; margin-top:50px; background-color:#fff" class="col-12 p-5 container">
 
-        <form id="myform" action="{{ addcategory }}" method="post">
+        <form id="myform" action="{% url 'addcategory' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <h4 style="color: #5cb85c;" class="card-title mb-4 mt-3">Category Name</h4>
-                <input type="text" class="form-control" placeholder="Category Name" value=""name="category_Name">
-            </div>
-            <div class="form-group">
-                <h4 style="color: #5cb85c;" class="card-title mb-4 mt-3">Slug</h4>
-                <input type="text" class="form-control" placeholder="Slug" value="" name="category_slug">
+                <input class="form-control" {{ form.category_name }} 
+                
             </div>
             <div class="form-group">
                 <h4 style="color: #5cb85c;" class="card-title mb-4 mt-3">Category Description</h4>
-                <input style="height: 150px;" type="text" class="form-control" placeholder="Category Description" value="" name="category_Description">
+                {{ form.description }}
             </div>
         </form>
         <div class="pt-5">
@@ -50,6 +47,11 @@
 
         </form>
     </div>
+    <style>
+        .error{
+            color:red !important;
+        }
+    </style>
     <script>
         $(document).on('click', '#btn-submit', function (e) {
             e.preventDefault();
@@ -66,6 +68,26 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+	crossorigin="anonymous"></script>
+<script>
+    $(document).ready(()=>{
+        $("#myform").validate({
+            rules:{
+                category_Name:{
+                    required:true,
+                },
+                description:{
+                    required:true,
+              },
+            }
+            })
+        })
+</script>
 </body>
 
 </html>

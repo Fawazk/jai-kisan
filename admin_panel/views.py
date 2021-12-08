@@ -1,4 +1,5 @@
 import datetime
+from django.http.response import HttpResponse
 from django.shortcuts import render,redirect
 from accounts.form import BannerForm
 from accounts.models import Account, Banner
@@ -16,10 +17,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import timezone
 from datetime import date, timedelta
 from django.db.models import Sum
+import csv
 # Create your views here.
 
 
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def admin_dashboard(request):
     if request.user.is_authenticated:
         #sales/orders
@@ -93,7 +95,6 @@ def admin_dashboard(request):
 
 
 
-
 def adminpanel(request):
     if request.user.is_authenticated:
         return redirect('admin_dashboard')
@@ -108,21 +109,21 @@ def adminpanel(request):
             messages.error(request,'Invalid credentials')
             return redirect('adminpanel')
     return render(request,'adminpanel/login.html')
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def category_list(request):
-    categories = category.objects.all()
+    categories = category.objects.all().order_by('-created_at')
     context ={
         'categories': categories,
     }
     return render(request,'adminpanel/category_list.html',context)
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def deletecategory(request,cat_id):
     categories = category.objects.get(id=cat_id)
     categories.delete()
     return redirect('category_list')
 
 
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def editcategory(request,cat_id):
     list_cats = category.objects.get(id=cat_id)
     form = CategoryForm(instance=list_cats)
@@ -138,12 +139,11 @@ def editcategory(request,cat_id):
     context = {'form':form}  
     return render(request,'adminpanel/edit_category.html',context)
     
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def addcategory(request):
     form = CategoryForm()
     if request.method == 'POST':
-        form = CategoryForm(request.POST,request.FILES)
-
+        form = CategoryForm(request.POST)
         if form.is_valid():
             category=form.save(commit=False)
             category.slug=category.category_name.lower().replace("","-")
@@ -154,20 +154,20 @@ def addcategory(request):
         } 
     return render(request,'adminpanel/add_category.html',context)   
     
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def Product_list(request):
-    products = Product.objects.all()
+    products = Product.objects.all().order_by('-created_at')
     context ={
         'products': products,
     }
     return render(request,'adminpanel/Product_list.html',context)
 
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def deleteproduct(request,cat_id):
     products = Product.objects.get(id=cat_id)
     products.delete()
     return redirect('Product_list')
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def addProduct(request):
     form = ProductForm()
     if request.method == 'POST':
@@ -182,7 +182,7 @@ def addProduct(request):
             'form':form
         }
     return render(request,'adminpanel/add_product.html',context) 
-@staff_member_required
+@staff_member_required(login_url='adminpanel')
 def editproduct(request,cat_id):
         list_cats = Product.objects.get(id=cat_id)
         form = ProductForm(instance=list_cats)
@@ -199,26 +199,26 @@ def editproduct(request,cat_id):
         context = {'form':form}  
         return render(request,'adminpanel/editproduct.html',context)
     
-    
+@staff_member_required(login_url='adminpanel')   
 def user_list(request):
-    user = Account.objects.all()
+    user = Account.objects.all().order_by('-created_at')
     context ={
         'user': user,
     }
     return render(request,'adminpanel/user_management.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def deleteuser(request,user_id):
     products = Account.objects.get(id=user_id)
     products.delete()
     return redirect('user_list')
 
-
+@staff_member_required(login_url='adminpanel')
 def blockuser(request,user_id):
     user = Account.objects.get(id=user_id)
     user.is_active = False
     user.save()
     return redirect('user_list')
-
+@staff_member_required(login_url='adminpanel')
 def unblockuser(request,user_id):
     user = Account.objects.get(id=user_id)
     user.is_active = True
@@ -226,14 +226,14 @@ def unblockuser(request,user_id):
     return redirect('user_list')
 
 
-
+@staff_member_required(login_url='adminpanel')
 def order_list(request):
-    order_list = OrderProduct.objects.all()
+    order_list = OrderProduct.objects.all().order_by('-created_at') 
     context = {
         'order_list':order_list,
     }
     return render(request,'adminpanel/order_list.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def order_edit(request,order_product_id):
     list_order = OrderProduct.objects.get(id=order_product_id)
     form = OrderProductForm(instance=list_order)
@@ -248,25 +248,26 @@ def order_edit(request,order_product_id):
             return redirect('order_list')
     context = {'form':form}     
     return render(request,'adminpanel/order_edit.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def order_history(request):
-    order_history = OrderProduct.objects.all()
+    order_history = OrderProduct.objects.all().order_by('-created_at')
     context = {
         'order_history':order_history,
     }
     return render(request,'adminpanel/order_history.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def product_offer(request):
     productoffer=ProductOffer.objects.all()
     context={
         'productoffer':productoffer,
     }
     return render(request,'adminpanel/product_offer.html',context)
+@staff_member_required(login_url='adminpanel')
 def deleteproductoffer(request,offer_id):
     productoffer=ProductOffer.objects.get(id=offer_id)
     productoffer.delete()
     return redirect('product_offer')
-
+@staff_member_required(login_url='adminpanel')
 def editproductoffer(request,offer_id):
     list_order_product=ProductOffer.objects.get(id=offer_id)
     form = ProductOfferForm(instance=list_order_product)
@@ -282,20 +283,20 @@ def editproductoffer(request,offer_id):
             return redirect('product_offer')
     context = {'form':form}     
     return render(request,'adminpanel/editoffer.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def category_offer(request):
     category_offer = CategoryOffer.objects.all()
     context ={
         'category_offer':category_offer,
     }
     return render(request,'adminpanel/category_offer.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def deletecategoryoffer(request,offer_id):
     category_list=CategoryOffer.objects.get(id=offer_id)
     category_list.delete()
     return redirect('category_offer')
 
-
+@staff_member_required(login_url='adminpanel')
 def editcategoryoffer(request,offer_id):
     category = CategoryOffer.objects.get(id=offer_id)
     form = CategoryOfferForm(instance=category)
@@ -311,7 +312,7 @@ def editcategoryoffer(request,offer_id):
     context = {'form':form}
     return render(request,'adminpanel/editcategoryoffer.html',context)
 
-
+@staff_member_required(login_url='adminpanel')
 def add_productoffer(request):
     form = ProductOfferForm()
     if request.method == 'POST':
@@ -323,7 +324,7 @@ def add_productoffer(request):
             'form':form,
     }
     return render(request,'adminpanel/add_productoffer.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def add_categoryoffer(request):
     form = CategoryOfferForm()
     if request.method == 'POST':
@@ -335,12 +336,14 @@ def add_categoryoffer(request):
             'form':form,
     }
     return render(request,'adminpanel/add_categoryoffer.html',context)
+@staff_member_required(login_url='adminpanel')
 def coupon_offer(request):
     coupon_list = Coupon.objects.all()
     context={
         'coupon_list':coupon_list,
     }
     return render(request,'adminpanel/coupon_offer.html',context)
+@staff_member_required(login_url='adminpanel')
 def coupon_add(request):
     form = CouponForm()
     if request.method == 'POST':
@@ -352,6 +355,7 @@ def coupon_add(request):
         'form':form,
     }
     return render(request,'adminpanel/coupon_add.html',context)
+@staff_member_required(login_url='adminpanel')
 def edit_coupon(request,coupon_id):
     coupon = Coupon.objects.get(id=coupon_id)
     form = CouponForm(instance=coupon)
@@ -368,25 +372,26 @@ def edit_coupon(request,coupon_id):
             return redirect('coupon_offer')
     context = {'form':form}
     return render(request,'adminpanel/edit_coupon.html',context)
+@staff_member_required(login_url='adminpanel')
 def delete_coupon(request,coupon_id):
     coupon=Coupon.objets.get(id=coupon_id)
     coupon.delete()
     return redirect('coupon_offer')
-
+@staff_member_required(login_url='adminpanel')
 def redeemed_coupon(request):
     redeemed_coupon= RedeemedCoupon.objects.all()
     context={
         'redeemed_coupon':redeemed_coupon,         
     }
     return render(request,'adminpanel/redeem_coupon.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def banner_list(request):
     banner_list= Banner.objects.all()
     context={
         'banner_list':banner_list,
     }
     return render(request,'adminpanel/banner/banner_list.html',context)
-
+@staff_member_required(login_url='adminpanel')
 def add_banner(request):
     form = BannerForm()
     if request.method=='POST':
@@ -399,7 +404,7 @@ def add_banner(request):
     }
     return render(request,'adminpanel/banner/add_banner.html',context)
 
-
+@staff_member_required(login_url='adminpanel')
 def banner_edit(request,banner_id):
     banner_list = Banner.objects.get(id=banner_id)
     form = BannerForm(instance=banner_list)
@@ -412,8 +417,67 @@ def banner_edit(request,banner_id):
         'form':form,
     }
     return render(request,'adminpanel/banner/banner_edit.html',context)
+@staff_member_required(login_url='adminpanel')
 def banner_delete(request,banner_id):
     banner_delete = Banner.objects.get(id=banner_id)
     banner_delete.delete()
     return redirect('banner_list')
 
+
+
+# sales report 
+def product_sales(request,month=timezone.now().month):
+    
+    print("Month:",end =" ")
+    print(month)
+    orders=OrderProduct.objects.filter(created_at__month=month,status=4)
+    products=Product.objects.all()
+    
+    month_now=timezone.now().strftime('%B')
+    #renvenue by distinct vehicle
+    # revenue_by_products = (orders.values('product').annotate(revenue=Sum('product_price')).order_by('product__product_name'))   
+    total_revenue=0
+    total_profit=0
+    for product in products:
+        print(product.get_revenue())
+        try:
+            total_revenue+=product.get_revenue()[0]['revenue']
+        except:
+            pass
+        try:
+            print(product.get_profit())
+            total_profit+=product.get_profit()
+        except:
+            pass    
+    request.session['total_revenue']=total_revenue
+    request.session['total_profit']=total_profit      
+    context={
+        'month_now':month_now,
+        'total_revenue':total_revenue,
+        'total_profit':total_profit,
+        'products':products,
+    }
+    return render(request,'adminpanel/sales_report.html',context)
+
+def download_product_sales_report(request):
+    products=Product.objects.all()
+    context={
+        'products':products,
+    }
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=sales_report.csv'
+
+    writer = csv.writer(response)
+    
+    writer.writerow(['Total Revenue', 'Total Profit'])
+    writer.writerow([request.session['total_revenue'],request.session['total_profit']])
+    writer.writerow(
+        ['Product', 'Category','No of Sold Products', 'Revenue recieved', 'Profit','Stocks remaining'])
+    for x in products:
+        try:
+            writer.writerow([x.id, x.p_category,
+                          x.get_count()[0]['quantity'], x.get_revenue()[0]['revenue'],x.get_profit(),
+                         x.remaining])
+        except:
+            pass
+    return response
