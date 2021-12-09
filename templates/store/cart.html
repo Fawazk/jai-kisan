@@ -54,8 +54,9 @@
 					</div>
 					<div class="col-md-5 col-sm-5 col-5 row">
 						<div class="col-md-6 col-sm-6">
-							<var class="price">Rs.{{ x.sub_total |floatformat:0 }}/-</var><br>
-											<small class="text-muted">Rs. {{ x.product.get_price|floatformat:0 }}/-</small>
+							
+							<var class="price">Rs.{{ x.product.get_price|floatformat:0 }}/-</var><br>
+											<small class="text-muted">Rs. {{ x.sub_total |floatformat:0 }}/-</small>
 						</div>
 						<div class="col-md-6 col-sm-6 ">
 							<a href="{% url 'remove_cart_item' x.product.id x.id %}" class="btn btn-danger">Remove</a>

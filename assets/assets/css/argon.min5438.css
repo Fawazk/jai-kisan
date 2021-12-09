@@ -1,3 +1,5 @@
+@charset 'UTF-8'; /*!
+
 =========================================================
 * Argon Dashboard - v1.2.0
 =========================================================
@@ -12,7 +14,8 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-/* */:root {
+*/
+:root {
   --blue: #5e72e4;
   --indigo: #5603ad;
   --purple: #8965e0;
@@ -48,7 +51,7 @@
   --font-family-sans-serif: Open Sans, sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
-} */
+}
 *,
 ::after,
 ::before {
@@ -79,17 +82,13 @@ body {
   line-height: 1.5;
   margin: 0;
   text-align: left;
-  /* color: #525f7f;
-  background-color: #f8f9fe; */
+  color: #525f7f;
+  background-color: #f8f9fe;
 }
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important;
 }
-hr {
-  overflow: visible;
-  box-sizing: content-box;
-  height: 0;
-}
+
 h1,
 h2,
 h3,
@@ -161,12 +160,12 @@ sup {
 }
 a {
   text-decoration: none;
-  color: #5e72e4;
+  color: #5cb85c;
   background-color: transparent;
 }
 a:hover {
   text-decoration: none;
-  color: #;
+  color: #5cb85c;
 }
 a:not([href]) {
   text-decoration: none;
@@ -4536,37 +4535,37 @@ input[type="submit"].btn-block {
   color: rgba(255, 255, 255, 0.65);
 }
 .navbar-dark .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.95);
+  color: #5cb85c;
 }
 .navbar-dark .navbar-nav .nav-link:focus,
 .navbar-dark .navbar-nav .nav-link:hover {
-  color: rgba(255, 255, 255, 0.65);
+  color: #5cb85c;
 }
 .navbar-dark .navbar-nav .nav-link.disabled {
-  color: rgba(255, 255, 255, 0.25);
+  color: #5cb85c;
 }
 .navbar-dark .navbar-nav .active > .nav-link,
 .navbar-dark .navbar-nav .nav-link.active,
 .navbar-dark .navbar-nav .nav-link.show,
 .navbar-dark .navbar-nav .show > .nav-link {
-  color: rgba(255, 255, 255, 0.65);
+  color: #5cb85c;
 }
 .navbar-dark .navbar-toggler {
-  color: rgba(255, 255, 255, 0.95);
+  color: #5cb85c;
   border-color: transparent;
 }
 .navbar-dark .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.95)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 .navbar-dark .navbar-text {
-  color: rgba(255, 255, 255, 0.95);
+  color: #5cb85c;
 }
 .navbar-dark .navbar-text a {
-  color: rgba(255, 255, 255, 0.65);
+  color: #5cb85c;
 }
 .navbar-dark .navbar-text a:focus,
 .navbar-dark .navbar-text a:hover {
-  color: rgba(255, 255, 255, 0.65);
+  color: #5cb85c;
 }
 .card {
   position: relative;
@@ -4780,7 +4779,7 @@ input[type="submit"].btn-block {
   text-decoration: none;
 }
 .breadcrumb-item.active {
-  color: #8898aa;
+  color: #5cb85c;
 }
 .pagination {
   display: flex;
@@ -6341,9 +6340,9 @@ a.close.disabled {
 .align-text-top {
   vertical-align: text-top !important;
 }
-.bg-primary {
+/* .bg-primary {
   background-color: #5e72e4 !important;
-}
+} */
 a.bg-primary:focus,
 a.bg-primary:hover,
 button.bg-primary:focus,
@@ -6452,9 +6451,9 @@ button.bg-darker:hover {
 .bg-white {
   background-color: #fff !important;
 }
-/* .bg-transparent {
+.bg-transparent {
   background-color: transparent !important;
-} */
+}
 .border {
   border: 1px solid #e9ecef !important;
 }
@@ -12157,7 +12156,7 @@ button.bg-darker:hover {
   font-style: italic !important;
 }
 .text-white {
-  color: # !important;
+  color: #5cb85c !important;
 }
 .text-primary {
   color: #5e72e4 !important;
@@ -12222,7 +12221,13 @@ a.text-default:focus,
 a.text-default:hover {
   color: #050a12 !important;
 }
-
+.text-white {
+  color: #5cb85c !important;
+}
+a.text-white:focus,
+a.text-white:hover {
+  color: #d9d9d9 !important;
+}
 .text-neutral {
   color: #fff !important;
 }
@@ -12583,7 +12588,7 @@ a.text-darker:hover {
   box-shadow: none;
 }
 .btn-neutral {
-  color: #5e72e4;
+  color: #5cb85c;
 }
 .btn-facebook {
   color: #fff;
@@ -13746,11 +13751,11 @@ a.btn-icon-only {
   margin-bottom: 1rem;
   letter-spacing: 0;
   text-transform: uppercase;
-  color: #8898aa;
+  color: #5cb85c;
 }
 .footer .footer-link,
 .footer .nav .nav-item .nav-link {
-  color: #8898aa !important;
+  color: #5cb85c !important;
 }
 .footer .footer-link:hover,
 .footer .nav .nav-item .nav-link:hover {
@@ -15433,7 +15438,7 @@ textarea[resize="horizontal"] {
   margin-bottom: 3px;
 }
 .sidenav-toggler-dark .sidenav-toggler-line {
-  background-color: #;
+  background-color: #5cb85c;
 }
 .sidenav-toggler {
   cursor: pointer;
@@ -17639,7 +17644,7 @@ a.text-cyan:hover {
   color: #00dea2 !important;
 }
 .text-white {
-  color: # !important;
+  color: #5cb85c !important;
 }
 a.text-white:focus,
 a.text-white:hover {

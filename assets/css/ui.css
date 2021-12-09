@@ -364,20 +364,16 @@ article:after,
   margin-top: 15px;
 }
 
-.section-title {
-  color: #5cb85c;
-}
+
 
 .title-text {
   margin-top: 30px;
   margin-bottom: 10px;
   font-weight: bold;
-  color: #212529;
+
 }
 
-.title-page {
-  color: #212529;
-}
+
 
 .text-lg {
   font-size: 1.3rem;
@@ -391,9 +387,6 @@ article:after,
   color: #fff;
 }
 
-.dark {
-  color: #212529;
-}
 
 .black {
   color: #000;
@@ -854,8 +847,8 @@ a[class*=card]:hover .title {
   height: 220px;
 }
 .card-product-grid .info-wrap {
-  overflow: visible;
-
+  overflow: hidden;
+  padding: 18px 20px;
 }
 .card-product-grid .bottom-wrap {
   padding: 18px;
@@ -873,7 +866,9 @@ a[class*=card]:hover .title {
 .card-product-grid .topbar a {
   color: #ccc;
 }
-
+.card-product-grid .topbar a:hover {
+  color: #3167eb;
+}
 .card-product-grid .fix-height {
   height: 80px;
   overflow: hidden;
@@ -889,10 +884,14 @@ a[class*=card]:hover .title {
   text-align: center;
   position: absolute;
   background: rgba(0, 0, 0, 0.5);
-
 }
-
-
+.card-product-grid:hover .btn-overlay {
+  opacity: 1;
+}
+.card-product-grid:hover {
+  box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3);
+  transition: 0.3s;
+}
 
 .item-slide .card-product-grid {
   margin-bottom: 0;

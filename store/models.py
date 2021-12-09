@@ -36,7 +36,6 @@ class Product(models.Model):
         except:
             try:
                 if self.p_category.categoryoffer.is_active:
-                    print('=================')
                     offer_price = (self.price / 100) * self.p_category.categoryoffer.discount_offer
                     p_price = self.price - offer_price
                     return p_price

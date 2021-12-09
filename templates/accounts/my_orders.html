@@ -21,12 +21,11 @@
                     <a class="list-group-item" href="{% url 'address_management' %}"> Address Management </a>
                 </ul>
                 <br>
-                <a class="btn btn-light btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Log
-                        out</span> </a>
+                <a class="btn btn-danger btn-block" href="#"> <i class="fa fa-power-off"></i> <span class="text">Logout</span> </a>
                 <!--   SIDEBAR .//END   -->
             </div>
             <div class="col-md-9 col-sm-12">
-                <table class="table">
+                <table class="table table-responsive">
                     <thead>
                         <tr>
                             <th scope="col">image</th>
@@ -71,6 +70,52 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            <!-- <div>
+                {% for x in orderproduct %}
+				<div class="row justify-content-around  shadow p-3 align-items-center mb-2" >
+					<div class="col-md-3 col-sm-4 col-4">
+						<div>
+							<a href="{{ x.product.get_url }}" class="title text-dark">{{ x.product.product_name }}</a>
+							<p class="small text-muted">{{ x.product.p_category }}</p>
+							<img src="{{ x.product.images_one.url  }}" class="img-sm">
+						</div>
+					</div>
+					<div class="col-md-1 col-sm-1 col-1" >
+                                <b>{{x.quantity}}</b>
+					</div>
+                    <div class="col-md-4 col-sm-4 col-4 row">
+                        {% if x.status == 1 %}
+                            <b>Order Accepted<br><small>{{ x.created_at }}</small></b>
+                            {% elif x.status == 2 %}
+                            <b>Shipped<br><small>{{ x.created_at }}</small></b>
+                            {% elif x.status == 3 %}
+                            <b>Out for delivery <br><small>{{ x.created_at }}</small></b>
+                            {% elif x.status == 4 %}
+                            <b>Order delivered<br><small>{{ x.created_at }}</small></b>
+                            {% else %}
+                            <b>Order Cancelled<br><small></small></b>
+                            {% endif %}
+                            {% if x.status == 4 %}
+                            <b><a class="btn btn-primary" href="">Delivered</a></b>
+                            {% elif x.status == 0 %}
+                            <b><a class="btn btn-primary" href="">Order Cancelled</a></b>
+                            {% else %}
+                            <b><a class="btn btn-danger" href="{% url 'cancel_order' x.order.id %}">Cancel</a></b>
+                            {% endif %}
+                    </div> -->
+					<div class="col-md-4 col-sm-4 col-4 row">
+						<div class="col-md-6 col-sm-6">
+							
+							<var class="price">Rs.{{ x.product.get_price|floatformat:0 }}/-</var><br>
+											<small class="text-muted">Rs. {{ x.sub_total |floatformat:0 }}/-</small>
+						</div>
+						<div class="col-md-6 col-sm-6 ">
+							<a href="{% url 'remove_cart_item' x.product.id x.id %}" class="btn btn-danger">Remove</a>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
             </div> <!-- row.// -->
         </div> <!-- card-body .// -->
 
