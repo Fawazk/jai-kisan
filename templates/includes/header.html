@@ -39,12 +39,21 @@
                         </div>
                     </div>
                     <form action="{% url 'search' %}" method="GET" class="form-inline">
-                        <div class="input-group">                    
+                        <!-- <div class="input-group">                    
                             <input type="text" class="form-control" placeholder="Search" name="keyword">
                             <div class="input-group-append">
                                 <button style="border-color: #fff;" type="submit"  class="btn btn-success"><i class="fa fa-search"></i></button>
                             </div>
-                        </div>
+                        </div> -->
+                        <div class="input-group">
+                            <div class="form-outline">
+                              <input type="search" id="form1" class="form-control" placeholder="Search" name="keyword" />
+                              <label class="form-label" for="form1"></label>
+                            </div>
+                            <button type="submit" placeholder="search" class="btn btn-success">
+                              <i class="fas fa-search"></i>
+                            </button>
+                          </div>
                     </form>
 
                     {% if user.is_authenticated %}

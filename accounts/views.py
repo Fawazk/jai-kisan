@@ -28,7 +28,6 @@ def home(request):
 
 
 def register(request):
-    global phone_number,user
     if request.user.is_authenticated:
         return redirect('home')
     form = RegisterationForm()
@@ -46,6 +45,7 @@ def register(request):
             request.session['password']=password
             username = str(first_name+last_name)
             request.session['username']=username
+            request.session['phone_number']=phone_number
             otpverify(phone_number)
             messages.info(request,'you were registered then please verify phone number')
             return redirect('confirm_register_otp')
@@ -56,7 +56,7 @@ def register(request):
     }
     return render(request,'register.html',context)
 def resent_register_otp(request):
-    phone_number=request.session['key']
+    phone_number=request.session['phone_number']
     otpverify(phone_number)
     return redirect('confirm_register_otp')
 
@@ -71,6 +71,7 @@ def confirm_register_otp(request):
         otp5 = request.POST['otp5']
         otp6 = request.POST['otp6']
         otp = [otp1+otp2+otp3+otp4+otp5+otp6]
+        phone_number=request.session['phone_number']
         if verify(phone_number,otp):
             first_name=request.session['first_name']
             del request.session['first_name']
@@ -85,7 +86,7 @@ def confirm_register_otp(request):
             messages.success(request,'Registered successfully')
             return redirect('signin')
         else:
-            messages.error('please enter valid otp')
+            messages.error(request,'please enter valid otp')
             return redirect('confirm_register_otp')
     return render(request,'confirm_register_otp.html')
 

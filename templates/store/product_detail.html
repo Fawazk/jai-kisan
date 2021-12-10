@@ -7,6 +7,14 @@
 
 
 {% include 'includes/header.html' %}
+<style>
+	@media only screen and (max-width: 1200px) {
+		.gallery-wrap .img-big-wrap img {
+			height: auto; 
+			
+		}
+	}
+</style>
 <section class="section-content padding-y bg">
 	<div class="container">
 
@@ -17,8 +25,7 @@
 
 					<div class="card shadow-sm">
 					  <article class="gallery-wrap"> 
-						<div class="img-big-wrap align-center">
-
+						<div class="img-big-wrap col-12" >
 							<img class="big_imgs" src="{{ single_product.images_one.url }}">
 						</div> 
 						<div class="thumbs-wrap">
