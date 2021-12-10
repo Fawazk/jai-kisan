@@ -15,15 +15,18 @@
                         <a href="{% url 'home' %}" class="nav-item nav-link text-white">Home</a>
                         <a href="{% url 'store' %}" class="nav-item nav-link text-white">Store</a>
                         <!-- <a href="#" style="color: #fff; font-weight:500; " class="nav-item nav-link">Account</a> -->
+                        {% if user.is_authenticated %}
                         <div class="nav-item dropdown " >
                             <a href="#" class="nav-link dropdown-toggle text-white" data-toggle="dropdown">Account</a>
                           
                             <div class="dropdown-menu">
+                                
                             <a href="{% url 'logout'  %}" style="color: #5cb85c;" class="dropdown-item">Logout</a>
                             <a href="{% url 'profile'  %}" style="color: #5cb85c;" class="dropdown-item">Profile</a>
                             </div>
                             
                         </div>
+                        {% endif %}
                         <div class="nav-item dropdown " >
                             <a href="#" style="color: #fff; font-weight:500; " class="nav-link dropdown-toggle" data-toggle="dropdown">Categories</a>
                           

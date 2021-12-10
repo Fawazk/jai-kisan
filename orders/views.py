@@ -94,10 +94,7 @@ def payments(request):
             product.save()
 
     # Clear cart
-    if 'direct_order' in request.session:
-        del request.session['direct_order']
-    else:
-        CartItem.objects.filter(user=request.user).delete()
+    CartItem.objects.filter(user=request.user).delete()
     data = {
         'order_number': order.order_number,
         'transID': payment.payment_id,
@@ -180,10 +177,7 @@ def razorpay_payment_verification(request):
             product.save()
 
     # # Clear cart/session of buy now
-    if 'direct_order' in request.session:
-        del request.session['direct_order']
-    else:
-        CartItem.objects.filter(user=request.user).delete()
+    CartItem.objects.filter(user=request.user).delete()
     return JsonResponse({'message': 'success'})
 
 def payment_failed(request):
@@ -206,30 +200,24 @@ def place_order(request, total=0, quantity=0):
             coupon_redeem.save()
     grand_total = 0
     tax = 0
-    total_savings=0
-    offer_savings=0
     if 'direct_order' in request.session:
         product=request.session['direct_order']
         item=Product.objects.get(id=product)
         tax=(2*item.get_price())/100
         total=item.get_price()
         quantity=1
-        offer_savings=total-item.price
         grand_total=total+tax
         if request.session.has_key('couponid'):
             coupen_discount= request.session['coupon_discount']
             del request.session['couponid']
             coupen_discount_price = total*(coupen_discount)/100
             grand_total=grand_total-coupen_discount_price
-            total_savings= grand_total-offer_savings
         else:
             coupen_discount_price=0    
     else:
         for cart_item in cart_items:
             total += (cart_item.product.get_price() * cart_item.quantity)
-            offer_savings=total-(cart_item.product.price*cart_item.quantity)
             quantity += cart_item.quantity
-            total_savings= grand_total-offer_savings
         tax = (2*total)/100
         grand_total = total+tax
         if request.session.has_key('couponid'):
@@ -237,7 +225,6 @@ def place_order(request, total=0, quantity=0):
             del request.session['couponid']
             coupen_discount_price = total*(coupen_discount)/100
             grand_total=grand_total-coupen_discount_price
-            total_savings= grand_total-(coupen_discount_price-offer_savings)
         else:
             coupen_discount_price=0
     paypal_amount = grand_total/dollar_rate()
@@ -285,7 +272,6 @@ def place_order(request, total=0, quantity=0):
                 'grand_total': grand_total,
                 'paypal_amount':round(paypal_amount,2),
                 'payment_order_id':payment_order_id,
-                'total_savings':total_savings,
                 'coupen_discount_price':coupen_discount_price,
                 'razorpay_merchant_key':settings.RAZOR_KEY_ID,
                 'razorpay_amount':order_amount,
@@ -296,7 +282,6 @@ def place_order(request, total=0, quantity=0):
 
 def order_complete(request):
     order_number = request.session['order_number']
-    del request.session['order_number']
     transID = request.GET.get('payment_id')
     try:
         order = Order.objects.get(is_ordered=False,order_number=order_number)
@@ -433,8 +418,6 @@ def cash_on_delivery(request,total=0, quantity=0):
             product.save()
 
     # # Clear cart
-    if 'direct_order' in request.session:
-        del request.session['direct_order']
-    else:
-        CartItem.objects.filter(user=request.user).delete()
+
+    CartItem.objects.filter(user=request.user).delete()
     return redirect('order_complete')

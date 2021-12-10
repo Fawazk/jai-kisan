@@ -28,7 +28,6 @@ class Product(models.Model):
     def get_price(self):
         try:
             if self.productoffer.is_active:
-                print('pininpinpikm')
                 offer_price = (self.price / 100) * self.productoffer.discount_offer
                 p_price = self.price - offer_price
                 return p_price

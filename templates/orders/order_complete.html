@@ -1,19 +1,21 @@
+
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 
 
 <div class="container" style="margin-top: 50px;">
     <center><i class="fas fa-check-circle" style="font-size: 72px;margin-bottom: 20px;color: #28A745;"></i></center>
-    <h2 class="text-center">Ordered Successful</h2>
+    <h2 class="text-center">Order Successful</h2>
 	<br>
 	<div class="text-center">
 		<a href="{% url 'store' %}" class="btn btn-success">Shop more</a>
 	</div>
 </div>
 
-<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
+<div class="container">
+    <div class="card mt-5 mb-5 shadow p-3 rounded">
+        <div class="card-body">
     <div class="row invoice row-printable">
         <div class="col-md-12">
             <!-- col-lg-12 start here -->
@@ -32,8 +34,8 @@
                             <div class="invoice-from">
                                 <ul class="list-unstyled text-right">
                                     <li><strong>Invoiced To</strong></li>
-                                    <li>{{order.full_name}}</li>
-                                    <li>{{order.full_address}}</li>
+                                    <li> {{order.full_name}}</li>
+                                    <li> {{order.full_address}}</li>
                                     <li>{{order.city}}, {{order.state}}</li>
                                     <li>{{order.country}}</li>
                                 </ul>
@@ -46,13 +48,13 @@
                                 <div class="well">
                                     <ul class="list-unstyled mb0">
                                         <li><strong>Order</strong> #{{order_number}}</li>
-                                        <li><strong>Transaction ID</strong> {{transID}}</li>
+                                        <li><strong>Transaction ID</strong> #{{transID}}</li>
                                         <li><strong>Order Date:</strong> {{order.created_at}}</li>
                                         <li><strong>Status:</strong> {{payment.status}}</li>
                                     </ul>
                                 </div>
                             </div>
-
+                           
                             <div class="invoice-items">
                                 <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
                                     <table class="table table-bordered">
@@ -64,35 +66,36 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                          {% for item in ordered_products %}
+                                            {% for item in ordered_products %}
                                             <tr>
                                                 <td>{{item.product.product_name}}
-                                                  <p class="text-muted small">
-                                          					{% if item.variations.all %}
-                                          						{% for i in item.variations.all %}
-                                          							{{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
-                                          						{% endfor %}
-                                          					{% endif %}
-                                          				</p>
+                                                    <p class="text-muted small text-dark">
+                                                        {% if item.variations.all %}
+                                                            {% for i in item.variations.all %}
+                                                                {{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </p>
                                                 </td>
                                                 <td class="text-center">{{item.quantity}}</td>
                                                 <td class="text-center">Rs.{{item.product_price}}/-</td>
+                                                <!-- Rs.{{item.product_price}}/- -->
                                             </tr>
-                                          {% endfor %}
+                                            {% endfor %}
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th colspan="2" class="text-right">Sub Total:</th>
-                                                <th class="text-center">${{subtotal}} USD</th>
+                                                <th class="text-center">Rs.{{subtotal}} ₹</th>
                                             </tr>
                                             <tr>
                                                 <th colspan="2" class="text-right">Tax:</th>
-                                                <th class="text-center">${{order.tax}} USD</th>
+                                                <th class="text-center">Rs.{{order.tax}} ₹</th>
                                             </tr>
-
+                                            
                                             <tr>
                                                 <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">{{order.order_total}} </th>
+                                                <th class="text-center">Rs.{{order.order_total}} ₹</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -112,6 +115,7 @@
         <!-- col-lg-12 end here -->
     </div>
     </div>
-
+</div>
+</div>
 
 {% endblock %}

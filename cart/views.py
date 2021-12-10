@@ -47,7 +47,6 @@ def add_cart(request, product_id):
                 existing_variation = item.variations.all()
                 ex_var_list.append(list(existing_variation)) 
                 id.append(item.id)
-
             if product_variation in ex_var_list:
                 # increasing cart item quantity
                 index = ex_var_list.index(product_variation)
@@ -175,11 +174,12 @@ def cart(request, total=0, quantity=0, cart_items=None):
             total += (cart_item.product.get_price()* cart_item.quantity)
             quantity += cart_item.quantity
             tax = (cart_item.product.tax * total)/100
+            print(total)
         grand_total = tax + total
     except ObjectDoesNotExist:
         pass
     context = {
-        'total': total,
+        'total': total, 
         'quantity': quantity,
         'cart_items': cart_items,
         'tax': tax,

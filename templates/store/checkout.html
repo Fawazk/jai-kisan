@@ -25,10 +25,13 @@
                                 <div id="collapsetwo" class="collapse show" aria-labelledby="headingOne"
                                     data-parent="#accordion">
                                     {% for addres in address %}
-                                    <div class="col-md-12" style="cursor: pointer" onclick="billingAddress('{{ addres.id }}')">
+                                    <div class="col-md-12" style="cursor: pointer" >
                                         <div class="card container mt-2"
                                             style="box-shadow: 0 6px 6px 0 rgb(0 0 0 / 12%), 0 1px 3px 0 rgb(0 0 0 / 18%);">
+
                                             <div class="card-body container">
+                                                <input type="radio" onclick="billingAddress('{{ addres.id }}')" id="" name="fav_language" value="">
+
                                                 <div class="dpjmKp d-flex justify-content-end">
                                                     <img
                                                         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
@@ -346,7 +349,7 @@
                                       </dl>
                                       {% endif %}
                                     <dl class="dlist-align">
-                                      <dt>Total price:</dt>
+                                      <dt>Total price with offers:</dt>
                                       <dd class="text-right"><b>Rs.{{total}}/-</b></dd>
                                     </dl>
                                 </div>

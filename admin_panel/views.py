@@ -111,7 +111,7 @@ def adminpanel(request):
     return render(request,'adminpanel/login.html')
 @staff_member_required(login_url='adminpanel')
 def category_list(request):
-    categories = category.objects.all().order_by('-created_at')
+    categories = category.objects.all()
     context ={
         'categories': categories,
     }
@@ -156,7 +156,7 @@ def addcategory(request):
     
 @staff_member_required(login_url='adminpanel')
 def Product_list(request):
-    products = Product.objects.all().order_by('-created_at')
+    products = Product.objects.all().order_by('-create_date')
     context ={
         'products': products,
     }
@@ -201,7 +201,7 @@ def editproduct(request,cat_id):
     
 @staff_member_required(login_url='adminpanel')   
 def user_list(request):
-    user = Account.objects.all().order_by('-created_at')
+    user = Account.objects.all()
     context ={
         'user': user,
     }
