@@ -97,8 +97,6 @@ AUTH_USER_MODEL = 'accounts.Account'
 #         'NAME': 'jai_kisan',
 #         'USER': 'postgres',
 #         'PASSWORD': 'instagram2002',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
 #     }
 # }
 DATABASES = {

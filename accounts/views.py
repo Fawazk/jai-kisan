@@ -61,33 +61,35 @@ def resent_register_otp(request):
     return redirect('confirm_register_otp')
 
 def confirm_register_otp(request): 
-    if request.user.is_authenticated:
-        return redirect('home')
-    if request.method == 'POST':
-        otp1 = request.POST['otp1']
-        otp2 = request.POST['otp2']
-        otp3 = request.POST['otp3']
-        otp4 = request.POST['otp4']
-        otp5 = request.POST['otp5']
-        otp6 = request.POST['otp6']
-        otp = [otp1+otp2+otp3+otp4+otp5+otp6]
-        phone_number=request.session['phone_number']
-        if verify(phone_number,otp):
-            first_name=request.session['first_name']
-            del request.session['first_name']
-            last_name=request.session['last_name']
-            del request.session['last_name']
-            email=request.session['email']
-            username=request.session['username']
-            password=request.session['password']
-            user = Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username,password=password)
-            user.phone_number=phone_number
-            user.save()
-            messages.success(request,'Registered successfully')
-            return redirect('signin')
-        else:
-            messages.error(request,'please enter valid otp')
-            return redirect('confirm_register_otp')
+    try:
+        if request.user.is_authenticated:
+            return redirect('home')
+        if request.method == 'POST':
+            otp1 = request.POST['otp1']
+            otp2 = request.POST['otp2']
+            otp3 = request.POST['otp3']
+            otp4 = request.POST['otp4']
+            otp5 = request.POST['otp5']
+            otp6 = request.POST['otp6']
+            otp = [otp1+otp2+otp3+otp4+otp5+otp6]
+            phone_number=request.session['phone_number']
+            if verify(phone_number,otp):
+                first_name=request.session['first_name']
+                del request.session['first_name']
+                last_name=request.session['last_name']
+                del request.session['last_name']
+                email=request.session['email']
+                username=request.session['username']
+                password=request.session['password']
+                user = Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username,password=password,phone_number=phone_number)
+                user.save()
+                messages.success(request,'Registered successfully')
+                return redirect('signin')
+            else:
+                messages.error(request,'please enter valid otp')
+                return redirect('confirm_register_otp')
+    except:
+        pass
     return render(request,'confirm_register_otp.html')
 
 
@@ -140,7 +142,6 @@ def signin(request):
 
 
 def forgot_password(request):
-    global mobile_number
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == 'POST':
@@ -160,23 +161,26 @@ def resent_otp(request):
     return redirect('otp')
 
 def otp(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    if request.method == 'POST':
-        otp1 = request.POST['otp1']
-        otp2 = request.POST['otp2']
-        otp3 = request.POST['otp3']
-        otp4 = request.POST['otp4']
-        otp5 = request.POST['otp5']
-        otp6 = request.POST['otp6']
-        otp = [otp1+otp2+otp3+otp4+otp5+otp6]
-        phone_number=request.session['keys']
-        if verify(phone_number, otp):
-            messages.info('you can change your password')
-            return redirect('new_password')
-        else:
-            messages.error('otp is not matching')
-            return redirect('otp')
+    try:
+        if request.user.is_authenticated:
+            return redirect('home')
+        if request.method == 'POST':
+            otp1 = request.POST['otp1']
+            otp2 = request.POST['otp2']
+            otp3 = request.POST['otp3']
+            otp4 = request.POST['otp4']
+            otp5 = request.POST['otp5']
+            otp6 = request.POST['otp6']
+            otp = [otp1+otp2+otp3+otp4+otp5+otp6]
+            phone_number=request.session['keys']
+            if verify(phone_number, otp):
+                messages.info(request,'you can change your password')
+                return redirect('new_password')
+            else:
+                messages.error(request,'otp is not matching')
+                return redirect('otp')
+    except:
+        pass
     return render(request, 'confirm_password_otp.html')
 
 

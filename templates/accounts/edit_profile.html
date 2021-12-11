@@ -36,36 +36,43 @@
 </h4>
 
 <body style="background-color: #E5E5E5;">
-    <div style=" background-color:#fff" class="col-6 container">
+    <div style=" background-color:#fff" class="col-md-6 col-sm-10 container">
         <form id="myform" action="{{ edit_profile }}" method="post" class="container container-fluid p-5" enctype="multipart/form-data" >
             {% csrf_token %}
             <!-- {{ form | crispy }} -->
                 <div class="form-row p-2">
                   <div class="col">
+                    <label class="form-label" for="form9Example1">First Name</label>
                     {{form.first_name}}
                   </div>
                   <div class="col">
+                    <label class="form-label" for="form9Example1">Last Name</label>
                     {{form.last_name}}
                   </div>
                 </div>
                 <div class="form-row p-2">
                     <div class="col">
+                        <label class="form-label" for="form9Example1">Email</label>
                       {{form.email}}
                     </div>
                     <div class="col">
+                        <label class="form-label" for="form9Example1">Phone Number</label>
                       {{form.phone_number}}
                     </div>
                   </div>
                   <div class="form-row p-2">
                     <div class="col">
+                    <label class="form-label" for="form9Example1">Profile image</label>
                       {{form.profile_img}}
                     </div>
                 </div>
                     <div class="form-row p-2">
                         <div class="col">
+                            <label class="form-label" for="form9Example1">State</label>
                             {{form.state}}
                           </div>
                           <div class="col">
+                            <label class="form-label" for="form9Example1">City</label>
                             {{form.city}}
                           </div>
                     </div>

@@ -7,14 +7,7 @@
 
 
 {% include 'includes/header.html' %}
-<style>
-	@media only screen and (max-width: 1200px) {
-		.gallery-wrap .img-big-wrap img {
-			height: auto; 
-			
-		}
-	}
-</style>
+
 <section class="section-content padding-y bg">
 	<div class="container">
 
@@ -25,8 +18,8 @@
 
 					<div class="card shadow-sm">
 					  <article class="gallery-wrap"> 
-						<div class="img-big-wrap col-12" >
-							<img class="big_imgs" src="{{ single_product.images_one.url }}">
+						<div class="img-big-wrap" >
+							<img class="big_imgs" src="{{ single_product.images_one.url }}" style="width: 100%; height: 100%;">
 						</div> 
 						<div class="thumbs-wrap">
 						  <a href="#" class="item-thumb"> <img class="small_img" src="{{ single_product.images_one.url }}"
@@ -75,19 +68,7 @@
 						
 
 							<hr>
-							<!-- {% for i in single_product.variation_set.reverse|slice:":1" %} -->
-							<!-- {% endfor %} -->
-							<!-- <div class="row">
-								<div class="item-option-select">
-									<h6>Choose Age</h6>
-									<select name="age" class="form-control">
-										<option value="" disabled selected>Choose</option>
-										{% for x in single_product.variation_set.all %}
-										<option value="{{ x.variation_value }}">{{ x.variation_value }}</option>
-										{% endfor %}
-									</select>
-								</div>
-							</div>  -->
+
 							<hr>
 							{% if single_product.stock <= 0 %} <span class="text btn btn-danger">Out of stock</span>
 								{% else %}
@@ -196,6 +177,7 @@
 <!-- ========================= SECTION CONTENT END// ========================= -->
 
 </body>
+
 {% include 'includes/footer.html' %}
 
 </html>
@@ -1130,7 +1112,7 @@
 			},
 			loaded999: {}
 		});
-	})(jQuery, window);
+	})(jQuery, window);	
   </script>
 </html>
 
