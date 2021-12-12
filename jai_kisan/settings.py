@@ -94,10 +94,10 @@ AUTH_USER_MODEL = 'accounts.Account'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('NAME'),
-        'USER': config('USER'),
-        'PASSWORD': config('PASSWORD'),
-        'HOST':config('HOST'),
+        'NAME': 'jai_kisan',
+        'USER': 'fawaz',
+        'PASSWORD': 'instagram2002',
+        'HOST':'localhost',
     }
 }
 
