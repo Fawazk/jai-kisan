@@ -111,16 +111,7 @@
                             <b><a class="btn btn-danger" href="{% url 'cancel_order' x.order.id %}">Cancel</a></b>
                             {% endif %}
                     </div> -->
-					<div class="col-md-4 col-sm-4 col-4 row">
-						<div class="col-md-6 col-sm-6">
-							
-							<var class="price">Rs.{{ x.product.get_price|floatformat:0 }}/-</var><br>
-											<small class="text-muted">Rs. {{ x.sub_total |floatformat:0 }}/-</small>
-						</div>
-						<div class="col-md-6 col-sm-6 ">
-							<a href="{% url 'remove_cart_item' x.product.id x.id %}" class="btn btn-danger">Remove</a>
-						</div>
-					</div>
+					
 				</div>
 				{% endfor %}
 			</div>

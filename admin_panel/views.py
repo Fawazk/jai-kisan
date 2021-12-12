@@ -18,79 +18,85 @@ from django.utils import timezone
 from datetime import date, timedelta
 from django.db.models import Sum
 import csv
+from django.template.loader import render_to_string
+# from weasyprint import HTML
+import tempfile
 # Create your views here.
 
 
 @staff_member_required(login_url='adminpanel')
 def admin_dashboard(request):
-    #sales/orders
-    products = Product.objects.all().count()
-    categories = category.objects.all().count()
-    users = Account.objects.all().count()
-
-    total_orders = Order.objects.filter(is_ordered=True).count()
-    total_revenue = Order.objects.aggregate(Sum('order_total'))
-    total_sales_amount = float(total_revenue['order_total__sum'])
-    current_year = timezone.now().year
-    current_month = timezone.now().month
-    order_detail = OrderProduct.objects.filter(created_at__month=current_month, status = 4)
-    print(order_detail)        
-    #daily bookings
-    today = date.today()
-    today_1 = today - timedelta(days=1)
-    today_2 = today - timedelta(days=2)
-    today_3 = today - timedelta(days=3)
-    today_4 = today - timedelta(days=4)
-    today_5 = today - timedelta(days=5)
-    today_6 = today - timedelta(days=6)
-    today_7 = today - timedelta(days=7)
-    tomorrow = today + timedelta(days=1)
-    
-    last_week_days=[
-        today_6.strftime("%a %m/%d/%Y"),
-        today_5.strftime("%a %m/%d/%Y"),
-        today_4.strftime("%a %m/%d/%Y"),
-        today_3.strftime("%a %m/%d/%Y"),
-        today_2.strftime("%a %m/%d/%Y"),
-        today_1.strftime("%a %m/%d/%Y"),
-        today.strftime("%a %m/%d/%Y"),
+    try:
+        products = Product.objects.all().count()
+        categories = category.objects.all().count()
+        users = Account.objects.all().count()
+        total_orders = Order.objects.filter(is_ordered=True).count()
+        total_revenue = Order.objects.aggregate(Sum('order_total'))
+        total_sales_amount = float(total_revenue['order_total__sum'])
+        current_year = timezone.now().year
+        current_month = timezone.now().month
+        order_detail = OrderProduct.objects.filter(created_at__month=current_month, status = 4)
+        print(order_detail)        
+        #daily bookings
+        today = date.today()
+        today_1 = today - timedelta(days=1)
+        today_2 = today - timedelta(days=2)
+        today_3 = today - timedelta(days=3)
+        today_4 = today - timedelta(days=4)
+        today_5 = today - timedelta(days=5)
+        today_6 = today - timedelta(days=6)
+        today_7 = today - timedelta(days=7)
+        tomorrow = today + timedelta(days=1)
         
-        ]
-    today_order      =   OrderProduct.objects.filter(created_at__range=[today,tomorrow]).count()
-    today_1_order    =   OrderProduct.objects.filter(created_at__range=[today_1,today]).count()
-    today_2_order    =   OrderProduct.objects.filter(created_at__range=[today_2,today_1]).count()
-    today_3_order    =   OrderProduct.objects.filter(created_at__range=[today_3,today_2]).count()
-    today_4_order    =   OrderProduct.objects.filter(created_at__range=[today_4,today_3]).count()
-    today_5_order    =   OrderProduct.objects.filter(created_at__range=[today_5,today_4]).count()
-    today_6_order    =   OrderProduct.objects.filter(created_at__range=[today_6,today_5]).count()
-    
+        last_week_days=[
+            today_6.strftime("%a %m/%d/%Y"),
+            today_5.strftime("%a %m/%d/%Y"),
+            today_4.strftime("%a %m/%d/%Y"),
+            today_3.strftime("%a %m/%d/%Y"),
+            today_2.strftime("%a %m/%d/%Y"),
+            today_1.strftime("%a %m/%d/%Y"),
+            today.strftime("%a %m/%d/%Y"),
+            
+            ]
+        today_order      =   OrderProduct.objects.filter(created_at__range=[today,tomorrow]).count()
+        today_1_order    =   OrderProduct.objects.filter(created_at__range=[today_1,today]).count()
+        today_2_order    =   OrderProduct.objects.filter(created_at__range=[today_2,today_1]).count()
+        today_3_order    =   OrderProduct.objects.filter(created_at__range=[today_3,today_2]).count()
+        today_4_order    =   OrderProduct.objects.filter(created_at__range=[today_4,today_3]).count()
+        today_5_order    =   OrderProduct.objects.filter(created_at__range=[today_5,today_4]).count()
+        today_6_order    =   OrderProduct.objects.filter(created_at__range=[today_6,today_5]).count()
+        
 
-    lastweek_orders=[today_6_order,today_5_order,today_4_order,today_3_order,today_2_order,today_1_order,today_order]
-    #status
-    order_accepted = OrderProduct.objects.filter(status=1).count()
-    shipped = OrderProduct.objects.filter(status=2).count()
-    out_for_delivery = OrderProduct.objects.filter(status=3).count()
-    delivered = OrderProduct.objects.filter(status=4).count()
-    cancelled_count = OrderProduct.objects.filter(status=0).count()
-    latest_orders = OrderProduct.objects.filter(user=request.user).order_by('-created_at')[:5]
-    context = {
-        'order_detail':order_detail,
-        'status_counter':[order_accepted,shipped,out_for_delivery,delivered,cancelled_count],
-        # 'most_moving_product_count':most_moving_product_count,
-        # 'most_moving_product':most_moving_product,
-        'last_week_days':last_week_days,
-        'lastweek_orders':lastweek_orders,
-        'total_orders':total_orders,
-        'products':products,
-        'categories':categories,
-        'latest_orders':latest_orders,
-        'users':users,
-        'total_sales_amount':round(total_sales_amount),
-        'order_detail':order_detail,
-    }
-    return render(request,'adminpanel/index.html',context)
+        lastweek_orders=[today_6_order,today_5_order,today_4_order,today_3_order,today_2_order,today_1_order,today_order]
+        #status
+        order_accepted = OrderProduct.objects.filter(status=1).count()
+        shipped = OrderProduct.objects.filter(status=2).count()
+        out_for_delivery = OrderProduct.objects.filter(status=3).count()
+        delivered = OrderProduct.objects.filter(status=4).count()
+        cancelled_count = OrderProduct.objects.filter(status=0).count()
+        latest_orders = OrderProduct.objects.filter(user=request.user).order_by('-created_at')[:5]
+        context = {
+            'status_counter':[order_accepted,shipped,out_for_delivery,delivered,cancelled_count],
+            # 'most_moving_product_count':most_moving_product_count,
+            # 'most_moving_product':most_moving_product,
+            'last_week_days':last_week_days,
+            'lastweek_orders':lastweek_orders,
+            'total_orders':total_orders,
+            'products':products,
+            'categories':categories,
+            'latest_orders':latest_orders,
+            'users':users,
+            'total_sales_amount':round(total_sales_amount),
+            'order_detail':order_detail,
+        }
+        return render(request,'adminpanel/index.html',context)
+    except:
+        pass
+    return render(request,'adminpanel/index.html')
 
 def adminpanel(request):
+    if request.user.is_authenticated:
+        return redirect('admin_dashboard')
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -139,7 +145,7 @@ def addcategory(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             category=form.save(commit=False)
-            category.slug=category.category_name.lower().replace("","-")
+            category.slug=category.category_name.lower().replace(" ","-")
             category.save()
             return redirect('category_list')
     context = {
@@ -312,7 +318,7 @@ def add_productoffer(request):
         form = ProductOfferForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('category_offer')
+            return redirect('product_offer')
     context = {
             'form':form,
     }
@@ -474,3 +480,28 @@ def download_product_sales_report(request):
         except:
             pass
     return response
+
+
+
+# def sales_export_pdf(request):
+#     response = HttpResponse(content_type = 'application/pdf')
+#     response['Content-Disposition'] = 'inline; attachement; filename=sales_Report.pdf'
+
+#     response['Content-Transfer-Encoding'] = 'binary'
+
+#     sales = OrderProduct.objects.filter(ordered = True,status = 4)
+
+#     html_string = render_to_string('admin/sales_pdf_output.html', {
+#                                     'sales': sales, 'total': 0})
+
+#     html = HTML(string=html_string)
+
+#     result = html.write_pdf()
+
+#     with tempfile.NamedTemporaryFile(delete=True) as output:
+#         output.write(result)
+#         output.flush()
+#         output = open(output.name, 'rb')
+#         response.write(output.read())
+
+#     return response

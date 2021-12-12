@@ -250,11 +250,9 @@ def change_password(request):
                 auth.login(request, user)
                 return redirect('profile')
             else:
-                print('++++++++++')
                 messages.error(request, 'Password is not matching!!!')
                 return render(request, 'accounts/change_password.html')
         else:
-            print('___________-')
             messages.error(request, 'Current password is not matching!!!')
             return render(request, 'accounts/change_password.html')
     return render(request, 'accounts/change_password.html')

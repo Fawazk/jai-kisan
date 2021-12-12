@@ -142,7 +142,11 @@
 				{% for x in reviews %}
 				<article class="box mb-3 mt-3">
 					<div class="icontext w-100">
-						<img src="{{ x.user.profile_img.url }}" class="img-xs icon rounded-circle">
+						{% if account.profile_img %}
+                                        <div class="m-b-25"> <img src="{{ x.user.profile_img.url }}" width="25%" class="img-radius" alt="User-Profile-Image"> </div>
+                                        {% else %}
+                                        <div class="m-b-25"> <img src="http://naikenviro.net/wp-content/uploads/2018/06/null.jpg" width="25%" class="img-xs icon rounded-circle" alt="User-Profile-Image"> </div>
+                                        {% endif %} 
 						<div class="text">
 							<span class="date text-muted float-md-right">{{ x.created_at }}</span>
 							<h6 class="mb-1">{{ x.user.username }}</h6>

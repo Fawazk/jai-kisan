@@ -19,12 +19,16 @@
 
 <div style="width:100%">
     <div class="align-items-center container p-5" style="overflow-y: auto;margin-top: 30px;">
-        <h1 style="color:#5cb85c;">Add Product Offer</h1>
+        <h1 style="color:#5cb85c;">Add Product offer</h1>
         <form action="{% url 'add_productoffer' %}" method="post" enctype="multipart/form-data" class="col-xl-10">
             {% csrf_token %}
             {{ form | crispy }}
-            <input class="btn btn-info" type="submit" value="submit">
+            <div class="form-group">
+                <div id="image-box" class="image-container"></div>
+                <button class="btn btn-outline-info" style="width: 100%; margin-top: 10px;" type="submit">Post</button>
+            </div>
         </form>
+
     </div>
 </div>
 
@@ -44,7 +48,6 @@
         });
     });
 </script>
-
 
 
 </body>
