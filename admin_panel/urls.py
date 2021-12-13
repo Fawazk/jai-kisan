@@ -1,3 +1,4 @@
+from os import name
 from django.contrib import admin
 from django.urls import path
 from . import views
@@ -47,4 +48,5 @@ urlpatterns = [
     
     path('product_sales',views.product_sales,name='product_sales'),
     path('download_product_sales_report',views.download_product_sales_report,name='download_product_sales_report'),
+    # path('sales_report_pdf',views.sales_report_pdf,name="sales_report_pdf"),
     ]

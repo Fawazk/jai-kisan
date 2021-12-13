@@ -4,8 +4,8 @@
 
 {% block content %}
 {% include 'includes/header.html' %}
-<div class="container">
-    <div class="container-fluid mt-3">
+<div class="container pb-5">
+    <div class="container-fluid mt-3 pb-5">
         <h4 class="mt-3">Delivery Address</h4>
         <div class="row  d-flex justify-content-between">
             <div class="card-body col-md-7"
@@ -13,9 +13,9 @@
 
                 <b class="card-text">{{ orderproduct.order.name }}</b>
                 <br>
+                {{orderproduct.order.type}}
                 <br>
-                <p class="card-text">{{ orderproduct.order.landmark }},{{ orderproduct.order.locality }},{{
-                    orderproduct.order.city }}<br>
+                <p class="card-text">{{ orderproduct.order.landmark }},{{ orderproduct.order.locality }},{{orderproduct.order.city }}<br>
 
                     {% if orderproduct.status == 1 %}
                     <td>Order Accepted<br><small>{{ orderproduct.created_at }}</small></td>
@@ -29,7 +29,7 @@
                     <td>Order Cancelled<br><small></small></td>
                     {% endif %}
 
-                    <b class="card-text">Phone Number :{{ orderproduct.order.phone }}</b>
+                   <br> <b class="card-text">Phone Number :{{ orderproduct.order.phone }}</b>
                     <!-- <a href="#" class="btn btn-success">Go somewhere</a> -->
             </div>
             <div class="card col-md-4"
@@ -37,16 +37,13 @@
                 <div class="card-body">
                     <div class="text-center">
                         <img src="{{ orderproduct.product.images_one.url }}" height="100px" width="100px"><br>
-                        <b><a href="{{ orderproduct.product.get_url }}">{{ orderproduct.product.product_name }}</a></b>
+                        <b><a class="pt-3" style="color: black;" href="{{ orderproduct.product.get_url }}">{{ orderproduct.product.product_name }}</a></b>
                     </div>
                 </div>
             </div>
         </div>
 
-
-
-
-        <div class="card col-md-12 col-sm-12" style="box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3); transition: 0.3s; opacity: 1;">
+        <div class="card col-lg-6 col-sm-12 pt-3 mt-2" style="box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3); transition: 0.3s; opacity: 1;">
             {% if orderproduct.status >= 1 %}
             <div class="row">
                 <div>
@@ -66,5 +63,7 @@
     </div>
 
 </div>
-{% include 'includes/footer.html' %}
+<div class="pt-5">
+    {% include 'includes/footer.html' %}
+</div>
 {% endblock %}

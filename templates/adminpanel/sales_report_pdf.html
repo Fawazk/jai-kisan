@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Output</title>
+    <style>
+        
+        @page{
+            size: "A4";
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+            
+
+
+            @bottom-right {
+                content: "Page "counter(page) "of "counter(pages);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div  class="row " style="display: flex; justify-content: center;">
+        <h3 style="color: #cacace; font-size: 25px;" class="font-weight-bold"><b style="color: green" >Jai Kisan</h3>
+    </div>
+    <h2><u>Sales Report</u></h2>
+    <table id="table" class="display">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Image</th>
+                <th>category</th>
+                <th>Product</th>
+                <th>Sold</th>
+                <th>Revenue Recieved</th>
+                <th>Profit</th>
+                <th>Stocks Remaining</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for x in products %}
+          <tr >
+              <td>{{forloop.counter}}</td>
+            <td class="align-middle" > 
+                    <img style="width: 80px;height: 60px;" src="{{x.images_one.url}}" alt="">
+            </td>
+            <td class="align-middle">{{x.p_category}}</td>
+            
+            <td class="align-middle">
+                <b>{{ x.product_name }}</b>
+            </td>
+            {% if x.get_count%}
+            <td class="align-middle">{{x.get_count.0.quantity}} products</td>
+            {% else %}
+            <td class="align-middle">None</td>
+            {% endif %}
+            
+            {% if x.get_count%}
+            <td class="align-middle">₹ {{x.get_revenue.0.revenue |floatformat:0 }}</td>
+            {% else %}
+            <td class="align-middle">None</td>
+            {% endif %}
+            {% if x.get_count%}
+            <td class="align-middle">₹ {{x.get_profit | floatformat:0 }}</td>
+            {% else %}
+            <td class="align-middle">None</td>
+            {% endif %}
+            <td class="align-middle ml-2">{{x.stock}} Remaining</td>
+           
+            
+          </tr>
+         {% endfor %}
+
+        </tbody>
+    </table>
+</body>
+</html>

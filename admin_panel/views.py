@@ -19,6 +19,7 @@ from datetime import date, timedelta
 from django.db.models import Sum
 import csv
 from django.template.loader import render_to_string
+import os
 # from weasyprint import HTML
 import tempfile
 # Create your views here.
@@ -93,9 +94,8 @@ def admin_dashboard(request):
     except:
         pass
     return render(request,'adminpanel/index.html')
-
 def adminpanel(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_staff:
         return redirect('admin_dashboard')
     if request.method == 'POST':
         email = request.POST['email']
@@ -433,12 +433,9 @@ def product_sales(request,month=timezone.now().month):
     products=Product.objects.all()
     
     month_now=timezone.now().strftime('%B')
-    #renvenue by distinct vehicle
-    # revenue_by_products = (orders.values('product').annotate(revenue=Sum('product_price')).order_by('product__product_name'))   
     total_revenue=0
     total_profit=0
     for product in products:
-        print(product.get_revenue())
         try:
             total_revenue+=product.get_revenue()[0]['revenue']
         except:
@@ -460,9 +457,6 @@ def product_sales(request,month=timezone.now().month):
 
 def download_product_sales_report(request):
     products=Product.objects.all()
-    context={
-        'products':products,
-    }
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=sales_report.csv'
 
@@ -473,26 +467,25 @@ def download_product_sales_report(request):
     writer.writerow(
         ['Product', 'Category','No of Sold Products', 'Revenue recieved', 'Profit','Stocks remaining'])
     for x in products:
-        try:
-            writer.writerow([x.id, x.p_category,
-                          x.get_count()[0]['quantity'], x.get_revenue()[0]['revenue'],x.get_profit(),
-                         x.remaining])
-        except:
-            pass
+
+        writer.writerow([x.id, x.p_category,
+                        x.get_count()[0]['quantity'], x.get_revenue()[0]['revenue'],x.get_profit(),
+                        x.stock])
+
     return response
 
 
 
-# def sales_export_pdf(request):
+# def sales_report_pdf(request,month=timezone.now().month):
 #     response = HttpResponse(content_type = 'application/pdf')
 #     response['Content-Disposition'] = 'inline; attachement; filename=sales_Report.pdf'
-
+    
 #     response['Content-Transfer-Encoding'] = 'binary'
 
-#     sales = OrderProduct.objects.filter(ordered = True,status = 4)
+#     sales_product = Product.objects.filter(created_at__month = month,status = 4)
 
-#     html_string = render_to_string('admin/sales_pdf_output.html', {
-#                                     'sales': sales, 'total': 0})
+#     html_string = render_to_string('adminpanel/sales_report_pdf.html', {
+#                                     'sales_product': sales_product, 'total': 0})
 
 #     html = HTML(string=html_string)
 

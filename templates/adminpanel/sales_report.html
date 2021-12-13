@@ -23,7 +23,7 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <title>Product_list</title>
+    <title></title>
 </head>
 
 <body>
@@ -46,7 +46,7 @@
                           <h5>Total Profit :₹ {{total_profit|floatformat:0}}</h5>
                         </div>
                         <div class="">
-                          <a style="margin-top: 50px;" href="{% url 'download_product_sales_report'%}" class="btn btn-info">Download Report</a>
+                          <a style="margin-top: 50px;" href="{% url 'download_product_sales_report'%}" class="btn btn-info">Download csv</a>
                         </div>
                       </div>
                     <table id="table" class="display">
@@ -54,7 +54,6 @@
 
                             <tr>
                                 <th>No</th>
-    
                                 <th>Image</th>
                                 <th>category</th>
                                 <th>Product</th>
