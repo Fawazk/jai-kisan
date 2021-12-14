@@ -23,8 +23,10 @@ import os
 # from weasyprint import HTML
 import tempfile
 # Create your views here.
-
-
+@staff_member_required(login_url='adminpanel')
+def admin_logout(request):
+    auth.logout(request)
+    return redirect('adminpanel')
 @staff_member_required(login_url='adminpanel')
 def admin_dashboard(request):
     try:

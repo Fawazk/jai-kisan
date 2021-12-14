@@ -90,16 +90,10 @@
 </nav>
 <div class="main-content" id="panel">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <b class="navbar-brand" style="justify-content: end;" >{{ user.username }}</b>
+        <b class="navbar-brand" >{{ user.username }}</b>
         <a  href="{% url 'admin_dashboard' %}"><b>Dashboard</b></a>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-            </li>
-          </ul>
+        <a class="ml-3" href="{% url 'admin_logout' %}">Logout</a>
 
-        </div>
       </nav>
     
 
