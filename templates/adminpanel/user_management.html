@@ -71,12 +71,8 @@
                                 <td>
                                     {{ x.email }}
                                 </td>
-                                <td>
-                                    {% if x.is_admin %}
-                                        <p>Admin</p>
-                                    {% else %}
-                                        {{ x.phone_number }}
-                                    {% endif %}
+                                <td>    
+                                    {{ x.phone_number }}
                                 </td>
                                 <td>
                                     {{ x.is_admin }}

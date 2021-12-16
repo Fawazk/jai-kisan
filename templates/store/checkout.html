@@ -353,7 +353,7 @@
                                       {% endif %}
                                     <dl class="dlist-align">
                                       <dt>Total price with offers:</dt>
-                                      <dd class="text-right"><b>Rs.{{total}}/-</b></dd>
+                                      <dd class="text-right"><b>Rs.{{grand_total}}/-</b></dd>
                                     </dl>
                                 </div>
                                 </div>
@@ -367,7 +367,7 @@
                             {% csrf_token %}
                             <input class="btn btn-block btn-light" name="coupon_code" placeholder="Coupon Code" type="text">
                             <input class="btn btn-block btn-success" type="submit" >
-                            {% include 'includes/alert.html' %}
+                            {% include 'includes/sweet.alert.html' %}
                         </form>
                     </div> <!-- card-body.// -->
                 </div> <!-- card.// -->

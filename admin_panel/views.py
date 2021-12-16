@@ -466,7 +466,6 @@ def download_product_sales_report(request):
     writer.writerow(
         ['Product', 'Category','No of Sold Products', 'Revenue recieved', 'Profit','Stocks remaining'])
     for x in products:
-
         writer.writerow([x.id, x.p_category,
                         x.get_count()[0]['quantity'], x.get_revenue()[0]['revenue'],x.get_profit(),
                         x.stock])

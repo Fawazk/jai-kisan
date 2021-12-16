@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'offer',
-    'storages',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -141,6 +141,7 @@ USE_TZ = True
 ...
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
+
 
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
