@@ -45,13 +45,11 @@
 								
 								<div class="rating-star">
 									<span>
-										{% if reviews.count != 0 %}
 										<i class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
 										<i class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
 										<i class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
 										<i class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
 										<i class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
-										{% endif %}
 								<small>&emsp;{{reviews.count}} reviews</small>
 										</span>
 								</div>
@@ -73,7 +71,7 @@
 							{% if single_product.stock <= 0 %} <span class="text btn btn-danger">Out of stock</span>
 								{% else %}
 								<button type="submit" style="background-color: #5cb85c; color:#fff;" class="btn"> <span
-										class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i></button>
+										class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i></button><br>
 								<a href="{% url 'direct_checkout' single_product.id %}" class="btn btn-outline-success"> <span>Buy Now</span></a>
 								{% endif %}
 						</article>

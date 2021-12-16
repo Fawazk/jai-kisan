@@ -50,8 +50,8 @@
 			{% for x in products %}
 			{% if x.averageReview > 2.5 %}
 
-			<div class="col-md-3">
-				<div class="card card-product-grid shadow" style="border:none;" >
+			<div class="col-md-4">
+				<div class="card card-product-grid shadow mr-2" style="border:none;" >
 					<a href="{{ x.get_url }}" class="img-wrap p-2"> <img src="{{ x.images_one.url }}"> </a>
 					<div class="info-wrap pl-4 ">
 						<a href="{{ x.get_url }}" class="text-success">{{ x.product_name }}</a><br>

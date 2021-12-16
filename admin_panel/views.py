@@ -424,6 +424,8 @@ def banner_delete(request,banner_id):
 
 
 # sales report 
+
+
 def product_sales(request,month=timezone.now().month):
     
     print("Month:",end =" ")
@@ -432,10 +434,15 @@ def product_sales(request,month=timezone.now().month):
     products=Product.objects.all()
     
     month_now=timezone.now().strftime('%B')
+    #renvenue by distinct vehicle
+    revenue_by_product = (orders.values('product').annotate(revenue=Sum('product_price')).order_by('product__product_name'))   
+    # for variant in variants:
+    #     print(orders.filter(variant=variant).aggregate(Sum('price')))
     total_revenue=0
     total_profit=0
     for product in products:
         try:
+            print(product.get_revenue())
             total_revenue+=product.get_revenue()[0]['revenue']
         except:
             pass
@@ -445,17 +452,23 @@ def product_sales(request,month=timezone.now().month):
         except:
             pass    
     request.session['total_revenue']=total_revenue
-    request.session['total_profit']=total_profit      
+    request.session['total_profit']=total_profit        
     context={
         'month_now':month_now,
         'total_revenue':total_revenue,
         'total_profit':total_profit,
+        'revenue_by_vehicles':revenue_by_product,
         'products':products,
+
     }
     return render(request,'adminpanel/sales_report.html',context)
 
+
 def download_product_sales_report(request):
     products=Product.objects.all()
+    context={
+        'products':products,
+    }
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=sales_report.csv'
 
@@ -465,34 +478,12 @@ def download_product_sales_report(request):
     writer.writerow([request.session['total_revenue'],request.session['total_profit']])
     writer.writerow(
         ['Product', 'Category','No of Sold Products', 'Revenue recieved', 'Profit','Stocks remaining'])
+
     for x in products:
-        writer.writerow([x.id, x.p_category,
-                        x.get_count()[0]['quantity'], x.get_revenue()[0]['revenue'],x.get_profit(),
-                        x.stock])
-
+        try:
+            writer.writerow([x.id, x.p_category,
+                            x.get_count()[0]['quantity'], x.get_revenue()[0]['revenue'],x.get_profit(),
+                            x.stock])
+        except:
+            pass
     return response
-
-
-
-# def sales_report_pdf(request,month=timezone.now().month):
-#     response = HttpResponse(content_type = 'application/pdf')
-#     response['Content-Disposition'] = 'inline; attachement; filename=sales_Report.pdf'
-    
-#     response['Content-Transfer-Encoding'] = 'binary'
-
-#     sales_product = Product.objects.filter(created_at__month = month,status = 4)
-
-#     html_string = render_to_string('adminpanel/sales_report_pdf.html', {
-#                                     'sales_product': sales_product, 'total': 0})
-
-#     html = HTML(string=html_string)
-
-#     result = html.write_pdf()
-
-#     with tempfile.NamedTemporaryFile(delete=True) as output:
-#         output.write(result)
-#         output.flush()
-#         output = open(output.name, 'rb')
-#         response.write(output.read())
-
-#     return response
