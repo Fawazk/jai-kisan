@@ -106,10 +106,13 @@ def adminpanel(request):
             messages.error(request,'Invalid credentials')
             return redirect('adminpanel')
     return render(request,'adminpanel/login.html')
+
+
 @staff_member_required(login_url='adminpanel')
 def admin_logout(request):
     auth.logout(request)
     return redirect('adminpanel')
+
 def category_list(request):
     categories = category.objects.all()
     context ={
