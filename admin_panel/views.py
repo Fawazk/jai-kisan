@@ -109,7 +109,7 @@ def adminpanel(request):
 
 
 @staff_member_required(login_url='adminpanel')
-def admin_logout(request):
+def adminLogout(request):
     auth.logout(request)
     return redirect('adminpanel')
 
