@@ -93,7 +93,7 @@ def admin_dashboard(request):
         pass
     return render(request,'adminpanel/index.html')
 def adminpanel(request):
-    if request.user.is_authenticated and request.user.is_superuser:
+    if request.user.is_authenticated and request.user.is_superadmin:
         return redirect('admin_dashboard')
     if request.method == 'POST':
         email = request.POST['email']
@@ -107,6 +107,9 @@ def adminpanel(request):
             return redirect('adminpanel')
     return render(request,'adminpanel/login.html')
 @staff_member_required(login_url='adminpanel')
+def adminlogout(request):
+    auth.logout(request)
+    return redirect('adminpanel')
 def category_list(request):
     categories = category.objects.all()
     context ={
