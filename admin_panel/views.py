@@ -108,10 +108,10 @@ def adminpanel(request):
     return render(request,'adminpanel/login.html')
 
 
-@staff_member_required(login_url='adminpanel')
-def adminLogout(request):
-    auth.logout(request)
-    return redirect('adminpanel')
+# @staff_member_required(login_url='adminpanel')
+# def adminLogout(request):
+#     auth.logout(request)
+#     return redirect('adminpanel')
 
 def category_list(request):
     categories = category.objects.all()
