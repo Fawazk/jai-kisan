@@ -25,7 +25,7 @@ urlpatterns = [
     path('deleteproductoffer/<int:offer_id>/',views.deleteproductoffer,name="deleteproductoffer"),
     path('editproductoffer/<int:offer_id>/',views.editproductoffer,name="editproductoffer"),
     path('add_productoffer',views.add_productoffer,name="add_productoffer"),
-    path('adminlogout',views.adminlogout,name="adminlogout"),
+    path('admin_logout',views.admin_logout,name="admin_logout"),
     
     path('category_offer',views.category_offer,name="category_offer"),
     path('deletecategoryoffer/<int:offer_id>/',views.deletecategoryoffer,name='deletecategoryoffer'),

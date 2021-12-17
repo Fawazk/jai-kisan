@@ -107,7 +107,7 @@ def adminpanel(request):
             return redirect('adminpanel')
     return render(request,'adminpanel/login.html')
 @staff_member_required(login_url='adminpanel')
-def adminlogout(request):
+def admin_logout(request):
     auth.logout(request)
     return redirect('adminpanel')
 def category_list(request):
