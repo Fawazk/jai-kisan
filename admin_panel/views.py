@@ -46,8 +46,7 @@ def admin_dashboard(request):
         today_5 = today - timedelta(days=5)
         today_6 = today - timedelta(days=6)
         today_7 = today - timedelta(days=7)
-        tomorrow = today + timedelta(days=1)
-        
+        tomorrow = today + timedelta(days=1)        
         last_week_days=[
             today_6.strftime("%a %m/%d/%Y"),
             today_5.strftime("%a %m/%d/%Y"),
@@ -94,7 +93,7 @@ def admin_dashboard(request):
         pass
     return render(request,'adminpanel/index.html')
 def adminpanel(request):
-    if request.user.is_authenticated and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_superuser:
         return redirect('admin_dashboard')
     if request.method == 'POST':
         email = request.POST['email']

@@ -66,13 +66,12 @@
 						
 
 							<hr>
-
 							<hr>
 							{% if single_product.stock <= 0 %} <span class="text btn btn-danger">Out of stock</span>
 								{% else %}
-								<button type="submit" style="background-color: #5cb85c; color:#fff;" class="btn"> <span
-										class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i></button><br>
-								<a href="{% url 'direct_checkout' single_product.id %}" class="btn btn-outline-success"> <span>Buy Now</span></a>
+								<button type="submit" style="background-color: #5cb85c; color:#fff;" class="btn mt-3"> <span
+										class="text">Add to cart</span> </button>
+								<a href="{% url 'direct_checkout' single_product.id %}" class="btn btn-outline-success mt-3"> <span>Buy Now</span></a>
 								{% endif %}
 						</article>
 					</form>

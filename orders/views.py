@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import never_cache
+from accounts.views import home
 from cart.models import CartItem
 from offer.models import Coupon, RedeemedCoupon
 from .forms import OrderForm
@@ -11,6 +12,7 @@ from store.models import Product
 from django.conf import settings
 from forex_python.converter import CurrencyRates
 import razorpay
+from django.contrib import auth, messages
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest
@@ -31,6 +33,7 @@ def dollar_rate():
     return rate
 
 def payments(request):
+    
     body = json.loads(request.body)
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
 
@@ -67,6 +70,11 @@ def payments(request):
         product = Product.objects.get(id=product_id)
         product.stock -= 1
         product.save()
+        data = {
+        'order_number': order.order_number,
+        'transID': payment.payment_id,
+        }
+        return JsonResponse(data)
     else:
         cart_items = CartItem.objects.filter(user=request.user)
         for item in cart_items:
@@ -150,6 +158,7 @@ def razorpay_payment_verification(request):
         product = Product.objects.get(id=product_id)
         product.stock -= 1
         product.save()
+        return JsonResponse({'message': 'success'})
     else:
         cart_items = CartItem.objects.filter(user=request.user)
         for item in cart_items:
@@ -182,8 +191,6 @@ def razorpay_payment_verification(request):
 
 def payment_failed(request):
     return render(request,'payment_failed.html')
-
-
 @never_cache
 def place_order(request, total=0, quantity=0):
     current_user = request.user
@@ -376,6 +383,7 @@ def cash_on_delivery(request,total=0, quantity=0):
     order_number = request.session['order_number']
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=order_number)
     if 'direct_order' in request.session:
+        print('direct buy')
         product_id=request.session['direct_order']
         direct_item=Product.objects.get(id=product_id)
         payment_amount=direct_item.get_price()
@@ -391,6 +399,7 @@ def cash_on_delivery(request,total=0, quantity=0):
         product = Product.objects.get(id=product_id)
         product.stock -= 1
         product.save()
+        return redirect('order_complete')
     else:
         cart_items = CartItem.objects.filter(user=request.user)
         for item in cart_items:
@@ -418,6 +427,5 @@ def cash_on_delivery(request,total=0, quantity=0):
             product.save()
 
     # # Clear cart
-
     CartItem.objects.filter(user=request.user).delete()
     return redirect('order_complete')

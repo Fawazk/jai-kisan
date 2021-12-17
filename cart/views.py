@@ -191,6 +191,8 @@ def cart(request, total=0, quantity=0, cart_items=None):
 @never_cache
 @login_required(login_url='signin')
 def checkout(request, total=0, quantity=0, cart_items=None):
+    if 'ordered' in request.session:
+        del request.session['ordered']
     user=request.user
     form = AddressForm()
     address = Address.objects.filter(user=user)
