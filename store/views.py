@@ -37,7 +37,7 @@ def store(request, category_slug=None):
             'count':count,
         }
         return render(request, 'store/store.html', context)
-    except:
+    except Exception as e:
         pass
 
 def product_detail(request,category_slug, product_slug):

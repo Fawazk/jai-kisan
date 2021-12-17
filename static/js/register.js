@@ -9,6 +9,12 @@ $(document).ready(()=>{
                 required:true,
                 email:true,
             },
+            phone_number:{
+                required:true,
+                matches: "[0-9]+",  // <-- no such method called "matches"!
+                minlength:10,
+                maxlength:10,
+            },
             password:{
                 required:true,
                 minlength:8,

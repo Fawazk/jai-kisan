@@ -10,6 +10,7 @@ class RegisterationForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
         'placeholder':'Confirm Password',
     }))
+    phone_number = forms.CharField(label='Mobile', required=True, widget=forms.NumberInput)
     class Meta:
         model = Account
         fields = ['first_name', 'last_name', 'email','phone_number','password']
